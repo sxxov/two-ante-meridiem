@@ -1,0 +1,75 @@
+<nav class='x-header-nav'>
+  <ul
+    class='header-nav-toppings'
+    role='list'
+  >
+    {% for link in section.settings.menu.links %}
+      <li class='header-nav-topping'>
+        <a
+          href='{{ link.url }}'
+          target='{{ link.target }}'
+          class='header-nav-topping-link'
+          {% if link.current %}
+            aria-current='page'
+          {% endif %}
+        >
+          {{- link.title -}}
+        </a>
+      </li>
+    {% endfor %}
+    <li class='header-nav-topping'>
+      {% render 'x-header-search-trigger' %}
+    </li>
+  </ul>
+</nav>
+
+{% stylesheet %}
+  .x-header-nav {
+    height: var(--x-header-height);
+
+    pointer-events: none;
+
+    & .header-nav-toppings {
+      list-style: none;
+      margin: 0;
+      padding-inline: 16px;
+      padding-block: 16px;
+
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+
+      & .header-nav-topping {
+        font-size: 10px;
+        font-weight: bold;
+        text-decoration: none;
+        color: inherit;
+        text-transform: uppercase;
+        text-underline-offset: 4px;
+
+        pointer-events: auto;
+
+        &:hover,
+        &:focus {
+          text-decoration: underline;
+        }
+
+        &:has([aria-current='page']) {
+          &::before {
+            content: '▪';
+            margin-right: 4px;
+            height: 100%;
+            display: inline-flex;
+            align-items: center;
+          }
+        }
+
+        & .header-nav-topping-link {
+          color: inherit;
+
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+{% endstylesheet %}

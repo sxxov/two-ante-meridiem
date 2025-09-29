@@ -1,0 +1,6 @@
+@layer base, theme, utilities;
+
+@import './x-theme-colors.css';
+@import './x-theme-animation.css';
+@import './x-theme-typography.css';
+@import './x-theme-layout.css';

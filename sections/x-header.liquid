@@ -1,0 +1,98 @@
+{% render 'x-theme' %}
+
+<header class='x-header'>
+  {% render 'x-header-logo', variant: section.settings.logo_variant %}
+  <div class='header-bar'>
+    <div class='header-bar-left'></div>
+    <div class='header-bar-center'>{% render 'x-header-nav' %}</div>
+    <div class='header-bar-right'>{% render 'x-header-actions' %}</div>
+  </div>
+</header>
+
+{% stylesheet %}
+  .x-header {
+    :root:has(&) {
+      --x-header-height: 60px;
+      --header-padding: 0px;
+    }
+
+    #header-group:has(&) {
+      display: contents;
+    }
+
+    display: contents;
+
+    & .header-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+
+      display: grid;
+      grid-template-areas: 'left center right';
+      grid-template-columns: 1fr auto 1fr;
+
+      z-index: 50;
+
+      color: white;
+      mix-blend-mode: difference;
+
+      & .header-bar-left {
+        grid-area: left;
+        justify-self: start;
+      }
+
+      & .header-bar-center {
+        grid-area: center;
+        justify-self: center;
+      }
+
+      & .header-bar-right {
+        grid-area: right;
+        justify-self: end;
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% unless request.design_mode %}
+  <script type='module'>
+    import { hydrate } from '@theme/section-hydration';
+    const url = new URL(window.location.href);
+    url.searchParams.delete('page');
+    hydrate('{{ section.id }}', url);
+  </script>
+{% endunless %}
+
+{% schema %}
+{
+  "name": "t:names.header",
+  "class": "slot",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "select",
+      "id": "logo_variant",
+      "label": "Logo Variant",
+      "options": [
+        {
+          "value": "forehead",
+          "label": "Forehead"
+        },
+        { "value": "chin", "label": "Chin" },
+        { "value": "temple", "label": "Temple" }
+      ]
+    }
+  ],
+  "presets": []
+}
+{% endschema %}

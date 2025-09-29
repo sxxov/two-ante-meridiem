@@ -1,0 +1,58 @@
+<div class='x-header-logo variant/{{ variant | default: 'forehead' }}'>
+  <div class='header-logo-container'>
+    {% render 'x-brand-logo' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-header-logo {
+    :root:has(&) {
+      --x-header-logo-width: 128px;
+      --x-header-logo-height: 256px;
+    }
+    width: var(--x-header-logo-width);
+    height: var(--x-header-logo-height);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 50;
+
+    pointer-events: none;
+
+    mix-blend-mode: difference;
+
+    &.variant\/forehead {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      translate: -50% 0;
+    }
+
+    &.variant\/chin {
+      position: sticky;
+      margin-top: calc(100lvh - var(--x-header-logo-height));
+      margin-bottom: -100lvh;
+      top: 0;
+      left: 50%;
+      translate: -50% 0;
+    }
+
+    &.variant\/temple {
+      position: fixed;
+      top: -96px;
+      left: -32px;
+    }
+
+    & .header-logo-container {
+      width: auto;
+      height: 32px;
+
+      display: flex;
+
+      pointer-events: auto;
+    }
+  }
+{% endstylesheet %}

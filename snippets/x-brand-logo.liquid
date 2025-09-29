@@ -1,0 +1,12 @@
+<a
+  class='x-brand-logo'
+  href='{{ routes.root_url }}'
+>
+  {% render 'image', image: settings.logo, text_fallback: shop.name %}
+</a>
+
+{% stylesheet %}
+  .x-brand-logo {
+    display: flex;
+  }
+{% endstylesheet %}

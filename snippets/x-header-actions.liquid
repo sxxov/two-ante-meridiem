@@ -1,0 +1,35 @@
+<ul class='x-header-actions'>
+  <li class='header-action'>
+    {% render 'account-popover' %}
+    {% render 'account-drawer' %}
+  </li>
+
+  <li class='header-action'>
+    {% render 'cart-drawer' %}
+  </li>
+</ul>
+
+{% stylesheet %}
+  .x-header-actions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+
+    & .account-button {
+      color: inherit;
+    }
+
+    & .header-action {
+      margin-left: -8px;
+
+      & cart-icon svg,
+      & .account-button svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+{% endstylesheet %}

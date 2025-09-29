@@ -1,0 +1,20 @@
+<a
+  class='x-header-search-trigger'
+  role='button'
+  tabindex='0'
+  on:click='#search-modal/showDialog'
+  aria-label='{{ 'accessibility.open_search_modal' | t }}'
+  {% if request.page_type == 'search' %}
+    aria-current='page'
+  {% endif %}
+>
+  {{ 'content.search' | t }}
+</a>
+
+{% stylesheet %}
+  .x-header-search-trigger {
+    color: inherit;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+{% endstylesheet %}

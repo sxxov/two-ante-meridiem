@@ -1,0 +1,27 @@
+{% stylesheet %}
+  @layer theme {
+    :root {
+      --color-bg-1: #fff;
+
+      --color-fg-1: #000;
+      --color-fg-2: #333;
+
+      --color-border: #ddd;
+
+      --color-accent-1: #ffc300;
+      --color-on-accent-1: #000;
+
+      --color-primary-1: #f00;
+      --color-on-primary-1: #fff;
+      --color-on-primary-2: #b9c1c6;
+      --color-on-primary-3: #595f62;
+    }
+  }
+
+  @layer base {
+    body {
+      background: var(--color-bg-1);
+      color: var(--color-fg-1);
+    }
+  }
+{% endstylesheet %}

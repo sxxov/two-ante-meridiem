@@ -1,0 +1,15 @@
+{
+  "trailingComma": "all",
+  "useTabs": false,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "endOfLine": "lf",
+  "singleAttributePerLine": true,
+  "experimentalTernaries": true,
+  "plugins": [
+    "prettier-plugin-inline-blocks",
+    "prettier-plugin-jsdoc",
+    "@shopify/prettier-plugin-liquid"
+  ]
+}

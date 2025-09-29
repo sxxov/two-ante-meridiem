@@ -1,0 +1,14 @@
+{% style %}
+  {% assign body_500 = settings.type_body_font | font_modify: 'weight', '500' %}
+  {{ body_500 | font_face: font_display: 'swap' }}
+  {% assign body_400 = settings.type_body_font | font_modify: 'weight', '400' %}
+  {{ body_400 | font_face: font_display: 'swap' }}
+{% endstyle %}
+
+{% stylesheet %}
+  @layer base {
+    :root {
+      font-synthesis: none;
+    }
+  }
+{% endstylesheet %}
