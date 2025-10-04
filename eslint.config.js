@@ -9,8 +9,16 @@ import eslint from '@eslint/js';
 
 const config = /** @type {const} @satisfies {Linter.Config[]} */ ([
   eslint.configs.recommended,
-  jsdoc.configs['flat/logical-typescript'],
-  jsdoc.configs['flat/logical-typescript-flavor'],
+  (() => {
+    const it = jsdoc.configs['flat/logical-typescript'];
+    delete it.rules;
+    return it;
+  })(),
+  (() => {
+    const it = jsdoc.configs['flat/logical-typescript-flavor'];
+    delete it.rules;
+    return it;
+  })(),
   ...tseslint.configs.recommendedTypeChecked,
   ...xoTypeScript.map((/** @type {Linter.Config} */ config) => {
     if (config.rules) {
@@ -137,6 +145,7 @@ const config = /** @type {const} @satisfies {Linter.Config[]} */ ([
       'max-nested-callbacks': ['error', 6],
       'no-inner-declarations': 'off',
       'no-bitwise': 'off',
+      'no-lonely-if': 'off',
 
       '@typescript-eslint/no-restricted-types': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
@@ -180,14 +189,10 @@ const config = /** @type {const} @satisfies {Linter.Config[]} */ ([
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/no-extraneous-class': 'off',
 
-      'jsdoc/require-jsdoc': 'off',
-      'jsdoc/no-types': 'off',
       'jsdoc/no-undefined-types': [
         'error',
         { markVariablesAsUsed: true, disableReporting: true },
       ],
-      'jsdoc/valid-types': 'off',
-      'jsdoc/check-template-names': 'off',
     },
   },
 ]);
