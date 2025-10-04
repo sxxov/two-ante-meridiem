@@ -25,6 +25,7 @@
   "javascript.preferences.useAliasesForRenames": false,
   "typescript.preferences.useAliasesForRenames": false,
   "editor.indentSize": 2,
+  "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "editor.detectIndentation": false,
   "emmet.includeLanguages": { "liquid": "html" }
