@@ -178,6 +178,7 @@ const config = /** @type {const} @satisfies {Linter.Config[]} */ ([
       '@typescript-eslint/member-ordering': 'off',
       '@typescript-eslint/no-unsafe-type-assertion': 'off',
       '@typescript-eslint/consistent-type-definitions': 'off',
+      '@typescript-eslint/no-extraneous-class': 'off',
 
       'jsdoc/require-jsdoc': 'off',
       'jsdoc/no-types': 'off',
@@ -185,6 +186,8 @@ const config = /** @type {const} @satisfies {Linter.Config[]} */ ([
         'error',
         { markVariablesAsUsed: true, disableReporting: true },
       ],
+      'jsdoc/valid-types': 'off',
+      'jsdoc/check-template-names': 'off',
     },
   },
 ]);
