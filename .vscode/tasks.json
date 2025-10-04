@@ -1,20 +1,38 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "shell",
-			"label": "shopify: dev",
-			"command": "set -a && source .env && set +a && shopify theme dev",
-			"group": "build",
-			"runOptions": {
-				"runOn": "folderOpen"
-			}
-		},
-		{
-			"type": "shell",
-			"label": "shopify: push",
-			"group": "build",
-			"command": "set -a && source .env && set +a && shopify theme push"
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "shopify: dev",
+      "command": "set -a && source .env && set +a && shopify theme dev",
+      "group": "build",
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "type": "shell",
+      "label": "shopify: push (development)",
+      "group": "build",
+      "command": "set -a && source .env && set +a && shopify theme push --development"
+    },
+    {
+      "type": "shell",
+      "label": "shopify: push (live)",
+      "group": "build",
+      "command": "set -a && source .env && set +a && shopify theme push --live"
+    },
+    {
+      "type": "shell",
+      "label": "shopify: pull (development)",
+      "group": "build",
+      "command": "set -a && source .env && set +a && shopify theme pull --development"
+    },
+    {
+      "type": "shell",
+      "label": "shopify: pull (live)",
+      "group": "build",
+      "command": "set -a && source .env && set +a && shopify theme pull --live"
+    }
+  ]
 }
