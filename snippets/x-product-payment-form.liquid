@@ -1,0 +1,204 @@
+{% liquid
+  assign variant = product.selected_or_first_available_variant
+  assign inventory_quantity = variant.inventory_quantity
+  assign inventory_policy = variant.inventory_policy
+
+  if variant.inventory_management == 'shopify'
+    assign inventory_managed = true
+  endif
+
+  if variant.quantity_rule.min > variant.inventory_quantity and inventory_managed and inventory_policy == 'deny'
+    assign quantity_rule_soldout = true
+  endif
+
+  assign checkout_text = 'content.checkout' | t
+
+  if inventory_managed
+    if inventory_quantity <= 0 and inventory_policy == 'deny' or quantity_rule_soldout
+      assign can_add_to_cart = false
+      assign add_to_cart_text = 'products.product.sold_out' | t
+    else
+      assign can_add_to_cart = true
+      assign add_to_cart_text = 'products.product.add_to_cart' | t
+    endif
+  else
+    if closest.product.selected_or_first_available_variant != null
+      assign can_add_to_cart = true
+      assign add_to_cart_text = 'products.product.add_to_cart' | t
+    else
+      assign can_add_to_cart = false
+      assign add_to_cart_text = 'products.product.unavailable' | t
+    endif
+  endif
+%}
+
+<div
+  class='x-product-payment-form'
+  data-product-pull-node='product-payment-form-{{ block.id }}-{{ product.id }}'
+>
+  {%- if product != blank -%}
+    {%- capture product_form_id -%}
+      product-payment-form-{{ section.id }}
+    {%- endcapture -%}
+    <div
+      class='visually-hidden'
+      aria-live='assertive'
+      role='status'
+      aria-atomic='true'
+      ref='liveRegion'
+    ></div>
+    {%- form 'product', product, id: product_form_id, data-type: 'add-to-cart-form' -%}
+      <input
+        type='hidden'
+        name='id'
+        ref='variantId'
+        value='{{ product.selected_or_first_available_variant.id }}'
+      >
+      <div
+        class='payment-form-buttons'
+      >
+        <div
+          class='payment-form-quantity'
+          data-form-input-number-controls
+        >
+          <button
+            class='payment-form-quantity-decrement'
+            type='button'
+            data-form-input-number-controls-decrement
+          >
+            {% render 'x-button', text: '-' %}
+          </button>
+          <div class='payment-form-quantity-input-frame'>
+            <input
+              class='payment-form-quantity-input'
+              type='number'
+              name='quantity'
+              value='{{ in_cart_quantity | default: 1 }}'
+              min='{{ min | default: 1 }}'
+              aria-label='{{ 'accessibility.quantity' | t }}'
+              {% if variant.quantity_rule.max %}
+                max='{{ variant.quantity_rule.max }}'
+              {% endif %}
+              step='{{ variant.quantity_rule.increment | default: 1 }}'
+            >
+          </div>
+          <button
+            class='payment-form-quantity-increment'
+            type='button'
+            data-form-input-number-controls-increment
+          >
+            {% render 'x-button', text: '+' %}
+          </button>
+        </div>
+
+        <button class='payment-form-add-to-cart-button'>
+          {% render 'x-button', text: add_to_cart_text %}
+        </button>
+        <button
+          class='payment-form-checkout-button'
+          data-button-for='shopify-buy-it-now-button button'
+        >
+          {% render 'x-button', variant: 'primary', text: 'Buy it now' %}
+        </button>
+        <div class='payment-form-accelerated-button'>
+          {{ form | payment_button }}
+        </div>
+      </div>
+    {%- endform -%}
+  {%- else -%}
+    <div class='payment-form-buttons'>
+      {% assign sold_out_text = 'blocks.sold_out' | t %}
+      <button
+        class='payment-form-sold-out-button'
+        type='submit'
+        name='add'
+        disabled
+      >
+        {% render 'x-button', text: sold_out_text %}
+      </button>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .x-product-payment-form {
+    & .payment-form-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+
+      & .payment-form-quantity {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 4px;
+
+        & .payment-form-quantity-decrement,
+        & .payment-form-quantity-increment {
+          all: unset;
+          display: flex;
+
+          &.payment-form-quantity-decrement {
+            margin-right: -32px;
+          }
+          &.payment-form-quantity-increment {
+            margin-left: -32px;
+          }
+        }
+
+        & .payment-form-quantity-input-frame {
+          height: 100%;
+          aspect-ratio: 1 / 1;
+          border: 1px solid currentColor;
+          border-radius: 9999px;
+
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
+          & .payment-form-quantity-input {
+            font: inherit;
+            appearance: none;
+            text-align: center;
+            width: 2em;
+            height: 2em;
+            padding: 0;
+            margin: 0;
+            background: linear-gradient(to top, var(--color-background) 50%, transparent);
+            backdrop-filter: blur(2px);
+            position: relative;
+            z-index: 10;
+            border: 1px solid currentColor;
+            border-radius: 9999px;
+
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+              appearance: none;
+            }
+          }
+        }
+      }
+
+      & .payment-form-add-to-cart-button,
+      & .payment-form-checkout-button,
+      & .payment-form-sold-out-button {
+        all: unset;
+        display: flex;
+        flex-direction: column;
+
+        &.payment-form-add-to-cart-button {
+          flex-grow: 999;
+        }
+
+        &.payment-form-checkout-button {
+          flex-grow: 1;
+        }
+      }
+
+      & .payment-form-accelerated-button {
+        visibility: hidden;
+        position: absolute;
+      }
+    }
+  }
+{% endstylesheet %}

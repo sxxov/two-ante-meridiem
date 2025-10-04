@@ -1,0 +1,76 @@
+<div
+  class='x-product-card-thumbnail'
+  data-carousel
+>
+  {% if product.media.size > 1 %}
+    <div class='product-card-thumbnail-indicators'>
+      {% for media in product.media %}
+        <button
+          class='product-card-thumbnail-indicator'
+          data-carousel-indicator='{{ forloop.index0 }}'
+          aria-label='View product media {{ forloop.index }}'
+        ></button>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div
+    class='product-card-thumbnail-container'
+    data-carousel-content
+  >
+    {% for media in product.media %}
+      <div
+        class='product-card-thumbnail-item'
+        data-carousel-item
+      >
+        <a
+          href='{{ product.url }}'
+          ref='cardGalleryLink'
+          class='product-card-thumbnail-link'
+          aria-label='View {{ product.title }}'
+        >
+          {% render 'x-media', media: media %}
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-product-card-thumbnail {
+    position: relative;
+    overflow: clip;
+
+    & .product-card-thumbnail-indicators {
+      position: absolute;
+      top: 0;
+      inset-inline: 0;
+
+      display: flex;
+      gap: 2px;
+      justify-content: center;
+
+      mix-blend-mode: difference;
+      z-index: 10;
+
+      & .product-card-thumbnail-indicator {
+        border: none;
+        padding: 0;
+
+        border-radius: 9999px;
+        width: 4px;
+        height: 4px;
+
+        border: 1px solid white;
+        transition-property: background;
+
+        &[data-carousel-indicator-selected] {
+          background: white;
+        }
+      }
+    }
+
+    & .product-card-thumbnail-link {
+      display: contents;
+    }
+  }
+{% endstylesheet %}

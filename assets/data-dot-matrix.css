@@ -1,10 +1,26 @@
 [data-dot-matrix] {
   --mask-size: clamp(2px, 0.05em, 6px);
-  --mask: radial-gradient(circle at center, transparent 66.67%, white 70%);
+  --mask-image-inverted: radial-gradient(
+    circle at center,
+    transparent 66.67%,
+    white 70%
+  );
+  --mask-image-normal: radial-gradient(
+    circle at center,
+    white 66.67%,
+    transparent 70%
+  );
+  &,
+  &[data-dot-matrix-polarity='normal'] {
+    --mask-image: var(--mask-image-normal);
+  }
+  &[data-dot-matrix-polarity='inverted'] {
+    --mask-image: var(--mask-image-inverted);
+  }
 
   &:not(:is(h1, h2, h3, h4, h5, h6, p)),
   &[data-dot-matrix='mask'] {
-    mask-image: var(--mask);
+    mask-image: var(--mask-image);
     mask-size: var(--mask-size) var(--mask-size);
   }
 
@@ -12,7 +28,7 @@
   &[data-dot-matrix='text'] {
     &,
     & * {
-      background: var(--mask) repeat;
+      background: var(--mask-image) repeat;
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent !important;

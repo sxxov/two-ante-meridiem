@@ -1,7 +1,5 @@
-{% render 'x-theme' %}
-
 <header class='x-header'>
-  {% render 'x-header-logo', variant: section.settings.logo_variant %}
+  {% render 'x-header-logo' %}
   <div class='header-blurs'>
     <div class='header-blur-lg'></div>
     <div class='header-blur-md'></div>
@@ -22,7 +20,10 @@
   .x-header {
     :root:has(&) {
       --x-header-height: 60px;
-      --header-padding: 0px;
+    }
+    body:has(&) {
+      --header-height: var(--x-header-height);
+      --header-padding: var(--x-header-height);
     }
 
     #header-group:has(&) {
@@ -30,6 +31,8 @@
     }
 
     display: contents;
+
+    pointer-events: none;
 
     & .header-blurs {
       position: fixed;
@@ -79,16 +82,22 @@
       & .header-bar-left {
         grid-area: left;
         justify-self: start;
+
+        pointer-events: auto;
       }
 
       & .header-bar-center {
         grid-area: center;
         justify-self: center;
+
+        pointer-events: auto;
       }
 
       & .header-bar-right {
         grid-area: right;
         justify-self: end;
+
+        pointer-events: auto;
       }
     }
   }
@@ -105,7 +114,7 @@
 
 {% schema %}
 {
-  "name": "t:names.header",
+  "name": "Header",
   "class": "slot",
   "settings": [
     {
@@ -117,21 +126,13 @@
     {
       "type": "header",
       "content": "Logo"
-    },
-    {
-      "type": "select",
-      "id": "logo_variant",
-      "label": "Logo Variant",
-      "options": [
-        {
-          "value": "forehead",
-          "label": "Forehead"
-        },
-        { "value": "chin", "label": "Chin" },
-        { "value": "temple", "label": "Temple" }
-      ]
     }
   ],
-  "presets": []
+  "presets": [
+    {
+      "name": "Header",
+      "category": "Header"
+    }
+  ]
 }
 {% endschema %}

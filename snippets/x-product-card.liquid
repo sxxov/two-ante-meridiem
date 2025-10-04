@@ -1,39 +1,39 @@
 <article class='x-product-card variant/{{ variant | default: 'image-info' }} reveal/{{ reveal | default: 'always' }}'>
+  <div class='product-card-thumbnail'>
+    {% render 'x-product-card-thumbnail', product: product %}
+    <div
+      class='product-card-overlay'
+      data-indices
+    >
+      <div
+        class='product-card-button variant/add-to-cart'
+        title='Add to cart'
+        on:click='quick-add-component/handleClick'
+      >
+        {% capture add_to_cart_icon %}
+            {{ 'x-icon-add-shopping-cart.svg' | inline_asset_content }}
+          {% endcapture %}
+        {% render 'x-button', variant: 'secondary', icon: add_to_cart_icon %}
+      </div>
+      <div
+        class='product-card-button variant/buy-now'
+        title='Buy now'
+      >
+        {% capture buy_now_icon %}
+            {{ 'x-icon-local-mall.svg' | inline_asset_content }}
+          {% endcapture %}
+        {% render 'x-button', variant: 'primary', icon: buy_now_icon %}
+      </div>
+    </div>
+  </div>
   <a
     href='{{ product.url }}'
     ref='cardGalleryLink'
     class='product-card-link'
     aria-label='View {{ product.title }}'
   >
-    <div class='product-card-thumbnail'>
-      {% render 'x-product-thumbnail', product: product %}
-      <div
-        class='product-card-overlay'
-        data-indices
-      >
-        <div
-          class='product-card-button variant/add-to-cart'
-          title='Add to cart'
-          on:click='quick-add-component/handleClick'
-        >
-          {% capture add_to_cart_icon %}
-            {{ 'x-icon-add-shopping-cart.svg' | inline_asset_content }}
-          {% endcapture %}
-          {% render 'x-button', variant: 'secondary', icon: add_to_cart_icon %}
-        </div>
-        <div
-          class='product-card-button variant/buy-now'
-          title='Buy now'
-        >
-          {% capture buy_now_icon %}
-            {{ 'x-icon-local-mall.svg' | inline_asset_content }}
-          {% endcapture %}
-          {% render 'x-button', variant: 'primary', icon: buy_now_icon %}
-        </div>
-      </div>
-    </div>
     <div class='product-card-info'>
-      {% render 'x-product-info', product: product %}
+      {% render 'x-product-card-info', product: product %}
     </div>
   </a>
 </article>
@@ -56,8 +56,8 @@
     }
 
     & .product-card-thumbnail {
+      position: relative;
       overflow: clip;
-      perspective: 100px;
 
       &:is(:focus, :focus-within) {
         outline: 2px solid currentColor;
@@ -74,38 +74,56 @@
       justify-content: center;
       gap: 4px;
 
+      pointer-events: none;
+
       transition-property: translate, rotate, scale;
       transition-duration: 0.5s;
       transition-timing-function: var(--ease-out);
       transition-delay: 0s;
+
+      @media not (hover: hover) {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: flex-start;
+      }
 
       & .product-card-button {
         transition-property: translate;
         transition-timing-function: var(--ease-in-out);
         transition-delay: calc((var(--index)) * 0.2s);
 
+        pointer-events: auto;
+
         min-width: 96px;
 
         & > * {
           width: 100%;
         }
+
+        &.variant\/buy-now {
+          @media not (hover: hover) {
+            display: none;
+          }
+        }
       }
     }
-    &:not(:is(:hover, :focus, :focus-within)) .product-card-overlay {
-      scale: 0;
-      transition-timing-function: var(--ease-in);
-      transition-delay: 0s;
-      transition-duration: 0.2s;
+    @media (hover: hover) {
+      &:not(:is(:hover, :focus, :focus-within)) .product-card-overlay {
+        scale: 0;
+        transition-timing-function: var(--ease-in);
+        transition-delay: 0s;
+        transition-duration: 0.2s;
 
-      & .product-card-button {
-        transition-delay: calc((var(--index) + 1) * 0.2s);
-        transition-duration: 0.5s;
+        & .product-card-button {
+          transition-delay: calc((var(--index) + 1) * 0.2s);
+          transition-duration: 0.5s;
 
-        &.variant\/add-to-cart {
-          translate: -100% 0;
-        }
-        &.variant\/buy-now {
-          translate: 100% 0;
+          &.variant\/add-to-cart {
+            translate: -100% 0;
+          }
+          &.variant\/buy-now {
+            translate: 100% 0;
+          }
         }
       }
     }
@@ -116,10 +134,12 @@
       transition-duration: 0.5s, 0s;
       transition-delay: 0s, 0s;
     }
-    &.reveal\/hover:not(:is(:hover, :focus, :focus-within)) .product-card-info {
-      opacity: 0;
-      clip-path: inset(100%);
-      transition-delay: 0s, 0.5s;
+    @media (hover: hover) {
+      &.reveal\/hover:not(:is(:hover, :focus, :focus-within)) .product-card-info {
+        opacity: 0;
+        clip-path: inset(100%);
+        transition-delay: 0s, 0.5s;
+      }
     }
   }
 {% endstylesheet %}

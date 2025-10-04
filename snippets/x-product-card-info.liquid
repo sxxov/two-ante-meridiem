@@ -27,29 +27,29 @@
   endif
 %}
 
-<div class='x-product-info'>
-  <div class='product-heading'>
+<div class='x-product-card-info'>
+  <div class='product-card-heading'>
     <h3
-      class='product-title h4'
+      class='product-card-title h4'
       data-text-clip-reveal
     >
       {{ product.title }}
     </h3>
-    <div class='product-chips'>
+    <div class='product-card-chips'>
       {% if is_new %}
-        {% render 'x-product-chip', variant: 'new', text: 'New' %}
+        {% render 'x-product-tag-chip', variant: 'new', text: 'New' %}
       {% endif %}
 
       {% if is_out_of_stock %}
-        {% render 'x-product-chip', variant: 'out-of-stock', text: 'Out of Stock' %}
+        {% render 'x-product-tag-chip', variant: 'out-of-stock', text: 'Out of Stock' %}
       {% elsif is_low_stock %}
-        {% render 'x-product-chip', variant: 'low-stock', text: 'Low Stock' %}
+        {% render 'x-product-tag-chip', variant: 'low-stock', text: 'Low Stock' %}
       {% endif %}
 
       {% for tag in product.tags %}
         {% if tag contains 'Sale-' %}
           {% assign sale_text = tag | remove: 'Sale-' %}
-          {% render 'x-product-chip', variant: 'sale', text: sale_text %}
+          {% render 'x-product-tag-chip', variant: 'sale', text: sale_text %}
         {% else %}
           {% liquid
             assign is_collection_tag = false
@@ -61,29 +61,29 @@
             endfor
           %}
           {% unless is_collection_tag %}
-            {% render 'x-product-chip', text: tag %}
+            {% render 'x-product-tag-chip', text: tag %}
           {% endunless %}
         {% endif %}
       {% endfor %}
     </div>
   </div>
-  <div class='product-description'>
+  <div class='product-card-description'>
     <div
-      class='product-price'
+      class='product-card-price'
       data-text-clip-reveal
     >
       {% if product.compare_at_price_max > product.price %}
-        <span class='product-price-previous'>
+        <span class='product-card-price-previous'>
           {{ product.compare_at_price_max | money }}
         </span>
       {% endif %}
-      <span class='product-price-current'>
+      <span class='product-card-price-current'>
         {{ product.price | money }}
       </span>
     </div>
-    <div class='product-sizes'>
+    <div class='product-card-sizes'>
       {% for variant in product.variants %}
-        <div class='product-size h6 {% if variant.available %}variant/available{% else %}variant/unavailable{% endif %}'>
+        <div class='product-card-size h6 {% if variant.available %}variant/available{% else %}variant/unavailable{% endif %}'>
           {{ variant.title }}
         </div>
       {% endfor %}
@@ -92,7 +92,7 @@
 </div>
 
 {% stylesheet %}
-  & .x-product-info {
+  & .x-product-card-info {
     padding-block: 16px;
 
     display: flex;
@@ -100,7 +100,7 @@
     flex-direction: column;
     container-type: inline-size;
 
-    & .product-heading {
+    & .product-card-heading {
       display: flex;
       gap: 16px;
       justify-content: space-between;
@@ -109,11 +109,11 @@
         flex-direction: column;
       }
 
-      & .product-title {
+      & .product-card-title {
         margin: 0;
       }
 
-      & .product-chips {
+      & .product-card-chips {
         display: flex;
         gap: 4px;
         flex-wrap: wrap;
@@ -121,28 +121,28 @@
       }
     }
 
-    & .product-description {
+    & .product-card-description {
       display: flex;
       gap: 8px;
       justify-content: space-between;
       flex-wrap: wrap;
 
-      & .product-price {
+      & .product-card-price {
         display: flex;
         gap: 4px;
 
-        & .product-price-previous {
+        & .product-card-price-previous {
           text-decoration: line-through;
           opacity: 0.5;
         }
       }
 
-      & .product-sizes {
+      & .product-card-sizes {
         display: flex;
         gap: 4px;
         flex-wrap: wrap;
 
-        & .product-size {
+        & .product-card-size {
           &.variant\/unavailable {
             opacity: 0.5;
             text-decoration: line-through;

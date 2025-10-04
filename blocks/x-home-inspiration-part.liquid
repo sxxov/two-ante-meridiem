@@ -27,13 +27,6 @@
     --in-progress: calc(clamp(0, var(--follow-scroll-y-in, 0) * 9999, 1));
     --out-progress: calc(clamp(0, (1 - var(--follow-scroll-y-in, 0)) * 9999, 1));
 
-    transition-property: clip-path;
-    transition-duration: 1s;
-    transition-timing-function: var(--ease-out);
-    transition-delay: calc(var(--index, 0) * 0.1s);
-
-    clip-path: inset(calc((1 - var(--in-progress)) * 50%) 0 0 0);
-
     & .home-inspiration-part-background {
       position: absolute;
       inset: 0;
@@ -49,6 +42,13 @@
 
     & .home-inspiration-part-image {
       position: relative;
+
+      transition-property: clip-path;
+      transition-duration: 1s;
+      transition-timing-function: var(--ease-out);
+      transition-delay: calc(var(--index, 0) * 0.1s);
+
+      clip-path: inset(calc((1 - var(--in-progress)) * 50%) 0 0 0);
 
       &::after {
         content: '';

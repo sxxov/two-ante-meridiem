@@ -28,15 +28,22 @@
           "type": "x-footer-nav",
           "static": true,
           "settings": {
-            "menu": ""
+            "menu": "footer"
           },
           "blocks": {
             "footer-policy-list": {
               "type": "_footer-policy-list",
+              "name": "Policy links",
+              "settings": {
+                "font_size": "0.75rem",
+                "case": "uppercase"
+              },
               "blocks": {}
             }
           },
-          "block_order": ["footer-policy-list"]
+          "block_order": [
+            "footer-policy-list"
+          ]
         }
       },
       "name": "Footer",
@@ -45,5 +52,7 @@
       }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }

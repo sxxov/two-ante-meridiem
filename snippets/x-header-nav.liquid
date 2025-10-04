@@ -39,6 +39,16 @@
       gap: 32px;
       justify-content: center;
 
+      &:not(:has([aria-current='page'])) .header-nav-topping:first-child,
+      & .header-nav-topping:has([aria-current='page']) {
+        &::before {
+          content: '▪';
+          margin-right: 4px;
+          height: 100%;
+          display: inline-flex;
+          align-items: center;
+        }
+      }
       & .header-nav-topping {
         text-decoration: none;
         color: inherit;
@@ -50,16 +60,6 @@
         &:hover,
         &:focus {
           text-decoration: underline;
-        }
-
-        &:has([aria-current='page']) {
-          &::before {
-            content: '▪';
-            margin-right: 4px;
-            height: 100%;
-            display: inline-flex;
-            align-items: center;
-          }
         }
 
         & .header-nav-topping-link {

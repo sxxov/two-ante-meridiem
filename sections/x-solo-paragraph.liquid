@@ -2,7 +2,10 @@
   {% content_for 'blocks' %}
 {% endcapture %}
 
-<section class='x-solo-paragraph'>
+<section
+  class='x-solo-paragraph'
+  data-text-clip-reveal
+>
   {{ text }}
 </section>
 
@@ -16,7 +19,7 @@
 
 {% schema %}
 {
-  "name": "Paragraph",
+  "name": "Solo: Paragraph",
   "class": "slot",
   "blocks": [
     {

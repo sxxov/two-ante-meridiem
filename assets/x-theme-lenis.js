@@ -36,6 +36,7 @@ function scrollIntoViewUsingLenis(
     if (behavior === 'smooth') {
       const { scrollMarginTop: scrollMarginTopRaw } = getComputedStyle(this);
       const scrollMarginTop = Number(scrollMarginTopRaw.replace('px', ''));
+      lenis.velocity = 0;
       lenis.scrollTo(this, {
         ...(!Number.isNaN(scrollMarginTop) && {
           offset: -scrollMarginTop,
@@ -78,11 +79,13 @@ function scrollToUsingLenis(
   const top = objectArg?.top ?? args[1];
   const behavior = objectArg?.behavior;
 
-  if (top !== undefined && !lenisScrolling && !objectArg?.bypass)
+  if (top !== undefined && !lenisScrolling && !objectArg?.bypass) {
+    lenis.velocity = 0;
     lenis.scrollTo(top, {
       immediate: behavior !== 'smooth',
       programmatic: true,
     });
+  }
 
   scrollTo.call(this, .../** @type {[number, number]} */ (args));
 }

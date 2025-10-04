@@ -1,0 +1,135 @@
+<div class='x-product-details-breakdown'>
+  <div
+    class='product-details-heading'
+    data-product-pull-node='product-details-heading-{{ block.id }}-{{ product.id }}'
+  >
+    <div class='product-details-tags'>
+      {% for collection in product.collections %}
+        <a
+          href='{{ collection.url }}'
+          class='product-details-tag-link'
+        >
+          {% render 'x-product-tag-chip', text: collection.title %}
+        </a>
+      {% endfor %}
+    </div>
+    <h1 class='product-details-title h1'>
+      {{ product.title }}
+    </h1>
+  </div>
+  <div
+    class='product-details-info'
+    data-product-pull-node='product-details-info-{{ block.id }}-{{ product.id }}'
+  >
+    <div class='product-details-price h4'>
+      {{ product.price | money }}
+    </div>
+    <div
+      class='product-details-description'
+      data-follow-child-rect
+    >
+      <div
+        class='product-details-description-container'
+        data-follow-child-rect-target
+      >
+        {{ product.description }}
+      </div>
+    </div>
+  </div>
+  <div class='product-details-buttons'>
+    <div class='product-details-variant'>
+      {% render 'x-product-variant-form', product: product %}
+    </div>
+    <div class='product-details-payment'>
+      {% render 'x-product-payment-form', product: product %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-product-details-breakdown {
+    position: sticky;
+    top: var(--x-header-height);
+    min-height: calc(100lvh - var(--x-header-height));
+
+    padding-block: 32px;
+    padding-inline: 32px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+
+    & .product-details-heading {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      & .product-details-tags {
+        & .product-details-tag-link {
+          color: currentColor;
+        }
+      }
+
+      & .product-details-title {
+        margin: 0;
+      }
+    }
+
+    & .product-details-info {
+      flex-grow: 1;
+
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+
+      & .product-details-price {
+        margin: 0;
+      }
+
+      & .product-details-description {
+        flex-grow: 1;
+
+        max-width: 50ch;
+
+        --outset-height: 64px;
+        padding-block: var(--outset-height);
+        margin-block: calc(-1 * var(--outset-height));
+        mask-image: linear-gradient(
+          to bottom,
+          #fff0,
+          #fff var(--outset-height),
+          #fff calc(100% - var(--outset-height)),
+          #fff0
+        );
+
+        transition-property: max-height;
+
+        &:is(:hover, :focus, :focus-within) {
+          min-height: calc(var(--outset-height) * 2 + var(--follow-child-rect-height, 100%));
+        }
+      }
+    }
+
+    & .product-details-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      & .product-details-variant {
+        & .product-variant-form {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+      }
+
+      & .product-details-payment {
+        & .product-payment-form {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+      }
+    }
+  }
+{% endstylesheet %}

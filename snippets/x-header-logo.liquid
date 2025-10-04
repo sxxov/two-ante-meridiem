@@ -1,4 +1,4 @@
-<div class='x-header-logo variant/{{ variant | default: 'forehead' }}'>
+<div class='x-header-logo variant/{{ variant }}'>
   <div class='header-logo-container'>
     {% render 'x-brand-logo' %}
   </div>
@@ -24,6 +24,8 @@
 
     mix-blend-mode: difference;
 
+    :root:not(:has(.x-header-logo-variant-provider)) &.variant\/,
+    :root:has(.x-header-logo\:variant\/forehead) &,
     &.variant\/forehead {
       position: fixed;
       top: 0;
@@ -31,6 +33,7 @@
       translate: -50% 0;
     }
 
+    :root:has(.x-header-logo\:variant\/chin) &,
     &.variant\/chin {
       position: sticky;
       margin-top: calc(100lvh - var(--x-header-logo-height));
@@ -40,6 +43,7 @@
       translate: -50% 0;
     }
 
+    :root:has(.x-header-logo\:variant\/temple) &,
     &.variant\/temple {
       position: fixed;
       top: -96px;

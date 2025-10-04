@@ -163,8 +163,6 @@ export const CarouselBehavior = behavior(
         if (!hasAttachedBehavior(element, CarouselContentBehavior))
           _._ = attachBehavior(element, CarouselContentBehavior, {});
 
-        contentContainer.set(element);
-
         return _;
       }));
 
@@ -213,6 +211,4 @@ export const CarouselBehavior = behavior(
   },
 );
 
-queueMicrotask(() => {
-  registerGlobalBehaviors(CarouselBehavior);
-});
+registerGlobalBehaviors(CarouselBehavior);

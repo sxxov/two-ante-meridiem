@@ -1,0 +1,59 @@
+{% capture strip %}
+  {%  content_for 'block', type: 'x-product-details-strip', id: 'strip' %}
+{% endcapture %}
+{% capture breakdown %}
+  {%  content_for 'block', type: 'x-product-details-breakdown', id: 'breakdown' %}
+{% endcapture %}
+
+<section
+  class='x-product-details'
+  data-product-pull
+  data-product-pull-url='{{ product.url }}'
+  data-product-pull-section='{{ section.id }}'
+>
+  <div class='product-details-strip'>{{ strip }}</div>
+  <div class='product-details-breakdown'>{{ breakdown }}</div>
+</section>
+
+{% stylesheet %}
+  .x-product-details {
+    display: grid;
+    grid-template-columns: 0.4fr 0.6fr;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product: Details",
+  "class": "slot",
+  "blocks": [{ "type": "x-product-details-strip" }, { "type": "x-product-details-breakdown" }],
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product: Details",
+      "category": "Product",
+      "settings": { "product": "{{ closest.product }}" },
+      "blocks": [
+        {
+          "type": "x-product-details-strip",
+          "id": "strip",
+          "static": true,
+          "settings": { "product": "{{ closest.product }}" }
+        },
+        {
+          "type": "x-product-details-breakdown",
+          "id": "breakdown",
+          "static": true,
+          "settings": { "product": "{{ closest.product }}" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

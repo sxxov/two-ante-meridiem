@@ -9,6 +9,13 @@
  */
 {
   "sections": {
+    "x_header_logo_variant_provider_xpnVWg": {
+      "type": "x-header-logo-variant-provider",
+      "name": "Header: Logo Variant Provider",
+      "settings": {
+        "variant": "chin"
+      }
+    },
     "x_home_hero_GMh8hk": {
       "type": "x-home-hero",
       "blocks": {
@@ -445,6 +452,7 @@
     }
   },
   "order": [
+    "x_header_logo_variant_provider_xpnVWg",
     "x_home_hero_GMh8hk",
     "x_wide_image_Y73PkU",
     "x_solo_paragraph_wTDLPR",

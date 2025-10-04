@@ -1,0 +1,31 @@
+<div
+  class='x-header-logo-variant-provider x-header-logo:variant/{{ section.settings.variant | default: 'forehead' }}'
+></div>
+
+{% schema %}
+{
+  "name": "Header: Logo Variant Pro…",
+  "class": "slot",
+  "settings": [
+    {
+      "type": "select",
+      "id": "variant",
+      "label": "Variant",
+      "options": [
+        {
+          "value": "forehead",
+          "label": "Forehead"
+        },
+        { "value": "chin", "label": "Chin" },
+        { "value": "temple", "label": "Temple" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header: Logo Variant Provider",
+      "category": "Header"
+    }
+  ]
+}
+{% endschema %}

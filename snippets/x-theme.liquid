@@ -7,19 +7,71 @@
 {% render 'x-theme-layout' %}
 {% render 'x-theme-typography' %}
 
-<script type='module'></script>
+{% capture modules_soup %}
+  x-theme-lenis.js,
+  x-theme-anchor-hash-scrolling.js,
+  data-text-clip-reveal.js,
+  data-text-clip-reveal.css,
+  data-text-countdown.js,
+  data-follow-scroll.js,
+  data-indices.js,
+  data-carousel.js,
+  data-carousel.css,
+  data-intersection.js,
+  data-dot-matrix.css,
+  data-button-for.js,
+  data-button-scroll-into-view-for.js,
+  data-hash-into-url.js,
+  data-href-matches-page.js,
+  data-follow-child-rect.js,
+  data-product-pull.js,
+  data-form-input-number-controls.js,
+  data-marquee.js,
+  data-marquee.css
+{% endcapture %}
+{% assign modules = modules_soup | split: ',' %}
 
+<script type='importmap'>
+  {
+    "imports": {
+      {%- assign module_count = 0 -%}
+      {%- for m in modules -%}
+        {%- assign path = m | strip -%}
+        {%- assign path_parts = path | split: '.' -%}
+        {%- assign extension = path_parts.last -%}
+        {%- if extension == 'js' -%}
+          {%- assign module_count = module_count | plus: 1 -%}
+          {%- if module_count > 1 -%},{%- endif -%}
+          {%- assign uri = path | asset_url -%}
+          {%- assign uri_parts = uri | split: '?' -%}
+          {%- assign uri_without_query = uri_parts.first | strip -%}
+          "{{ uri_without_query }}": "{{ uri }}"
+        {%- endif -%}
+      {%- endfor -%}
+    }
+  }
+</script>
 <script type='module'>
-  import '{{ 'x-theme-lenis.js' | asset_url }}';
-  import '{{ 'data-text-clip-reveal.js' | asset_url }}';
-  import '{{ 'data-text-countdown.js' | asset_url }}';
-  import '{{ 'data-follow-scroll.js' | asset_url }}';
-  import '{{ 'data-indices.js' | asset_url }}';
-  import '{{ 'data-carousel.js' | asset_url }}';
-  import '{{ 'data-intersection.js' | asset_url }}';
+  {%- for m in modules -%}
+    {%- assign path = m | strip -%}
+    {%- assign path_parts = path | split: '.' -%}
+    {%- assign extension = path_parts.last -%}
+    {%- if extension == 'js' -%}
+      {%- assign uri = path | asset_url -%}
+      {%- assign uri_parts = uri | split: '?' -%}
+      {%- assign uri_without_query = uri_parts.first | strip -%}
+      import "{{ uri_without_query }}";
+    {%- endif -%}
+  {%- endfor -%}
 </script>
 <style>
-  @import '{{ 'data-dot-matrix.css' | asset_url }}';
-  @import '{{ 'data-text-clip-reveal.css' | asset_url }}';
-  @import '{{ 'data-carousel.css' | asset_url }}';
+  {%- for m in modules -%}
+    {%- assign path = m | strip -%}
+    {%- assign path_parts = path | split: '.' -%}
+    {%- assign extension = path_parts.last -%}
+    {%- if extension == 'css' -%}
+      {%- assign uri = path | asset_url -%}
+      @import "{{ uri }}";
+    {%- endif -%}
+  {%- endfor -%}
 </style>
