@@ -1,0 +1,39 @@
+<div class='x-product-chip h6 variant/{{ variant | default: 'default' }}'>
+  {{ text }}
+</div>
+
+{% stylesheet %}
+  .x-product-chip {
+    display: inline-block;
+    padding-inline: 0.3em;
+    padding-block: 0.3em;
+
+    letter-spacing: -0.03em !important;
+    text-transform: unset !important;
+
+    border-radius: 6px;
+    border: 1px solid color-mix(in oklab, currentColor, transparent 50%);
+
+    text-wrap: nowrap;
+
+    &.variant\/default {
+      color: currentColor;
+    }
+
+    &.variant\/new {
+      color: #2791ae;
+    }
+
+    &.variant\/sale {
+      color: #b94de7;
+    }
+
+    &.variant\/low-stock {
+      color: #e74d4d;
+    }
+
+    &.variant\/out-of-stock {
+      color: #888;
+    }
+  }
+{% endstylesheet %}

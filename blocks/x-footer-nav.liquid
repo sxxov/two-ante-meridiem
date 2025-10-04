@@ -1,0 +1,81 @@
+{% capture children %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+<nav
+  class='x-footer-nav'
+>
+  {{ children }}
+  {% for link in block.settings.menu.links %}
+    <a
+      href='{{ link.url }}'
+      class='footer-nav-link'
+      {% if link.current %}
+        aria-current='page'
+      {% endif %}
+    >
+      {{- link.title -}}
+    </a>
+  {% endfor %}
+</nav>
+
+{% stylesheet %}
+  .x-footer-nav {
+    display: flex;
+    gap: 0.5em;
+
+    & > * {
+      --color: currentColor;
+      font-weight: inherit;
+      font-size: inherit;
+      text-transform: uppercase;
+      text-wrap: nowrap;
+
+      &:not(:last-child) {
+        position: relative;
+
+        &::after {
+          content: '/';
+          position: absolute;
+          display: block;
+          right: 0;
+          top: 50%;
+          translate: 100% -53%;
+        }
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer: Nav",
+  "tag": "slot",
+  "blocks": [
+    {
+      "type": "_footer-policy-list"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer: Nav",
+      "category": "Footer",
+      "blocks": [
+        {
+          "type": "_footer-policy-list"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

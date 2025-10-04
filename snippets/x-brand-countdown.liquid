@@ -1,0 +1,93 @@
+<div class='x-brand-countdown'>
+  <div class='brand-countdown-hourglass'>
+    <div class='brand-countdown-hourglass-a'>
+      {{ 'x-icon-hourglass.svg' | inline_asset_content }}
+    </div>
+    <div class='brand-countdown-hourglass-b'>
+      {{ 'x-icon-hourglass.svg' | inline_asset_content }}
+    </div>
+  </div>
+  <div class='brand-countdown-info'>
+    <div class='brand-countdown-title h5'>
+      {{ title }}
+    </div>
+    <div class='brand-countdown-timer h5'>
+      <div
+        data-text-countdown
+        data-text-countdown-time='{{ time }}'
+        data-text-countdown-format='d:hh:mm:ss.SS'
+      ></div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-brand-countdown {
+    display: flex;
+    gap: 16px;
+
+    & .brand-countdown-hourglass {
+      width: fit-content;
+      height: fit-content;
+
+      display: grid;
+      grid-template-areas: 'a';
+      align-items: center;
+      justify-items: center;
+
+      animation: brand-countdown-hourglass-spin 4s var(--ease-in-out) infinite;
+
+      & .brand-countdown-hourglass-a {
+        grid-area: a;
+        animation: brand-countdown-hourglass-a-clip 4s var(--ease-in-out) infinite;
+      }
+
+      & .brand-countdown-hourglass-b {
+        grid-area: a;
+        scale: 1 -1;
+        animation: brand-countdown-hourglass-b-clip 4s var(--ease-in-out) infinite;
+      }
+    }
+
+    & .brand-countdown-info {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  @keyframes brand-countdown-hourglass-spin {
+    0% {
+      rotate: 0deg;
+    }
+    50% {
+      rotate: 180deg;
+    }
+    100% {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes brand-countdown-hourglass-a-clip {
+    0% {
+      clip-path: inset(50% 0 0 0);
+    }
+    60% {
+      clip-path: inset(0 0 0 0);
+    }
+    100% {
+      clip-path: inset(50% 0 0 0);
+    }
+  }
+
+  @keyframes brand-countdown-hourglass-b-clip {
+    0% {
+      clip-path: inset(0 0 0 0);
+    }
+    60% {
+      clip-path: inset(50% 0 0 0);
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+{% endstylesheet %}

@@ -1,0 +1,129 @@
+{% capture copyright %}
+  {% content_for 'block', type: '_footer-copyright', id: 'copyright' %}
+{% endcapture %}
+
+{% capture nav %}
+  {% content_for 'block', type: 'x-footer-nav', id: 'nav' %}
+{% endcapture %}
+
+<footer
+  class='x-footer'
+  role='contentinfo'
+>
+  <div
+    class='footer-info'
+    data-text-clip-reveal
+  >
+    <div class='footer-copyright'>{{ copyright }}</div>
+    <a
+      class='footer-email'
+      href='mailto:{{ shop.email }}'
+    >
+      {{- shop.email | escape -}}
+    </a>
+    <div class='footer-nav'>{{ nav }}</div>
+  </div>
+  <div class='footer-brand'>
+    {{ 'x-2.svg' | inline_asset_content }}
+  </div>
+</footer>
+
+{% stylesheet %}
+  .x-footer {
+    :root:has(&) {
+      --x-footer-height: 336px;
+    }
+
+    display: flex;
+    flex-direction: column;
+
+    & .footer-info {
+      position: sticky;
+      top: 0;
+
+      min-height: var(--x-footer-height);
+      padding-inline: 16px;
+      padding-block: 16px;
+
+      display: grid;
+      align-items: end;
+      grid-template-columns: 1fr auto 1fr;
+      grid-template-areas: 'copyright email nav';
+      column-gap: 16px;
+      row-gap: 8px;
+
+      font-size: 0.75rem;
+      text-transform: uppercase;
+
+      z-index: 10;
+      color: white;
+      mix-blend-mode: difference;
+
+      & .footer-copyright {
+        grid-area: copyright;
+        justify-self: start;
+        text-align: start;
+      }
+
+      & .footer-email {
+        grid-area: email;
+        justify-self: center;
+        text-align: center;
+        --color: currentColor;
+      }
+
+      & .footer-nav {
+        grid-area: nav;
+        justify-self: end;
+        text-align: end;
+      }
+    }
+
+    & .footer-brand {
+      & svg {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "slot",
+  "blocks": [
+    {
+      "type": "x-footer-nav"
+    },
+    {
+      "type": "_footer-copyright"
+    }
+  ],
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "category": "Footer",
+      "blocks": [
+        {
+          "type": "_footer-copyright",
+          "id": "copyright",
+          "static": true
+        },
+        {
+          "type": "x-footer-nav",
+          "id": "nav",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

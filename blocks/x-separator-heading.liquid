@@ -1,0 +1,62 @@
+{% capture description_a %}
+  {% content_for 'block', type: 'x-separator-description', id: 'a' %}
+{% endcapture %}
+
+{% capture description_b %}
+  {% content_for 'block', type: 'x-separator-description', id: 'b' %}
+{% endcapture %}
+
+{% render 'x-separator-heading',
+  title: block.settings.title,
+  count: block.settings.count,
+  description_a: description_a,
+  description_b: description_b
+%}
+
+{% schema %}
+{
+  "name": "Separator: Heading",
+  "tag": "slot",
+  "blocks": [
+    {
+      "type": "x-separator-description"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "<h2>Your Title Here</h2>"
+    },
+    {
+      "type": "number",
+      "id": "count",
+      "label": "Count",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Separator: Heading",
+      "category": "Separator",
+      "blocks": [
+        {
+          "type": "x-separator-description",
+          "id": "a",
+          "static": true
+        },
+        {
+          "type": "x-separator-description",
+          "id": "b",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -6,3 +6,20 @@
 {% render 'x-theme-colors' %}
 {% render 'x-theme-layout' %}
 {% render 'x-theme-typography' %}
+
+<script type='module'></script>
+
+<script type='module'>
+  import '{{ 'x-theme-lenis.js' | asset_url }}';
+  import '{{ 'data-text-clip-reveal.js' | asset_url }}';
+  import '{{ 'data-text-countdown.js' | asset_url }}';
+  import '{{ 'data-follow-scroll.js' | asset_url }}';
+  import '{{ 'data-indices.js' | asset_url }}';
+  import '{{ 'data-carousel.js' | asset_url }}';
+  import '{{ 'data-intersection.js' | asset_url }}';
+</script>
+<style>
+  @import '{{ 'data-dot-matrix.css' | asset_url }}';
+  @import '{{ 'data-text-clip-reveal.css' | asset_url }}';
+  @import '{{ 'data-carousel.css' | asset_url }}';
+</style>

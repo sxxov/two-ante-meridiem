@@ -1,0 +1,39 @@
+@layer base {
+  [data-carousel] {
+    overflow: clip;
+    user-select: none;
+
+    & [data-carousel-content]:not(slot) {
+      display: flex;
+      cursor: grab;
+
+      &:active {
+        cursor: grabbing;
+      }
+
+      [data-carousel-axis='y'] & {
+        flex-direction: column;
+        height: 100%;
+      }
+    }
+
+    & {
+      & [data-carousel-content] {
+        align-items: stretch;
+      }
+    }
+    &[data-carousel-auto-height] {
+      & [data-carousel-content] {
+        align-items: flex-start;
+      }
+    }
+
+    :where(& [data-carousel-content] > *) {
+      flex-shrink: 0;
+      flex-grow: 1;
+      flex-basis: 100%;
+      min-width: 0;
+      min-height: 0;
+    }
+  }
+}

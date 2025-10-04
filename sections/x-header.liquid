@@ -2,10 +2,19 @@
 
 <header class='x-header'>
   {% render 'x-header-logo', variant: section.settings.logo_variant %}
+  <div class='header-blurs'>
+    <div class='header-blur-lg'></div>
+    <div class='header-blur-md'></div>
+    <div class='header-blur-sm'></div>
+  </div>
   <div class='header-bar'>
     <div class='header-bar-left'></div>
-    <div class='header-bar-center'>{% render 'x-header-nav' %}</div>
-    <div class='header-bar-right'>{% render 'x-header-actions' %}</div>
+    <div class='header-bar-center'>
+      {% render 'x-header-nav', menu: section.settings.menu %}
+    </div>
+    <div class='header-bar-right'>
+      {% render 'x-header-actions' %}
+    </div>
   </div>
 </header>
 
@@ -21,6 +30,36 @@
     }
 
     display: contents;
+
+    & .header-blurs {
+      position: fixed;
+      top: 0;
+      inset-inline: 0;
+      width: 100%;
+      height: var(--x-header-height);
+
+      z-index: 40;
+
+      & .header-blur-lg,
+      & .header-blur-md,
+      & .header-blur-sm {
+        position: absolute;
+        inset: 0;
+
+        &.header-blur-lg {
+          backdrop-filter: blur(8px);
+          mask-image: linear-gradient(to bottom, #fff 30%, #fff0 80%);
+        }
+        &.header-blur-md {
+          backdrop-filter: blur(4px);
+          mask-image: linear-gradient(to bottom, #fff 50%, #fff0 100%);
+        }
+        &.header-blur-sm {
+          backdrop-filter: blur(2px);
+          mask-image: linear-gradient(to bottom, #fff 80%, #fff0 100%);
+        }
+      }
+    }
 
     & .header-bar {
       position: fixed;

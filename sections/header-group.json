@@ -13,9 +13,13 @@
   "sections": {
     "header": {
       "type": "x-header",
-      "blocks": {},
-      "settings": {}
+      "settings": {
+        "menu": "main-menu",
+        "logo_variant": "chin"
+      }
     }
   },
-  "order": ["header"]
+  "order": [
+    "header"
+  ]
 }

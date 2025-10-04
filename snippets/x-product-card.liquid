@@ -1,0 +1,125 @@
+<article class='x-product-card variant/{{ variant | default: 'image-info' }} reveal/{{ reveal | default: 'always' }}'>
+  <a
+    href='{{ product.url }}'
+    ref='cardGalleryLink'
+    class='product-card-link'
+    aria-label='View {{ product.title }}'
+  >
+    <div class='product-card-thumbnail'>
+      {% render 'x-product-thumbnail', product: product %}
+      <div
+        class='product-card-overlay'
+        data-indices
+      >
+        <div
+          class='product-card-button variant/add-to-cart'
+          title='Add to cart'
+          on:click='quick-add-component/handleClick'
+        >
+          {% capture add_to_cart_icon %}
+            {{ 'x-icon-add-shopping-cart.svg' | inline_asset_content }}
+          {% endcapture %}
+          {% render 'x-button', variant: 'secondary', icon: add_to_cart_icon %}
+        </div>
+        <div
+          class='product-card-button variant/buy-now'
+          title='Buy now'
+        >
+          {% capture buy_now_icon %}
+            {{ 'x-icon-local-mall.svg' | inline_asset_content }}
+          {% endcapture %}
+          {% render 'x-button', variant: 'primary', icon: buy_now_icon %}
+        </div>
+      </div>
+    </div>
+    <div class='product-card-info'>
+      {% render 'x-product-info', product: product %}
+    </div>
+  </a>
+</article>
+
+{% stylesheet %}
+  .x-product-card {
+    position: relative;
+    display: flex;
+
+    &.variant\/image-info {
+      flex-direction: column;
+    }
+    &.variant\/info-image {
+      flex-direction: column-reverse;
+    }
+
+    & .product-card-link {
+      color: inherit;
+      display: contents;
+    }
+
+    & .product-card-thumbnail {
+      overflow: clip;
+      perspective: 100px;
+
+      &:is(:focus, :focus-within) {
+        outline: 2px solid currentColor;
+        outline-offset: 4px;
+      }
+    }
+
+    & .product-card-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+
+      transition-property: translate, rotate, scale;
+      transition-duration: 0.5s;
+      transition-timing-function: var(--ease-out);
+      transition-delay: 0s;
+
+      & .product-card-button {
+        transition-property: translate;
+        transition-timing-function: var(--ease-in-out);
+        transition-delay: calc((var(--index)) * 0.2s);
+
+        min-width: 96px;
+
+        & > * {
+          width: 100%;
+        }
+      }
+    }
+    &:not(:is(:hover, :focus, :focus-within)) .product-card-overlay {
+      scale: 0;
+      transition-timing-function: var(--ease-in);
+      transition-delay: 0s;
+      transition-duration: 0.2s;
+
+      & .product-card-button {
+        transition-delay: calc((var(--index) + 1) * 0.2s);
+        transition-duration: 0.5s;
+
+        &.variant\/add-to-cart {
+          translate: -100% 0;
+        }
+        &.variant\/buy-now {
+          translate: 100% 0;
+        }
+      }
+    }
+
+    & .product-card-info {
+      transition-property: opacity, clip-path;
+      clip-path: inset(0);
+      transition-duration: 0.5s, 0s;
+      transition-delay: 0s, 0s;
+    }
+    &.reveal\/hover:not(:is(:hover, :focus, :focus-within)) .product-card-info {
+      opacity: 0;
+      clip-path: inset(100%);
+      transition-delay: 0s, 0.5s;
+    }
+  }
+{% endstylesheet %}

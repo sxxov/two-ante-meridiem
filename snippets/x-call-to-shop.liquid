@@ -1,0 +1,102 @@
+<div class='x-call-to-shop'>
+  <div class='call-to-shop-button'>
+    <a
+      href='{{ url | default: shop.url }}'
+    >
+      {% capture shop_now_children %}
+        <div class="call-to-shop-text">
+          <span class="call-to-shop-text-before">Shop</span>
+          {{ 'x-icon-arrow-forward.svg' | inline_asset_content }}
+          <span class="call-to-shop-text-after">Now</span>
+        </div>
+      {% endcapture %}
+      {% render 'x-button', text: shop_now_children %}
+    </a>
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-call-to-shop {
+    --top: calc(0px);
+
+    position: sticky;
+    top: 0;
+    margin-top: calc(-100lvh - -1 * var(--top));
+    margin-bottom: calc(-1 * var(--top));
+    height: 100lvh;
+
+    padding-block: 96px;
+    padding-inline: 16px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    pointer-events: none;
+
+    z-index: 20;
+
+    & .call-to-shop-button {
+      pointer-events: auto;
+
+      position: relative;
+
+      box-shadow: 0 8px 32px var(--color-primary-button-text);
+      border-radius: 9999px;
+
+      backdrop-filter: blur(16px);
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          to top,
+          color-mix(in oklab, var(--color-primary-button-text), transparent 80%),
+          transparent
+        );
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          120deg,
+          transparent 0%,
+          rgba(255 255 255 / 0) 30%,
+          rgba(255 255 255 / 0.6) 45%,
+          rgba(255 255 255 / 0) 60%,
+          transparent 100%
+        );
+        background-size: 200% 100%;
+        animation: call-to-shop-shimmer 6s infinite var(--ease-in-out);
+        mix-blend-mode: plus-lighter;
+        pointer-events: none;
+      }
+
+      & .call-to-shop-text {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        & svg {
+          width: 1.25em;
+          height: 1.25em;
+        }
+      }
+    }
+  }
+
+  @keyframes call-to-shop-shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+{% endstylesheet %}

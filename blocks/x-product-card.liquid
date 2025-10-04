@@ -1,0 +1,61 @@
+{% liquid
+  assign variant = variant | default: block.settings.variant | default: 'image-info'
+  assign reveal = reveal | default: block.settings.reveal | default: 'always'
+%}
+
+{% render 'x-product-card', variant: variant, reveal: reveal, product: block.settings.product %}
+
+{% schema %}
+{
+  "name": "Product: Card",
+  "tag": "slot",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "select",
+      "id": "variant",
+      "label": "Variant",
+      "options": [
+        {
+          "value": "image-info",
+          "label": "Image / Info"
+        },
+        {
+          "value": "info-image",
+          "label": "Info / Image"
+        }
+      ],
+      "default": "image-info"
+    },
+    {
+      "type": "select",
+      "id": "reveal",
+      "label": "Reveal Product Info",
+      "options": [
+        {
+          "value": "always",
+          "label": "Always"
+        },
+        {
+          "value": "hover",
+          "label": "On Hover"
+        }
+      ],
+      "default": "always"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Card",
+      "category": "Product",
+      "settings": {
+        "product": "{{ closest.product }}"
+      }
+    }
+  ]
+}
+{% endschema %}

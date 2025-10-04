@@ -1,4 +1,6 @@
 {% style %}
+  {% assign body_600 = settings.type_body_font | font_modify: 'weight', '600' %}
+  {{ body_600 | font_face: font_display: 'swap' }}
   {% assign body_500 = settings.type_body_font | font_modify: 'weight', '500' %}
   {{ body_500 | font_face: font_display: 'swap' }}
   {% assign body_400 = settings.type_body_font | font_modify: 'weight', '400' %}
@@ -9,6 +11,25 @@
   @layer base {
     :root {
       font-synthesis: none;
+    }
+  }
+
+  :root {
+    --font-subheading--weight: 500;
+    --font-accent--weight: 500;
+
+    --font-h1--weight: 500;
+    --font-h4--weight: 500;
+    --font-h4--letter-spacing: -0.05em;
+    --font-h5--weight: 600;
+    --font-h6--weight: 700;
+  }
+
+  @layer utilities {
+    /* button */
+    .hb {
+      font-weight: 600;
+      text-transform: uppercase;
     }
   }
 {% endstylesheet %}

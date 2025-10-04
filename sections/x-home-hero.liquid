@@ -1,9 +1,34 @@
+{% capture background %}
+    {% content_for 'block', type: 'image', id: 'background' %}
+{% endcapture %}
+
+{% capture tagline %}
+    {% content_for 'block', type: 'text', id: 'tagline' %}
+{% endcapture %}
+
+{% capture countdown %}
+    {% content_for 'block', type: 'x-brand-countdown', id: 'countdown' %}
+{% endcapture %}
+
 <section class='x-home-hero'>
   <div class='hero-background'>
-    {% render 'image', image: section.settings.background %}
+    {{ background }}
   </div>
   <div class='hero-overlay'>
-    <div class='hero-tagline h5'>{{ section.settings.tagline }}</div>
+    <div
+      class='hero-info'
+    >
+      <div
+        class='hero-tagline h5'
+        data-text-clip-reveal
+        data-text-clip-reveal-obscured
+      >
+        {{ tagline }}
+      </div>
+      <div class='hero-countdown'>
+        {{ countdown }}
+      </div>
+    </div>
   </div>
 </section>
 
@@ -19,8 +44,13 @@
     & .hero-background {
       grid-area: a;
 
+      & * {
+        width: 100%;
+        height: 100%;
+      }
+
       & img {
-        object-fit: stretch;
+        object-fit: fill;
         height: 100%;
       }
     }
@@ -34,7 +64,7 @@
       & {
         grid-template-areas:
           '. . .'
-          '. . tagline'
+          '. . info'
           '. . .';
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(3, 1fr);
@@ -42,7 +72,7 @@
       @media (width < 768px) {
         grid-template-areas:
           '. .'
-          '. tagline'
+          '. info'
           '. .';
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(3, 1fr);
@@ -50,19 +80,36 @@
       @media (width < 640px) {
         grid-template-areas:
           '.'
-          'tagline'
+          'info'
           '.';
         grid-template-columns: repeat(1, 1fr);
         grid-template-rows: repeat(3, 1fr);
-        text-align: center;
       }
 
-      & .hero-tagline {
-        grid-area: tagline;
-        width: 100%;
+      & .hero-info {
+        grid-area: info;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
 
         color: white;
         mix-blend-mode: difference;
+
+        & .hero-tagline {
+          display: flex;
+          flex-direction: column;
+
+          @media (width < 640px) {
+            /* align-items: center;
+            text-align: center;
+            --text-align: center; */
+          }
+        }
+
+        & .hero-countdown {
+          display: flex;
+          flex-direction: column;
+        }
       }
     }
   }
@@ -70,24 +117,39 @@
 
 {% schema %}
 {
-  "name": "Home Hero",
+  "name": "Hero",
   "class": "slot",
-  "settings": [
+  "blocks": [
     {
-      "type": "image_picker",
-      "id": "background",
-      "label": "Background"
+      "type": "text"
     },
-    {
-      "type": "richtext",
-      "id": "tagline",
-      "label": "Tagline"
-    }
+    { "type": "image" },
+    { "type": "x-brand-countdown" }
   ],
+  "settings": [],
   "presets": [
     {
-      "name": "Hero",
-      "category": "Home"
+      "name": "Home: Hero",
+      "category": "Home",
+      "blocks": [
+        {
+          "type": "image",
+          "id": "background",
+          "name": "Background",
+          "static": true
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "name": "Tagline",
+          "static": true
+        },
+        {
+          "type": "x-brand-countdown",
+          "id": "countdown",
+          "static": true
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,61 @@
+{% capture description_a %}
+  {% content_for 'block', type: 'x-separator-description', id: 'a' %}
+{% endcapture %}
+
+{% capture description_b %}
+  {% content_for 'block', type: 'x-separator-description', id: 'b' %}
+{% endcapture %}
+
+{% assign collection = block.settings.collection %}
+{% render 'x-separator-heading',
+  title: collection.title,
+  count: collection.products_count,
+  description_a: description_a,
+  description_b: description_b
+%}
+
+{% schema %}
+{
+  "name": "Separator: Heading: by C…",
+  "tag": "slot",
+  "blocks": [
+    {
+      "type": "x-separator-description"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Separator: Heading: by Collection",
+      "category": "Separator",
+      "blocks": [
+        {
+          "type": "x-separator-description",
+          "id": "a",
+          "name": "Description A",
+          "static": true
+        },
+        {
+          "type": "x-separator-description",
+          "id": "b",
+          "name": "Description B",
+          "static": true
+        }
+      ],
+      "settings": {
+        "collection": "{{ closest.collection }}"
+      }
+    }
+  ]
+}
+{% endschema %}

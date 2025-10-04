@@ -1,0 +1,26 @@
+{% render 'x-call-to-shop', url: block.settings.collection.url %}
+
+{% schema %}
+{
+  "name": "Call to: Shop: by Collec…",
+  "tag": "slot",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Call to: Shop: by Collection",
+      "category": "Call to",
+      "settings": { "collection": "{{ closest.collection }}" }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,154 @@
+{% liquid
+  assign is_new = false
+  assign newness_metafield = product.metafields.custom.newness
+  if newness_metafield
+    assign newness_until_time = newness_metafield.value | date: '%s'
+    assign now_time = 'now' | date: '%s'
+    if now_time < newness_until_time
+      assign is_new = true
+    endif
+  endif
+
+  assign is_low_stock = true
+  assign stock_cum = 0
+  for variant in product.variants
+    if variant.inventory_management != null
+      assign stock_cum = stock_cum | plus: variant.inventory_quantity
+      if stock_cum > 3
+        assign is_low_stock = false
+        break
+      endif
+    endif
+  endfor
+
+  assign is_out_of_stock = false
+  if product.available == false
+    assign is_out_of_stock = true
+  endif
+%}
+
+<div class='x-product-info'>
+  <div class='product-heading'>
+    <h3
+      class='product-title h4'
+      data-text-clip-reveal
+    >
+      {{ product.title }}
+    </h3>
+    <div class='product-chips'>
+      {% if is_new %}
+        {% render 'x-product-chip', variant: 'new', text: 'New' %}
+      {% endif %}
+
+      {% if is_out_of_stock %}
+        {% render 'x-product-chip', variant: 'out-of-stock', text: 'Out of Stock' %}
+      {% elsif is_low_stock %}
+        {% render 'x-product-chip', variant: 'low-stock', text: 'Low Stock' %}
+      {% endif %}
+
+      {% for tag in product.tags %}
+        {% if tag contains 'Sale-' %}
+          {% assign sale_text = tag | remove: 'Sale-' %}
+          {% render 'x-product-chip', variant: 'sale', text: sale_text %}
+        {% else %}
+          {% liquid
+            assign is_collection_tag = false
+            for collection in product.collections
+              if collection.title == tag
+                assign is_collection_tag = true
+                break
+              endif
+            endfor
+          %}
+          {% unless is_collection_tag %}
+            {% render 'x-product-chip', text: tag %}
+          {% endunless %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  <div class='product-description'>
+    <div
+      class='product-price'
+      data-text-clip-reveal
+    >
+      {% if product.compare_at_price_max > product.price %}
+        <span class='product-price-previous'>
+          {{ product.compare_at_price_max | money }}
+        </span>
+      {% endif %}
+      <span class='product-price-current'>
+        {{ product.price | money }}
+      </span>
+    </div>
+    <div class='product-sizes'>
+      {% for variant in product.variants %}
+        <div class='product-size h6 {% if variant.available %}variant/available{% else %}variant/unavailable{% endif %}'>
+          {{ variant.title }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  & .x-product-info {
+    padding-block: 16px;
+
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+    container-type: inline-size;
+
+    & .product-heading {
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: flex-start;
+      @container (width < 300px) {
+        flex-direction: column;
+      }
+
+      & .product-title {
+        margin: 0;
+      }
+
+      & .product-chips {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+    }
+
+    & .product-description {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      & .product-price {
+        display: flex;
+        gap: 4px;
+
+        & .product-price-previous {
+          text-decoration: line-through;
+          opacity: 0.5;
+        }
+      }
+
+      & .product-sizes {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+
+        & .product-size {
+          &.variant\/unavailable {
+            opacity: 0.5;
+            text-decoration: line-through;
+          }
+        }
+      }
+    }
+  }
+{% endstylesheet %}

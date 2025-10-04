@@ -1,0 +1,20 @@
+{% capture text %}
+  {% content_for 'block', type: 'text', id: 'text' %}
+{% endcapture %}
+
+{% render 'x-call-to-action-title', children: text %}
+
+{% schema %}
+{
+  "name": "Call to: Action: Title",
+  "tag": "slot",
+  "blocks": [{ "type": "text" }],
+  "presets": [
+    {
+      "name": "Call to: Action: Title",
+      "category": "Call to",
+      "blocks": [{ "type": "text", "id": "text", "static": true }]
+    }
+  ]
+}
+{% endschema %}

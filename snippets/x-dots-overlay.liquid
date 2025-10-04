@@ -1,0 +1,32 @@
+<svg
+  class='x-dots-overlay'
+  aria-hidden='true'
+  xmlns='http://www.w3.org/2000/svg'
+  xmlns:xlink='http://www.w3.org/1999/xlink'
+  fill='none'
+  width='100%'
+  height='100%'
+  preserveAspectRatio='none'
+>
+  <defs>
+    <pattern id="dots-pattern" patternUnits="userSpaceOnUse" patternTransform="matrix(98 0 0 196 671 769)" preserveAspectRatio="none" viewBox="0 0 98 196" width="1" height="1">
+      <use xlink:href="#dots-group" transform="translate(-98 0)" />
+      <g id="dots-group">
+        <circle cx="32.5" cy="32.5" r="0.5" fill="white" />
+        <circle cx="65.5" cy="32.5" r="0.5" fill="white" />
+        <circle cx="32.5" cy="65.5" r="0.5" fill="white" />
+        <circle cx="65.5" cy="65.5" r="0.5" fill="white" />
+      </g>
+      <use xlink:href="#dots-group" transform="translate(-49 98)" />
+      <use xlink:href="#dots-group" transform="translate(49 98)" />
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#dots-pattern)" />
+</svg>
+
+{% stylesheet %}
+  .x-dots-overlay {
+    pointer-events: none;
+    mix-blend-mode: difference;
+  }
+{% endstylesheet %}

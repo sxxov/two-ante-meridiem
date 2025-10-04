@@ -1,0 +1,31 @@
+<div class='x-product-add-to-cart-dialog-content'>
+  <div class='product-add-to-cart-dialog-thumbnail'>
+    {% render 'x-product-thumbnail', product: product %}
+  </div>
+  <div class="product-add-to-cart-dialog-info">
+    <div class='product-add-to-cart-dialog-heading'>
+      <h3
+        class='product-add-to-cart-dialog-title h4'
+        data-text-clip-reveal
+      >
+        {{ product.title }}
+      </h3>
+      <div class='product-add-to-cart-dialog-chips'></div>
+    </div>
+    <div class='product-add-to-cart-dialog-description'>
+      <div
+        class='product-add-to-cart-dialog-price'
+        data-text-clip-reveal
+      >
+        {% if product.compare_at_price_max > product.price %}
+          <span class='product-add-to-cart-dialog-price-previous'>
+            {{ product.compare_at_price_max | money }}
+          </span>
+        {% endif %}
+        <span class='product-add-to-cart-dialog-price-current'>
+          {{ product.price | money }}
+        </span>
+      </div>
+      <div class='product-add-to-cart-dialog-sizes'></div>
+  </div>
+</div>

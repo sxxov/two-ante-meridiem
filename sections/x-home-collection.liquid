@@ -1,0 +1,247 @@
+{% assign collection = section.settings.collection %}
+{% assign products = section.settings.products | default: collection.products %}
+{% assign limit = section.settings.limit %}
+
+{% capture heading %}
+  {% content_for 'block', type: 'x-separator-heading-by-collection', id: 'heading', closest.collection: collection %}
+{% endcapture %}
+
+{% capture call_to_shop %}
+  {% content_for 'block', type: 'x-call-to-shop', id: 'call_to_shop' %}
+{% endcapture %}
+
+{% capture inspiration %}
+  {% content_for 'block', type: 'x-home-inspiration', id: 'inspiration' %}
+{% endcapture %}
+
+{% capture call_to_action %}
+  {% content_for 'block', type: 'x-call-to-action', id: 'call_to_action' %}
+{% endcapture %}
+
+<section class='x-home-collection'>
+  <div class='home-collection-call-to-shop'>
+    {{ call_to_shop }}
+  </div>
+
+  <div class='home-collection-grid'>
+    <div class='home-collection-heading'>
+      {{ heading }}
+    </div>
+    <div
+      class='home-collection-products'
+      data-product-grid-content
+    >
+      {% for product in products limit: limit %}
+        <div
+          class='home-collection-product {% if forloop.index0 == section.settings.emphasis_index %}emphasis{% endif %}'
+        >
+          {% liquid
+            if forloop.index0 == section.settings.reverse_index
+              assign variant = 'info-image'
+            else
+              assign variant = 'image-info'
+            endif
+          %}
+          {% content_for 'block', type: 'x-product-card', id: 'product', variant: variant, closest.product: product %}
+        </div>
+
+        {% unless forloop.last %}
+          <!-- @list/split -->
+        {% endunless %}
+      {% endfor %}
+    </div>
+    <div class='home-collection-coda'></div>
+    <div class='home-collection-overlay'>
+      {% render 'x-dots-overlay' %}
+    </div>
+  </div>
+
+  <div class='home-collection-inspiration'>
+    {{ inspiration }}
+  </div>
+
+  <div class='home-collection-call-to-action'>
+    {{ call_to_action }}
+  </div>
+</section>
+
+{% stylesheet %}
+  .x-home-collection {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 0;
+
+    & .home-collection-grid {
+      position: relative;
+      background: var(--color-background);
+      z-index: 10;
+
+      padding-inline: 16px;
+      margin-block: 64px;
+
+      & .home-collection-heading {
+        display: contents;
+      }
+
+      & .home-collection-products {
+        display: grid;
+        gap: 16px;
+
+        & {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        @media (max-width: 1280px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        @media (max-width: 1024px) {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        @media (max-width: 640px) {
+          grid-template-columns: 1fr;
+        }
+
+        & .home-collection-product {
+          &.emphasis {
+            & {
+              grid-column: span 2;
+              grid-row: span 2;
+            }
+            @media (max-width: 1280px) {
+              grid-column: span 2;
+              grid-row: span 2;
+            }
+            @media (max-width: 1024px) {
+              grid-column: span 2;
+              grid-row: span 2;
+            }
+            @media (max-width: 640px) {
+              grid-column: span 1;
+              grid-row: span 1;
+            }
+          }
+        }
+      }
+
+      & .home-collection-coda {
+        height: 64px;
+      }
+
+      & .home-collection-overlay {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+    }
+
+    & .home-collection-call-to-shop {
+      display: contents;
+    }
+
+    & .home-collection-call-to-action {
+      overflow: clip;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection",
+  "class": "slot",
+  "blocks": [
+    {
+      "type": "x-separator-heading-by-collection"
+    },
+    {
+      "type": "x-call-to-shop"
+    },
+    {
+      "type": "x-call-to-action"
+    },
+    {
+      "type": "x-product-card"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Related Collection"
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Featured Products",
+      "info": "If no products are selected, all products from the selected collection will be shown."
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Maximum Number of Products to Show",
+      "min": 1,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "range",
+      "id": "reverse_index",
+      "label": "Index of Reversed Product",
+      "min": 0,
+      "max": 16,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "emphasis_index",
+      "label": "Index of Emphasized Product",
+      "min": 0,
+      "max": 16,
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Home: Collection",
+      "category": "Home",
+      "blocks": [
+        {
+          "type": "x-separator-heading-by-collection",
+          "id": "heading",
+          "static": true
+        },
+        {
+          "type": "x-call-to-shop",
+          "id": "call_to_shop",
+          "static": true
+        },
+        {
+          "type": "x-product-card",
+          "id": "product",
+          "static": true
+        },
+        {
+          "type": "x-home-inspiration",
+          "id": "inspiration",
+          "static": true
+        },
+        {
+          "type": "x-call-to-action",
+          "id": "call_to_action",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

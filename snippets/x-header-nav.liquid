@@ -3,8 +3,8 @@
     class='header-nav-toppings'
     role='list'
   >
-    {% for link in section.settings.menu.links %}
-      <li class='header-nav-topping'>
+    {% for link in menu.links %}
+      <li class='header-nav-topping h6'>
         <a
           href='{{ link.url }}'
           target='{{ link.target }}'
@@ -17,7 +17,7 @@
         </a>
       </li>
     {% endfor %}
-    <li class='header-nav-topping'>
+    <li class='header-nav-topping h6'>
       {% render 'x-header-search-trigger' %}
     </li>
   </ul>
@@ -40,8 +40,6 @@
       justify-content: center;
 
       & .header-nav-topping {
-        font-size: 10px;
-        font-weight: bold;
         text-decoration: none;
         color: inherit;
         text-transform: uppercase;

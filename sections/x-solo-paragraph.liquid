@@ -1,0 +1,38 @@
+{% capture text %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+<section class='x-solo-paragraph'>
+  {{ text }}
+</section>
+
+{% stylesheet %}
+  .x-solo-paragraph {
+    margin-inline: auto;
+    width: 100%;
+    margin-block: 128px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Paragraph",
+  "class": "slot",
+  "blocks": [
+    {
+      "type": "@theme"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Solo: Paragraph",
+      "category": "Solo",
+      "blocks": [
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -32,6 +32,14 @@
       --default-transition-duration: 0.5s;
       --default-transition-timing-function: var(--ease-out);
     }
+
+    :where(*),
+    :where(*)::before,
+    :where(*)::after {
+      transition: none;
+      transition-duration: var(--default-transition-duration);
+      transition-timing-function: var(--default-transition-timing-function);
+    }
   }
 
   @layer theme {

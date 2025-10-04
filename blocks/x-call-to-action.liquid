@@ -1,0 +1,40 @@
+{% capture background %}
+  {% content_for 'block', type: 'image', id: 'background' %}
+{% endcapture %}
+{% capture children %}
+  {% content_for 'blocks', closest.collection: closest.collection %}
+{% endcapture %}
+
+{% render 'x-call-to-action', background: background, children: children %}
+
+{% schema %}
+{
+  "name": "Call to: Action",
+  "tag": "slot",
+  "blocks": [
+    {
+      "type": "x-call-to-action-title"
+    },
+    {
+      "type": "image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Call to Action: Title",
+      "category": "Call to Action",
+      "blocks": [
+        {
+          "type": "image",
+          "id": "background",
+          "name": "Background",
+          "static": true
+        },
+        {
+          "type": "x-call-to-action-title"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

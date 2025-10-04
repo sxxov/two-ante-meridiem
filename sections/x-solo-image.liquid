@@ -1,0 +1,97 @@
+{% capture image %}
+  {% content_for 'block', type: 'image', id: 'image' %}
+{% endcapture %}
+
+<section
+  class='x-solo-image'
+  data-follow-scroll
+  style='--amplitude: {{ section.settings.amplitude }}'
+>
+  {{ image }}
+</section>
+
+{% stylesheet %}
+  .x-solo-image {
+    --outset-height: 64px;
+
+    position: relative;
+    padding-block: 64px;
+    margin-block: -64px;
+
+    overflow: clip;
+    mask-image: linear-gradient(
+      to bottom,
+      #fff0,
+      #fff var(--outset-height),
+      #fff calc(100% - var(--outset-height)),
+      #fff0
+    );
+
+    perspective: 100px;
+
+    &::after {
+      content: '';
+      display: block;
+      position: sticky;
+      bottom: 0;
+      inset-inline: 0;
+      height: var(--outset-height);
+      mask-image: linear-gradient(to bottom, #fff0, #fff);
+      backdrop-filter: blur(16px);
+    }
+
+    & * {
+      transform-style: preserve-3d;
+    }
+
+    & img {
+      transform: scaleY(calc(1 + clamp(0, (1 - var(--follow-scroll-y-in, 1)) * 6 - 3, 1) * var(--amplitude, 0.2) * 10));
+      scale: calc(1 + (1 - var(--follow-scroll-y-in, 1)) * var(--amplitude, 0.2));
+      rotate: x calc((1 - var(--follow-scroll-y-in, 1)) * var(--amplitude, 0.2) * -10deg);
+      transform-style: preserve-3d;
+      transform-origin: top;
+      transition-property: transform, scale, rotate;
+      transition-duration: 1s, 0.5s, 0.5s;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Solo Image",
+  "class": "slot",
+  "blocks": [
+    {
+      "type": "image"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "amplitude",
+      "label": "Amplitude",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.2
+    }
+  ],
+  "presets": [
+    {
+      "name": "Solo: Image",
+      "category": "Solo",
+      "blocks": [
+        {
+          "type": "image",
+          "id": "image",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

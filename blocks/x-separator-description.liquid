@@ -1,0 +1,33 @@
+{% capture children %}
+  {% content_for 'block', type: 'text', id: 'text' %}
+{% endcapture %}
+
+{% render 'x-separator-description', children: children %}
+
+{% schema %}
+{
+  "name": "Separator: Description",
+  "tag": "slot",
+  "blocks": [
+    {
+      "type": "text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Separator: Description",
+      "category": "Separator",
+      "blocks": [
+        {
+          "type": "text",
+          "id": "text",
+          "static": true,
+          "settings": {
+            "text": "<p>Add a description to your heading.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

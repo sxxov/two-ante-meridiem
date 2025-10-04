@@ -1,0 +1,145 @@
+<div class='x-call-to-action variant/{{ variant | default: 'dark-light' }}'>
+  <div class='call-to-action-container'>
+    <div class='call-to-action-underlay'></div>
+    <div class='call-to-action-background'>
+      {{ background }}
+    </div>
+    <div class='call-to-action-fade-gradient'>
+      <div class='call-to-action-fade-gradient-overlay'></div>
+    </div>
+    <div class='call-to-action-noise-gradient'>
+      {{ 'x-noise-linear-gradient-to-top.png' | asset_img_url | image_tag }}
+    </div>
+    <div class='call-to-action-blur'></div>
+    <div class='call-to-action-noise'>
+      <div
+        class='call-to-action-noise-overlay'
+        style='--background: url("{{ 'x-noise.svg' | asset_url }}")'
+      ></div>
+    </div>
+    <div class='call-to-action-overlay'>
+      {{ children }}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-call-to-action {
+    margin-top: -100lvh;
+    min-height: 200lvh;
+    overflow: clip;
+    background: #17191b;
+
+    &.variant\/light-dark {
+      --color-0: #0d0f1d;
+      --via-0: 20%;
+      --color-1: #e0e0e0;
+      --via-1: 56%;
+      --color-2: #ffffff;
+      --via-2: 90%;
+    }
+    &.variant\/dark-light {
+      --color-0: #ffffff;
+      --via-0: 30%;
+      --color-1: #e0e0e0;
+      --via-1: 50%;
+      --color-2: #0d0f1d;
+      --via-2: 70%;
+    }
+
+    & .call-to-action-container {
+      position: sticky;
+      top: 0;
+
+      & .call-to-action-underlay {
+        position: absolute;
+        inset: 0;
+        background: #0c0d0e;
+
+        pointer-events: none;
+      }
+
+      & .call-to-action-background {
+        position: absolute;
+        inset: 0;
+        display: flex;
+
+        &:has(.placeholder-image) {
+          opacity: 0;
+        }
+      }
+
+      & .call-to-action-fade-gradient {
+        position: absolute;
+        inset: 32px;
+        mix-blend-mode: color-dodge;
+
+        pointer-events: none;
+
+        & .call-to-action-fade-gradient-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to top,
+            var(--color-0) var(--via-0),
+            var(--color-1) var(--via-1),
+            var(--color-2) var(--via-2)
+          );
+          filter: blur(30px);
+        }
+      }
+
+      & .call-to-action-noise-gradient {
+        position: absolute;
+        inset: 0;
+        mix-blend-mode: color-burn;
+
+        pointer-events: none;
+
+        & img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      & .call-to-action-blur {
+        position: absolute;
+        inset: 0;
+        mask-image: linear-gradient(to bottom, #fff 50%, #fff0 100%);
+        backdrop-filter: blur(10px);
+
+        pointer-events: none;
+      }
+
+      & .call-to-action-noise {
+        position: absolute;
+        inset: 0;
+        mix-blend-mode: color-burn;
+
+        pointer-events: none;
+
+        & .call-to-action-noise-overlay {
+          position: absolute;
+          inset: 0;
+          background: var(--background);
+          opacity: 1;
+        }
+      }
+
+      & .call-to-action-overlay {
+        min-height: 100lvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        pointer-events: none;
+
+        & > * {
+          pointer-events: auto;
+        }
+      }
+    }
+  }
+{% endstylesheet %}

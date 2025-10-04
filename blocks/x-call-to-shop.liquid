@@ -1,0 +1,25 @@
+{% render 'x-call-to-shop', url: block.settings.url %}
+
+{% schema %}
+{
+  "name": "Call to: Shop",
+  "tag": "slot",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Call to: Shop",
+      "category": "Call to"
+    }
+  ]
+}
+{% endschema %}

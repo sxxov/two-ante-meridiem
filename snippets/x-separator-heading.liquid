@@ -1,0 +1,139 @@
+<div
+  class='x-separator-heading'
+  data-text-clip-reveal
+>
+  <div class='separator-description-a h6'>
+    {{ description_a }}
+  </div>
+  <div class='separator-title'>
+    <div class='separator-title-before h5'></div>
+    <div class='separator-title-container'>
+      <h3
+        class='separator-title-text h4'
+        data-dot-matrix='text'
+      >
+        {{ title }}
+      </h3>
+    </div>
+    <div class='separator-title-after h5'>({{ count }})</div>
+  </div>
+  <div class='separator-description-b h6'>
+    {{ description_b }}
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-separator-heading {
+    position: sticky;
+    top: calc(var(--x-header-height) - 16px);
+    padding-block: 16px;
+
+    display: grid;
+    column-gap: 16px;
+    row-gap: 16px;
+
+    color: white;
+    mix-blend-mode: difference;
+
+    z-index: 10;
+
+    & {
+      grid-template-areas: 'description-a title description-b';
+      grid-template-columns: 1fr auto 1fr;
+    }
+    @media (width < 1024px) {
+      grid-template-areas: 'description-a title description-b';
+      grid-template-columns: auto 1fr 1fr;
+    }
+    @media (width < 640px) {
+      grid-template-areas:
+        'title title'
+        'description-a description-b';
+      grid-template-columns: auto 1fr;
+    }
+
+    & .separator-description-a,
+    & .separator-description-b,
+    & .separator-description-c {
+      &.separator-description-a {
+        grid-area: description-a;
+      }
+
+      &.separator-description-b {
+        grid-area: description-b;
+        /* 
+        @media (width < 1024px) {
+          display: none;
+        }
+        @media (width < 640px) {
+          display: block;
+        } */
+      }
+    }
+
+    & .separator-title {
+      grid-area: title;
+
+      display: grid;
+      gap: 16px;
+      align-items: baseline;
+      & {
+        grid-template-areas: 'before text after';
+        grid-template-columns: 1em 1fr 1em;
+      }
+      @media (width < 400px) {
+        grid-template-areas: 'text';
+        grid-template-columns: auto;
+      }
+
+      & .separator-title-before {
+        grid-area: before;
+
+        font-size: 0.875rem;
+        text-wrap: nowrap;
+
+        @media (width < 400px) {
+          display: none;
+        }
+      }
+
+      & .separator-title-container {
+        grid-area: text;
+        height: 1em;
+        display: flex;
+        align-items: center;
+
+        & {
+          text-align: center;
+          justify-content: center;
+        }
+        @media (width < 1024px) {
+          text-align: start;
+          justify-content: flex-start;
+        }
+        @media (width < 640px) {
+          text-align: center;
+          justify-content: center;
+        }
+
+        & .separator-title-text {
+          margin: 0;
+          line-height: 0.8;
+
+          max-width: 600px;
+        }
+      }
+
+      & .separator-title-after {
+        grid-area: after;
+
+        font-size: 0.875rem;
+        text-wrap: nowrap;
+
+        @media (width < 400px) {
+          display: none;
+        }
+      }
+    }
+  }
+{% endstylesheet %}

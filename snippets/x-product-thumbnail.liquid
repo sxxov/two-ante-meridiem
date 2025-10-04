@@ -1,0 +1,25 @@
+<div
+  class='product-thumbnail'
+  data-carousel
+>
+  <div
+    class='product-thumbnail-container'
+    data-carousel-content
+  >
+    {% for media in product.media %}
+      <div
+        class='product-thumbnail-item'
+        data-carousel-item
+      >
+        {% render 'x-media', media: media %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-product-thumbnail {
+    position: relative;
+    overflow: clip;
+  }
+{% endstylesheet %}

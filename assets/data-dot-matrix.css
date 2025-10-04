@@ -1,0 +1,22 @@
+[data-dot-matrix] {
+  --mask-size: clamp(2px, 0.05em, 6px);
+  --mask: radial-gradient(circle at center, transparent 66.67%, white 70%);
+
+  &:not(:is(h1, h2, h3, h4, h5, h6, p)),
+  &[data-dot-matrix='mask'] {
+    mask-image: var(--mask);
+    mask-size: var(--mask-size) var(--mask-size);
+  }
+
+  &:is(h1, h2, h3, h4, h5, h6, p),
+  &[data-dot-matrix='text'] {
+    &,
+    & * {
+      background: var(--mask) repeat;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent !important;
+      background-size: var(--mask-size) var(--mask-size);
+    }
+  }
+}

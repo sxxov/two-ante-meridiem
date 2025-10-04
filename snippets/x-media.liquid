@@ -1,0 +1,23 @@
+<figure
+  class='x-media variant/{{ media.media_type | handle }}'
+  data-media-id='{{ media.id }}'
+>
+  {% case media.media_type %}
+    {% when 'image' %}
+      {{ media | image_url: width: 2048, height: 2048 | image_tag }}
+    {% when 'external_video' %}
+      {{ media | external_video_tag }}
+    {% when 'video' %}
+      {{ media | video_tag: controls: true, loop: true, autoplay: true, muted: true }}
+    {% when 'model' %}
+      {{ media | model_viewer_tag }}
+    {% else %}
+      {{ media | media_tag }}
+  {% endcase %}
+</figure>
+
+{% stylesheet %}
+  .x-media {
+    display: contents;
+  }
+{% endstylesheet %}
