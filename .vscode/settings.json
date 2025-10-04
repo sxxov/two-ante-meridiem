@@ -17,8 +17,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
-  "typescript.preferences.importModuleSpecifierEnding": "minimal",
-  "typescript.preferences.importModuleSpecifier": "shortest",
+  "typescript.preferences.importModuleSpecifierEnding": "js",
+  "typescript.preferences.importModuleSpecifier": "relative",
   "task.allowAutomaticTasks": "on",
   "testing.automaticallyOpenPeekView": "never",
   "files.eol": "\n",
