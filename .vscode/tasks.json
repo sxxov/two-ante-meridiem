@@ -3,8 +3,8 @@
   "tasks": [
     {
       "type": "shell",
-      "label": "shopify: dev",
-      "command": "set -a && source .env && set +a && shopify theme dev",
+      "label": "npm: shopify dev",
+      "command": "npm run dev",
       "group": "build",
       "runOptions": {
         "runOn": "folderOpen"
@@ -12,27 +12,27 @@
     },
     {
       "type": "shell",
-      "label": "shopify: push (development)",
+      "label": "npm: shopify push (development)",
       "group": "build",
-      "command": "set -a && source .env && set +a && shopify theme push --development"
+      "command": "npm run push:dev"
     },
     {
       "type": "shell",
-      "label": "shopify: push (live)",
+      "label": "npm: shopify push (live)",
       "group": "build",
-      "command": "set -a && source .env && set +a && shopify theme push --live"
+      "command": "npm run push:prod"
     },
     {
       "type": "shell",
-      "label": "shopify: pull (development)",
+      "label": "npm: shopify pull (development)",
       "group": "build",
-      "command": "set -a && source .env && set +a && shopify theme pull --development"
+      "command": "npm run pull:dev"
     },
     {
       "type": "shell",
-      "label": "shopify: pull (live)",
+      "label": "npm: shopify pull (live)",
       "group": "build",
-      "command": "set -a && source .env && set +a && shopify theme pull --live"
+      "command": "npm run pull:prod"
     }
   ]
 }

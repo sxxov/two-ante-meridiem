@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "description": "2AMRecords Shopify Theme",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "env": "set -a && source .env && set +a",
+    "dev": "npm run env && shopify theme dev --host 0.0.0.0",
+    "push:dev": "npm run env && shopify theme push --development",
+    "push:prod": "npm run env && shopify theme push --live",
+    "pull:dev": "npm run env && shopify theme pull --development",
+    "pull:prod": "npm run env && shopify theme pull --live"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Shopify/horizon.git"
@@ -17,6 +24,7 @@
   "devDependencies": {
     "@shopify/prettier-plugin-liquid": "^1.10.0",
     "embla-carousel": "^8.6.0",
+    "embla-carousel-auto-height": "^8.6.0",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-config-xo": "^0.49.0",
