@@ -1,6 +1,9 @@
 {% capture strip %}
   {%  content_for 'block', type: 'x-product-details-strip', id: 'strip' %}
 {% endcapture %}
+{% capture carousel %}
+  {%  content_for 'block', type: 'x-product-details-carousel', id: 'carousel' %}
+{% endcapture %}
 {% capture breakdown %}
   {%  content_for 'block', type: 'x-product-details-breakdown', id: 'breakdown' %}
 {% endcapture %}
@@ -12,13 +15,35 @@
   data-product-pull-section='{{ section.id }}'
 >
   <div class='product-details-strip'>{{ strip }}</div>
+  <div class='product-details-carousel'>{{ carousel }}</div>
   <div class='product-details-breakdown'>{{ breakdown }}</div>
 </section>
 
 {% stylesheet %}
   .x-product-details {
+    padding-top: var(--x-header-height);
     display: grid;
-    grid-template-columns: 0.4fr 0.6fr;
+
+    & {
+      grid-template-columns: 0.4fr 0.6fr;
+      grid-template-rows: auto;
+    }
+    @media (width < 1024px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    & .product-details-strip {
+      @media (width < 1024px) {
+        display: none;
+      }
+    }
+
+    & .product-details-carousel {
+      @media (width >= 1024px) {
+        display: none;
+      }
+    }
   }
 {% endstylesheet %}
 
@@ -43,6 +68,12 @@
         {
           "type": "x-product-details-strip",
           "id": "strip",
+          "static": true,
+          "settings": { "product": "{{ closest.product }}" }
+        },
+        {
+          "type": "x-product-details-carousel",
+          "id": "carousel",
           "static": true,
           "settings": { "product": "{{ closest.product }}" }
         },

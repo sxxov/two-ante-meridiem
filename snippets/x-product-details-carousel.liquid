@@ -1,0 +1,74 @@
+{% liquid
+  assign product_media = product.selected_or_first_available_variant.featured_media | concat: product.media | uniq
+%}
+
+<div
+  class='x-product-details-carousel'
+  data-product-pull-node='product-details-carousel-{{ block.id }}-{{ product.id }}'
+  data-carousel
+  data-carousel-hash
+  data-carousel-auto-size
+>
+  <div
+    class='product-details-carousel-items'
+    data-carousel-content
+    data-lightbox
+  >
+    {% for media in product_media %}
+      <div
+        class='product-details-carousel-item'
+        id='product-details-carousel-item-{{ forloop.index0 }}'
+      >
+        {% render 'x-media', media: media %}
+      </div>
+    {% endfor %}
+  </div>
+  <div class='product-details-carousel-indicators'>
+    {% for media in product_media %}
+      <button
+        class='product-details-carousel-indicator'
+        data-carousel-indicator
+      ></button>
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-product-details-carousel {
+    position: relative;
+    max-height: calc(50lvh - var(--x-header-height));
+
+    & .product-details-carousel-items {
+      & .product-details-carousel-item {
+      }
+    }
+
+    & .product-details-carousel-indicators {
+      position: absolute;
+      bottom: 16px;
+      inset-inline: 0;
+
+      display: flex;
+      justify-content: center;
+      gap: 2px;
+
+      mix-blend-mode: difference;
+
+      & .product-details-carousel-indicator {
+        all: unset;
+
+        width: 12px;
+        height: 12px;
+        border-radius: 9999px;
+
+        border: 1px solid white;
+
+        transition-property: background;
+
+        &[data-carousel-indicator-selected] {
+          background: white;
+        }
+      }
+    }
+  }
+{% endstylesheet %}

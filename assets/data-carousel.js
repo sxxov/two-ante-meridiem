@@ -15,6 +15,8 @@ import { CarouselPrevBehavior } from './data-carousel-prev.js';
 import { CarouselNextBehavior } from './data-carousel-next.js';
 import EmblaCarousel from './lib-package-embla-carousel.js';
 import { TaskSignal } from './lib-signal-TaskSignal.js';
+import { CarouselHashBehavior } from './data-carousel-hash.js';
+import { CarouselAutoHeightBehavior } from './data-carousel-auto-height.js';
 /** @import {EmblaCarouselType, EmblaPluginType} from 'embla-carousel' */
 
 export const CarouselBehavior = behavior(
@@ -148,6 +150,9 @@ export const CarouselBehavior = behavior(
       CarouselIndicatorBehavior,
       CarouselPrevBehavior,
       CarouselNextBehavior,
+
+      CarouselHashBehavior,
+      CarouselAutoHeightBehavior,
     );
 
     const _ = bin();

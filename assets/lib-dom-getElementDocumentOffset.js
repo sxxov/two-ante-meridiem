@@ -20,14 +20,13 @@ export function getElementDocumentOffset(
   let ancestor = el;
   do {
     const { position } = getComputedStyle(ancestor);
-    const { pageYOffset } = window;
-
-    if (position === 'sticky') scrollTo({ top: 0, bypass: true });
+    const { position: inlinePosition } = ancestor.style;
+    if (position === 'sticky') ancestor.style.position = 'relative';
 
     x += ancestor.offsetLeft;
     y += ancestor.offsetTop;
 
-    if (position === 'sticky') scrollTo({ top: pageYOffset, bypass: true });
+    if (position === 'sticky') ancestor.style.position = inlinePosition;
   } while (
     (ancestor = /** @type {HTMLElement | null} */ (
       visitNonOffsetParents ?

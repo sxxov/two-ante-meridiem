@@ -1,0 +1,2 @@
+export * from 'https://cdn.jsdelivr.net/npm/embla-carousel-auto-height@8.6.0/esm/embla-carousel-auto-height.esm.min.js';
+export { default } from 'https://cdn.jsdelivr.net/npm/embla-carousel-auto-height@8.6.0/esm/embla-carousel-auto-height.esm.min.js';

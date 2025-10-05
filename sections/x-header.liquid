@@ -35,11 +35,14 @@
     pointer-events: none;
 
     & .header-blurs {
+      /* used to blur in the notch area on iOS */
+      --top-offset: -100px;
+
       position: fixed;
-      top: 0;
+      top: var(--top-offset);
       inset-inline: 0;
       width: 100%;
-      height: var(--x-header-height);
+      height: calc(var(--x-header-height) - var(--top-offset));
 
       z-index: 40;
 

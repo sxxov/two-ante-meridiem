@@ -24,24 +24,26 @@
     <div class='product-details-price h4'>
       {{ product.price | money }}
     </div>
-    <div
-      class='product-details-description'
-      data-follow-child-rect
-    >
+    <div class='product-details-particulars'>
       <div
-        class='product-details-description-container'
-        data-follow-child-rect-target
+        class='product-details-description'
+        data-follow-child-rect
       >
-        {{ product.description }}
+        <div
+          class='product-details-description-container'
+          data-follow-child-rect-target
+        >
+          {{ product.description }}
+        </div>
       </div>
-    </div>
-  </div>
-  <div class='product-details-buttons'>
-    <div class='product-details-variant'>
-      {% render 'x-product-variant-form', product: product %}
-    </div>
-    <div class='product-details-payment'>
-      {% render 'x-product-payment-form', product: product %}
+      <div class='product-details-buttons'>
+        <div class='product-details-variant'>
+          {% render 'x-product-variant-form', product: product %}
+        </div>
+        <div class='product-details-payment'>
+          {% render 'x-product-payment-form', product: product %}
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -50,19 +52,26 @@
   .x-product-details-breakdown {
     position: sticky;
     top: var(--x-header-height);
-    min-height: calc(100lvh - var(--x-header-height));
 
-    padding-block: 32px;
-    padding-inline: 32px;
+    padding-top: 32px;
 
     display: flex;
     flex-direction: column;
     gap: 64px;
 
+    & {
+      min-height: calc(100lvh - var(--x-header-height));
+    }
+    @media (width < 1024px) {
+      min-height: auto;
+    }
+
     & .product-details-heading {
       display: flex;
       flex-direction: column;
       gap: 8px;
+
+      padding-inline: 32px;
 
       & .product-details-tags {
         & .product-details-tag-link {
@@ -82,52 +91,76 @@
       flex-direction: column;
       gap: 32px;
 
+      overflow: clip;
+
       & .product-details-price {
         margin: 0;
+        padding-inline: 32px;
       }
 
-      & .product-details-description {
+      & .product-details-particulars {
         flex-grow: 1;
 
-        max-width: 50ch;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 32px;
 
-        --outset-height: 64px;
-        padding-block: var(--outset-height);
-        margin-block: calc(-1 * var(--outset-height));
-        mask-image: linear-gradient(
-          to bottom,
-          #fff0,
-          #fff var(--outset-height),
-          #fff calc(100% - var(--outset-height)),
-          #fff0
-        );
+        & .product-details-description {
+          padding-inline: 32px;
 
-        transition-property: max-height;
-
-        &:is(:hover, :focus, :focus-within) {
-          min-height: calc(var(--outset-height) * 2 + var(--follow-child-rect-height, 100%));
+          max-width: 50ch;
         }
-      }
-    }
 
-    & .product-details-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-
-      & .product-details-variant {
-        & .product-variant-form {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-      }
-
-      & .product-details-payment {
-        & .product-payment-form {
+        & .product-details-buttons {
           display: flex;
           flex-direction: column;
           gap: 16px;
+
+          padding-block: 32px;
+          padding-inline: 32px;
+
+          position: sticky;
+          bottom: 0;
+
+          &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            inset-inline: 0;
+            height: 32px;
+
+            translate: 0 -100%;
+            background: linear-gradient(to top, var(--color-background), transparent);
+          }
+
+          &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            display: block;
+            background: var(--color-background);
+            pointer-events: none;
+          }
+
+          & .product-details-variant {
+            position: relative;
+
+            & .product-variant-form {
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+            }
+          }
+
+          & .product-details-payment {
+            & .product-payment-form {
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+            }
+          }
         }
       }
     }

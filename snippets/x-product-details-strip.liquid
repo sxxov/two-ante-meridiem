@@ -6,11 +6,14 @@
   class='x-product-details-strip'
   data-product-pull-node='product-details-strip-{{ block.id }}-{{ product.id }}'
 >
-  <div class='product-details-items'>
+  <div
+    class='product-details-strip-items'
+    data-lightbox
+  >
     {% for media in product_media %}
       <div
-        class='product-details-item'
-        id='media-{{ forloop.index0 }}'
+        class='product-details-strip-item'
+        id='product-details-strip-item-{{ forloop.index0 }}'
         data-hash-into-url
       >
         {% render 'x-media', media: media %}
@@ -18,18 +21,17 @@
     {% endfor %}
   </div>
   <div
-    class='product-details-indicators'
+    class='product-details-strip-indicators'
   >
     {% for media in product_media %}
       <a
-        class='product-details-indicator'
-        id='media-indicator-{{ forloop.index0 }}'
-        href='#media-{{ forloop.index0 }}'
+        class='product-details-strip-indicator product-details-strip-indicator-{{ forloop.index0 }}'
+        href='#product-details-strip-item-{{ forloop.index0 }}'
         data-dot-matrix
       >
         <style>
-          :root:has(#media-{{ forloop.index0 }}[data-hash-into-url-active])
-            #media-indicator-{{ forloop.index0 }} {
+          :root:has(#product-details-strip-item-{{ forloop.index0 }}[data-hash-into-url-active])
+            .product-details-strip-indicator-{{ forloop.index0 }} {
             mask-image: none;
 
             &::after {
@@ -48,18 +50,16 @@
     display: grid;
     grid-template-columns: 1fr auto;
 
-    & .product-details-items {
-      flex-grow: 1;
-
-      padding-top: var(--x-header-height);
-
+    & .product-details-strip-items {
       display: grid;
       justify-items: center;
 
-      & .product-details-item {
+      & .product-details-strip-item {
         position: relative;
         width: 100%;
         max-height: calc(100lvh - var(--x-header-height));
+
+        scroll-margin-top: var(--x-header-height);
 
         &::after {
           content: '';
@@ -81,20 +81,21 @@
       }
     }
 
-    & .product-details-indicators {
+    & .product-details-strip-indicators {
       position: sticky;
-      top: 0;
-      height: 100lvh;
-
-      padding-top: var(--x-header-height);
+      top: var(--x-header-height);
+      height: calc(100lvh - var(--x-header-height));
 
       display: grid;
       justify-items: center;
+      align-content: start;
       gap: 0px;
 
-      & .product-details-indicator {
+      & .product-details-strip-indicator {
         width: 100%;
         min-height: 0;
+
+        padding-inline: 8px;
 
         position: relative;
         display: flex;

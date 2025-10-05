@@ -1,0 +1,22 @@
+{% render 'x-product-details-carousel', product: product %}
+
+{% schema %}
+{
+  "name": "Product: Details: Carous…",
+  "tag": "slot",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product: Details: Carousel",
+      "category": "Product",
+      "settings": { "product": "{{ closest.product }}" }
+    }
+  ]
+}
+{% endschema %}

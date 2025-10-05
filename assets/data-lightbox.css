@@ -1,0 +1,240 @@
+[data-lightbox-link] {
+  display: contents;
+}
+
+[data-lightbox-dialog] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100lvh;
+  z-index: 1000;
+
+  overflow: clip;
+
+  max-width: unset;
+  max-height: unset;
+  background: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &::backdrop {
+    opacity: 0;
+    background: var(--color-overlay, #808080aa);
+    animation: lightbox-fade-in 0.5s var(--ease-out, ease-out);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    z-index: -1;
+  }
+
+  & [data-lightbox-close] {
+    all: unset;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 20;
+    width: 2.5rem;
+    aspect-ratio: 1 / 1;
+    border-radius: 9999px;
+    color: var(--color-on-overlay, #fff);
+    transition-property: all;
+    cursor: pointer;
+
+    &:hover {
+      background: #fff1;
+    }
+    &:active {
+      background: #fff0;
+    }
+
+    &::after {
+      content: '✕';
+      font-weight: bold;
+    }
+  }
+
+  & [data-lightbox-container] {
+    width: 100%;
+    cursor: pointer;
+    transform-origin: var(--origin-x, 50%) var(--origin-y, 50%);
+
+    & [data-lightbox-carousel] {
+      position: relative;
+
+      & > [data-lightbox-carousel-prev],
+      & > [data-lightbox-carousel-next] {
+        position: absolute;
+        top: 50%;
+        translate: 0 -50%;
+        width: 2.5rem;
+        height: 100%;
+        border-radius: var(--radius, 0);
+        color: var(--color-on-overlay, #fff);
+        opacity: 0.8;
+        transition-property: all, pointer-events;
+        transition-duration: 0.5s, 0s;
+        transition-delay: 0s, 0.5s;
+        cursor: pointer;
+        z-index: 20;
+
+        &:disabled {
+          opacity: 0;
+          pointer-events: none;
+          transition-property: all, pointer-events;
+          transition-duration: 0.5s, 0s;
+          transition-delay: 0s, 0.5s;
+        }
+
+        &:hover {
+          opacity: 1;
+        }
+
+        &:active {
+          opacity: 0.8;
+        }
+
+        &[data-lightbox-carousel-prev] {
+          all: unset;
+          left: 1rem;
+
+          &::after {
+            content: '〈';
+          }
+        }
+        &[data-lightbox-carousel-next] {
+          all: unset;
+          right: 1rem;
+
+          &::after {
+            content: '〉';
+          }
+        }
+      }
+
+      & > [data-lightbox-carousel-items] {
+        display: flex;
+        align-items: center;
+
+        & > * {
+          position: relative;
+          width: 100%;
+          max-width: none;
+          max-width: min(100%, calc(100lvh * var(--aspect)));
+          height: auto;
+          flex-grow: 0;
+          flex-shrink: 0;
+          padding-inline: 1rem;
+          margin-inline: -0.5rem;
+
+          &:first-child {
+            margin-inline-start: auto;
+          }
+          &:last-child {
+            margin-inline-end: auto;
+          }
+
+          & img {
+            border-radius: var(--radius, 0);
+            object-fit: contain;
+            width: 100%;
+          }
+
+          & > [data-lightbox-carousel-before],
+          & > [data-lightbox-carousel-after] {
+            position: absolute;
+            inset-block: 0;
+            width: 100%;
+            height: 100%;
+
+            &[data-lightbox-carousel-before] {
+              left: 0;
+              translate: -100% 0;
+            }
+            &[data-lightbox-carousel-after] {
+              right: 0;
+              translate: 100% 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &[data-lightbox-dialog=''] {
+    & [data-lightbox-container] {
+      opacity: 0;
+    }
+  }
+
+  &[data-lightbox-dialog='open'] {
+    &,
+    &::backdrop {
+      opacity: 1;
+      transition-property: all;
+    }
+
+    & [data-lightbox-container] {
+      animation: lightbox-zoom-in 0.5s var(--ease-out, ease-out);
+      transition-property: all;
+    }
+  }
+
+  &[data-lightbox-dialog='close'] {
+    & {
+      opacity: 0;
+      filter: blur(48px) brightness(2);
+      transition-property: all;
+      transition-timing-function: var(--ease-in, ease-in);
+    }
+
+    &::backdrop {
+      opacity: 0;
+      transition-property: all;
+      animation: lightbox-fade-out 0.5s var(--ease-out, ease-out);
+    }
+
+    & [data-lightbox-container] {
+      animation: lightbox-zoom-out 0.5s var(--ease-out, ease-out);
+      transition-property: all;
+    }
+  }
+}
+
+@keyframes lightbox-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes lightbox-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes lightbox-zoom-in {
+  from {
+    transform: translate(var(--diff-x, 0), var(--diff-y, 0))
+      scaleX(var(--diff-scale-x, 1)) scaleY(var(--diff-scale-y, 1));
+  }
+}
+
+@keyframes lightbox-zoom-out {
+  to {
+    transform: translate(var(--diff-x, 0), var(--diff-y, 0))
+      scaleX(var(--diff-scale-x, 1)) scaleY(var(--diff-scale-y, 1));
+  }
+}
