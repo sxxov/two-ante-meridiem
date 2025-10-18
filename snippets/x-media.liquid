@@ -4,7 +4,7 @@
 >
   {% case media.media_type %}
     {% when 'image' %}
-      {{ media | image_url: width: 2048, height: 2048 | image_tag }}
+      {{ media | image_url: width: 2048 | image_tag }}
     {% when 'external_video' %}
       {{ media | external_video_tag }}
     {% when 'video' %}
