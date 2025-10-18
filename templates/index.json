@@ -435,19 +435,17 @@
       },
       "name": "Home: Collection",
       "settings": {
-        "collection": "rhythm-of-the-unknown",
+        "collection": "echos-we-live-with",
         "products": [
-          "rhythm-of-the-unknown",
-          "rhythm-of-the-unknown-2",
-          "rhythm-of-the-unknown-3",
-          "rhythm-of-the-unknown-4",
-          "rhythm-of-the-unknown-5",
-          "rhythm-of-the-unknown-6",
-          "rhythm-of-the-unknown-7"
+          "logo-embroidered-t-shirt-product-1",
+          "distress-print-t-shirt-product-2",
+          "combined-print-t-shirt-product-3",
+          "echos-zip-up-jacket-product-4",
+          "half-sleeve-overshirt-product-5"
         ],
         "limit": 8,
         "reverse_index": 1,
-        "emphasis_index": 5
+        "emphasis_index": 3
       }
     }
   },
