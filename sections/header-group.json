@@ -14,8 +14,7 @@
     "header": {
       "type": "x-header",
       "settings": {
-        "menu": "main-menu",
-        "logo_variant": "chin"
+        "menu": "main-menu"
       }
     }
   },
