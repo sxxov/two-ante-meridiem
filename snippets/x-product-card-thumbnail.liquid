@@ -69,8 +69,14 @@
       }
     }
 
-    & .product-card-thumbnail-link {
-      display: contents;
+    & .product-card-thumbnail-container {
+      display: flex;
+
+      & .product-card-thumbnail-item {
+        & .product-card-thumbnail-link {
+          display: contents;
+        }
+      }
     }
   }
 {% endstylesheet %}
