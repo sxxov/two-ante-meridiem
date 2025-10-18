@@ -447,6 +447,303 @@
         "reverse_index": 1,
         "emphasis_index": 3
       }
+    },
+    "x_home_collection_VNxcpq": {
+      "type": "x-home-collection",
+      "blocks": {
+        "heading": {
+          "type": "x-separator-heading-by-collection",
+          "static": true,
+          "settings": {
+            "collection": "{{ closest.collection }}"
+          },
+          "blocks": {
+            "a": {
+              "type": "x-separator-description",
+              "name": "Description A",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "text": {
+                  "type": "text",
+                  "static": true,
+                  "settings": {
+                    "text": "<p>Informed by<br/>the past.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            },
+            "b": {
+              "type": "x-separator-description",
+              "name": "Description B",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "text": {
+                  "type": "text",
+                  "static": true,
+                  "settings": {
+                    "text": "<p>Informed by<br/>the past.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            }
+          },
+          "block_order": []
+        },
+        "call_to_shop": {
+          "type": "x-call-to-shop",
+          "name": "Call to: Shop",
+          "static": true,
+          "settings": {
+            "url": "{{ closest.collection.url }}"
+          },
+          "blocks": {}
+        },
+        "inspiration": {
+          "type": "x-home-inspiration",
+          "name": "Home: Inspiration",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "x_home_inspiration_part_xFYmNL": {
+              "type": "x-home-inspiration-part",
+              "name": "Home: Inspiration Part",
+              "settings": {
+                "variant": "transparent"
+              },
+              "blocks": {
+                "image": {
+                  "type": "image",
+                  "static": true,
+                  "settings": {
+                    "image": "shopify://shop_images/rhythm-overlap-1.webp",
+                    "link": "",
+                    "image_ratio": "adapt",
+                    "width": "fill",
+                    "custom_width": 100,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            },
+            "x_home_inspiration_part_6QbrhX": {
+              "type": "x-home-inspiration-part",
+              "name": "Home: Inspiration Part",
+              "settings": {
+                "variant": "background-dots"
+              },
+              "blocks": {
+                "image": {
+                  "type": "image",
+                  "static": true,
+                  "settings": {
+                    "image": "shopify://shop_images/rhythm-overlap-2.webp",
+                    "link": "",
+                    "image_ratio": "adapt",
+                    "width": "fill",
+                    "custom_width": 100,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            },
+            "x_home_inspiration_part_biL63G": {
+              "type": "x-home-inspiration-part",
+              "name": "Home: Inspiration Part",
+              "settings": {
+                "variant": "transparent"
+              },
+              "blocks": {
+                "image": {
+                  "type": "image",
+                  "static": true,
+                  "settings": {
+                    "image": "shopify://shop_images/rhythm-overlap-3.webp",
+                    "link": "",
+                    "image_ratio": "adapt",
+                    "width": "fill",
+                    "custom_width": 100,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            }
+          },
+          "block_order": [
+            "x_home_inspiration_part_xFYmNL",
+            "x_home_inspiration_part_6QbrhX",
+            "x_home_inspiration_part_biL63G"
+          ]
+        },
+        "call_to_action": {
+          "type": "x-call-to-action",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "x_call_to_action_title_CWfMUF": {
+              "type": "x-call-to-action-title",
+              "name": "Call to: Action: Title",
+              "settings": {},
+              "blocks": {
+                "text": {
+                  "type": "text",
+                  "static": true,
+                  "settings": {
+                    "text": "<p>{{ closest.collection.title }}</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            },
+            "background": {
+              "type": "image",
+              "name": "Background",
+              "static": true,
+              "settings": {
+                "link": "",
+                "image_ratio": "adapt",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "x_call_to_action_title_CWfMUF"
+          ]
+        },
+        "product": {
+          "type": "x-product-card",
+          "name": "Product: Card",
+          "static": true,
+          "settings": {
+            "product": "{{ closest.product }}",
+            "variant": "image-info",
+            "reveal": "hover"
+          },
+          "blocks": {}
+        }
+      },
+      "name": "Home: Collection",
+      "settings": {
+        "collection": "rhythm-of-the-unknown",
+        "products": [
+          "combination-print-t-shirt-reflective",
+          "washed-print-t-shirt",
+          "combination-print-t-shirt",
+          "combination-print-t-shirt-limited"
+        ],
+        "limit": 8,
+        "reverse_index": 1,
+        "emphasis_index": 2
+      }
     }
   },
   "order": [
@@ -454,6 +751,7 @@
     "x_home_hero_GMh8hk",
     "x_wide_image_Y73PkU",
     "x_solo_paragraph_wTDLPR",
-    "x_home_collection_gabgVK"
+    "x_home_collection_gabgVK",
+    "x_home_collection_VNxcpq"
   ]
 }
