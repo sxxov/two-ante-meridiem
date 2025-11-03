@@ -6,16 +6,17 @@ export const FollowChildRectTargetBehavior = behavior(
   'follow-child-rect-target',
   class {},
   (element, {}, { getContext }) =>
-    subscribe({ followChildRectTarget: getContext(FollowChildRectBehavior) }, ({
-      $followChildRectTarget,
-    }) => {
-      if (!$followChildRectTarget) return;
+    subscribe(
+      { followChildRectTarget: getContext(FollowChildRectBehavior) },
+      ({ $followChildRectTarget }) => {
+        if (!$followChildRectTarget) return;
 
-      const { target } = $followChildRectTarget;
-      const previousTarget = target.get();
-      target.set(element);
-      return () => {
-        if (target.get() === element) target.set(previousTarget);
-      };
-    }),
+        const { target } = $followChildRectTarget;
+        const previousTarget = target.get();
+        target.set(element);
+        return () => {
+          if (target.get() === element) target.set(previousTarget);
+        };
+      },
+    ),
 );

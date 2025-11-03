@@ -11,7 +11,13 @@
     assign quantity_rule_soldout = true
   endif
 
-  assign checkout_text = 'content.checkout' | t
+  assign checkout_text = 'products.product.buy_now' | t
+
+  if product != blank
+    assign can_add_to_cart = true
+  else
+    assign can_add_to_cart = false
+  endif
 
   if inventory_managed
     if inventory_quantity <= 0 and inventory_policy == 'deny' or quantity_rule_soldout
@@ -36,85 +42,104 @@
   class='x-product-payment-form'
   data-product-pull-node='product-payment-form-{{ block.id }}-{{ product.id }}'
 >
-  {%- if product != blank -%}
-    {%- capture product_form_id -%}
-      product-payment-form-{{ section.id }}
-    {%- endcapture -%}
-    <div
-      class='visually-hidden'
-      aria-live='assertive'
-      role='status'
-      aria-atomic='true'
-      ref='liveRegion'
-    ></div>
-    {%- form 'product', product, id: product_form_id, data-type: 'add-to-cart-form' -%}
-      <input
-        type='hidden'
-        name='id'
-        ref='variantId'
-        value='{{ product.selected_or_first_available_variant.id }}'
-      >
+  {%- if can_add_to_cart -%}
+    <product-form-component
+      data-section-id='{{ section.id }}'
+      data-product-id='{{ product.id }}'
+      data-product-url='{{ product.url }}'
+      on:submit='/handleSubmit'
+    >
       <div
-        class='payment-form-buttons'
-      >
+        class='visually-hidden'
+        aria-live='assertive'
+        role='status'
+        aria-atomic='true'
+        ref='liveRegion'
+      ></div>
+      {%- form 'product', product, data-type: 'add-to-cart-form' -%}
+        <input
+          type='hidden'
+          name='id'
+          ref='variantId'
+          value='{{ product.selected_or_first_available_variant.id }}'
+        >
         <div
-          class='payment-form-quantity'
-          data-form-input-number-controls
+          class='payment-form-buttons'
         >
-          <button
-            class='payment-form-quantity-decrement'
-            type='button'
-            data-form-input-number-controls-decrement
+          <div
+            class='payment-form-quantity'
+            data-form-input-number-controls
           >
-            {% render 'x-button', text: '-' %}
-          </button>
-          <div class='payment-form-quantity-input-frame'>
-            <input
-              class='payment-form-quantity-input'
-              type='number'
-              name='quantity'
-              value='{{ in_cart_quantity | default: 1 }}'
-              min='{{ min | default: 1 }}'
-              aria-label='{{ 'accessibility.quantity' | t }}'
-              {% if variant.quantity_rule.max %}
-                max='{{ variant.quantity_rule.max }}'
-              {% endif %}
-              step='{{ variant.quantity_rule.increment | default: 1 }}'
+            <button
+              class='payment-form-quantity-decrement'
+              type='button'
+              data-form-input-number-controls-decrement
             >
+              {% render 'x-button', text: '-' %}
+            </button>
+            <div class='payment-form-quantity-input-frame'>
+              <input
+                class='payment-form-quantity-input'
+                type='number'
+                name='quantity'
+                value='{{ in_cart_quantity | default: 1 }}'
+                min='{{ min | default: 1 }}'
+                aria-label='{{ 'accessibility.quantity' | t }}'
+                {% if variant.quantity_rule.max %}
+                  max='{{ variant.quantity_rule.max }}'
+                {% endif %}
+                step='{{ variant.quantity_rule.increment | default: 1 }}'
+              >
+            </div>
+            <button
+              class='payment-form-quantity-increment'
+              type='button'
+              data-form-input-number-controls-increment
+            >
+              {% render 'x-button', text: '+' %}
+            </button>
           </div>
-          <button
-            class='payment-form-quantity-increment'
-            type='button'
-            data-form-input-number-controls-increment
-          >
-            {% render 'x-button', text: '+' %}
-          </button>
-        </div>
 
-        <button class='payment-form-add-to-cart-button'>
-          {% render 'x-button', text: add_to_cart_text %}
-        </button>
-        <button
-          class='payment-form-checkout-button'
-          data-button-for='shopify-buy-it-now-button button'
-        >
-          {% render 'x-button', variant: 'primary', text: 'Buy it now' %}
-        </button>
-        <div class='payment-form-accelerated-button'>
-          {{ form | payment_button }}
+          <button
+            class='payment-form-add-to-cart-button'
+            data-follow-add-to-cart
+          >
+            <div class='payment-form-add-to-cart-button-trigger'>
+              {% render 'x-button', text: add_to_cart_text %}
+            </div>
+            <div class='payment-form-add-to-cart-button-spinner'>
+              {% render 'x-spinner' %}
+            </div>
+            <div class='payment-form-add-to-cart-button-success hb'>
+              {% assign added_to_cart_text = 'products.product.added_to_cart' | t %}
+              {{ added_to_cart_text }}
+            </div>
+            <div
+              class='payment-form-add-to-cart-button-error hidden'
+              ref='addToCartTextError'
+            ></div>
+          </button>
+          <button
+            class='payment-form-checkout-button'
+            data-button-for='shopify-buy-it-now-button button'
+          >
+            {% render 'x-button', variant: 'primary', text: checkout_text %}
+          </button>
+          <div class='payment-form-accelerated-button'>
+            {{ form | payment_button }}
+          </div>
         </div>
-      </div>
-    {%- endform -%}
+      {%- endform -%}
+    </product-form-component>
   {%- else -%}
     <div class='payment-form-buttons'>
-      {% assign sold_out_text = 'blocks.sold_out' | t %}
       <button
         class='payment-form-sold-out-button'
         type='submit'
         name='add'
         disabled
       >
-        {% render 'x-button', text: sold_out_text %}
+        {% render 'x-button', text: add_to_cart_text %}
       </button>
     </div>
   {%- endif -%}
@@ -126,6 +151,7 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+      align-items: flex-start;
 
       & .payment-form-quantity {
         display: grid;
@@ -183,11 +209,79 @@
       & .payment-form-checkout-button,
       & .payment-form-sold-out-button {
         all: unset;
+
+        position: relative;
+
         display: flex;
         flex-direction: column;
 
         &.payment-form-add-to-cart-button {
           flex-grow: 999;
+
+          position: relative;
+
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          & .payment-form-add-to-cart-button-trigger {
+            display: flex;
+            flex-direction: column;
+
+            transition-property: opacity, filter;
+          }
+          &[data-follow-add-to-cart-status='pending'] .payment-form-add-to-cart-button-trigger {
+            opacity: 0;
+            filter: blur(4px);
+
+            pointer-events: none;
+          }
+
+          & .payment-form-add-to-cart-button-spinner {
+            position: absolute;
+            inset: 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: var(--color-background);
+            border-radius: 9999px;
+
+            transition-property: opacity, filter;
+          }
+          &:not([data-follow-add-to-cart-status='pending']) .payment-form-add-to-cart-button-spinner {
+            opacity: 0;
+            filter: blur(4px);
+
+            pointer-events: none;
+          }
+
+          & .payment-form-add-to-cart-button-success {
+            position: absolute;
+            inset: 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: var(--color-background);
+            border-radius: 9999px;
+
+            pointer-events: none;
+            mix-blend-mode: hard-light;
+
+            opacity: 0;
+          }
+          &[data-follow-add-to-cart-status='fulfilled'] .payment-form-add-to-cart-button-success {
+            animation: payment-form-add-to-cart-success 2s var(--ease-in-out) both;
+          }
+
+          & .payment-form-add-to-cart-button-error {
+            color: var(--color-error);
+            text-align: center;
+            font-size: 0.875em;
+          }
         }
 
         &.payment-form-checkout-button {
@@ -199,6 +293,23 @@
         visibility: hidden;
         position: absolute;
       }
+    }
+  }
+
+  @keyframes payment-form-add-to-cart-success {
+    0% {
+      opacity: 1;
+      filter: blur(10px);
+    }
+
+    50% {
+      opacity: 1;
+      filter: blur(0);
+    }
+
+    100% {
+      opacity: 0;
+      filter: blur(4px);
     }
   }
 {% endstylesheet %}

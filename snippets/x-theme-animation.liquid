@@ -32,22 +32,16 @@
       --default-transition-duration: 0.5s;
       --default-transition-timing-function: var(--ease-out);
     }
+  }
 
+  @layer base {
     :where(*),
     :where(*)::before,
-    :where(*)::after {
+    :where(*)::after,
+    :where(*)::backdrop {
       transition: none;
       transition-duration: var(--default-transition-duration);
       transition-timing-function: var(--default-transition-timing-function);
-    }
-  }
-
-  @layer theme {
-    :root {
-      --animate-fade-in: fade-in 0.5s var(--ease-out) forwards;
-      --animate-fade-out: fade-out 0.5s var(--ease-out) forwards;
-      --animate-scale-in: scale-in 0.5s var(--ease-out) forwards;
-      --animate-scale-out: scale-out 0.5s var(--ease-out) forwards;
     }
   }
 
@@ -73,6 +67,16 @@
     @keyframes scale-out {
       to {
         transform: scale(0.5);
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
       }
     }
   }
