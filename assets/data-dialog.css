@@ -14,6 +14,8 @@
       justify-content: center;
       align-items: center;
 
+      pointer-events: auto;
+
       &::backdrop {
         opacity: 0;
         background: var(--color-overlay, #808080aa);
