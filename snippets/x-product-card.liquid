@@ -4,12 +4,12 @@
     <div
       class='product-card-overlay'
       data-indices
+      data-dialog
     >
       <div
         class='product-card-action'
-        data-dialog
       >
-        <div
+        <button
           class='product-card-action-trigger variant/add-to-cart'
           title='Add to cart'
           data-dialog-trigger
@@ -18,42 +18,38 @@
               {{ 'x-icon-add-shopping-cart.svg' | inline_asset_content }}
             {% endcapture %}
           {% render 'x-button', variant: 'secondary', icon: add_to_cart_icon %}
-        </div>
-        <div
-          class='product-card-action-content'
-          data-dialog-content
-          data-fragment
-          data-fragment-url='{{ product.url }}'
-          data-fragment-selector='[data-product-id="{{ product.id }}"] [data-product-details-breakdown]'
-          data-fragment-loading='lazy'
-          data-lenis-prevent
-        >
-          <div
-            class='product-card-action-content-container'
-            data-fragment-content
-          ></div>
-          <div class='product-card-action-spinner'>
-            {% render 'x-spinner' %}
-          </div>
-        </div>
+        </button>
       </div>
       <div
         class='product-card-action'
       >
-        {%- form 'product', product, data-type: 'add-to-cart-form' -%}
-          <button
-            class='product-card-action-trigger variant/buy-now'
-            data-button-for='shopify-buy-it-now-button button'
-          >
-            {% capture buy_now_icon %}
+        <button
+          class='product-card-action-trigger variant/buy-now'
+          title='Buy now'
+          data-dialog-trigger
+        >
+          {% capture buy_now_icon %}
               {{ 'x-icon-local-mall.svg' | inline_asset_content }}
             {% endcapture %}
-            {% render 'x-button', variant: 'primary', icon: buy_now_icon %}
-          </button>
-          <div class='product-card-action-accelerated-button'>
-            {{ form | payment_button }}
-          </div>
-        {%- endform -%}
+          {% render 'x-button', variant: 'primary', icon: buy_now_icon %}
+        </button>
+      </div>
+      <div
+        class='product-card-content'
+        data-dialog-content
+        data-fragment
+        data-fragment-url='{{ product.url }}'
+        data-fragment-selector='[data-product-id="{{ product.id }}"] [data-product-details-breakdown]'
+        data-fragment-loading='lazy'
+        data-lenis-prevent
+      >
+        <div
+          class='product-card-content-container'
+          data-fragment-content
+        ></div>
+        <div class='product-card-content-spinner'>
+          {% render 'x-spinner' %}
+        </div>
       </div>
     </div>
   </div>
@@ -117,6 +113,8 @@
         pointer-events: auto;
 
         & .product-card-action-trigger {
+          all: unset;
+
           transition-property: translate;
           transition-timing-function: var(--ease-in-out);
           transition-delay: calc((var(--index)) * 0.2s);
@@ -134,50 +132,48 @@
               display: none;
             }
           }
+        }
+      }
 
-          & .product-card-action-accelerated-button {
-            display: none;
+      & .product-card-content {
+        width: 100%;
+        max-width: 768px;
+        max-height: min(560px, 100%);
+        overflow-y: auto;
+
+        pointer-events: auto;
+
+        & .product-card-content-container {
+          position: relative;
+          z-index: 0;
+
+          background: var(--color-background);
+          transition-property: opacity, filter, translate;
+
+          &:empty {
+            opacity: 0;
+            filter: blur(4px);
+            translate: 0 -8px;
           }
         }
 
-        & .product-card-action-content {
-          width: 100%;
-          max-width: 768px;
-          max-height: min(560px, 100%);
-          overflow-y: auto;
+        & .product-card-content-spinner {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          translate: -50% -50%;
 
-          & .product-card-action-content-container {
-            position: relative;
-            z-index: 0;
+          padding: 4px;
+          background: var(--color-background);
+          border-radius: 9999px;
 
-            background: var(--color-background);
-            transition-property: opacity, filter, translate;
+          pointer-events: none;
 
-            &:empty {
-              opacity: 0;
-              filter: blur(4px);
-              translate: 0 -8px;
-            }
-          }
-
-          & .product-card-action-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            translate: -50% -50%;
-
-            padding: 4px;
-            background: var(--color-background);
-            border-radius: 9999px;
-
-            pointer-events: none;
-
-            transition-property: opacity, filter;
-          }
-          &[data-fragment-status='ready'] .product-card-action-spinner {
-            opacity: 0;
-            filter: blur(4px);
-          }
+          transition-property: opacity, filter;
+        }
+        &[data-fragment-status='ready'] .product-card-content-spinner {
+          opacity: 0;
+          filter: blur(4px);
         }
       }
     }
