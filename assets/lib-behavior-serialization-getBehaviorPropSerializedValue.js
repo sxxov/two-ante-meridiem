@@ -1,5 +1,5 @@
 import { BehaviorPropKind } from './lib-behavior-prop-BehaviorPropKind.js';
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 import { cast } from './lib-type-cast.js';
 
 export function getBehaviorPropSerializedValue(

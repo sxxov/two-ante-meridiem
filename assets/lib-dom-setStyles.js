@@ -1,4 +1,4 @@
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 /** @import {CSSProperties} from './lib-dom-CSSProperties.js' */
 
 // eslint-disable-next-line prettier/prettier

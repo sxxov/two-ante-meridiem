@@ -1,6 +1,6 @@
 import { setStyles } from './lib-dom-setStyles.js';
-import { some } from './lib-functional-some.js';
-import { unwrap } from './lib-functional-unwrap.js';
+import { some } from './lib-type-some.js';
+import { unwrap } from './lib-type-unwrap.js';
 
 export function applyOrderToPerSpans(
   /** @type {HTMLSpanElement[]} */ spans,

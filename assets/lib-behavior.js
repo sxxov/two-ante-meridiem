@@ -7,8 +7,8 @@ import {
 } from './lib-signal.js';
 import { setAttributes } from './lib-dom-setAttributes.js';
 import { subscribeSelectorAll } from './lib-dom-subscribeSelectorAll.js';
-import { some } from './lib-functional-some.js';
-import { unwrap } from './lib-functional-unwrap.js';
+import { some } from './lib-type-some.js';
+import { unwrap } from './lib-type-unwrap.js';
 import {
   registeredGlobalBehaviors,
   elementContexts,
@@ -20,34 +20,45 @@ import {
 import { BehaviorPropKind } from './lib-behavior-prop-BehaviorPropKind.js';
 import { getBehaviorAttributeName } from './lib-behavior-serialization-getBehaviorAttributeName.js';
 import { getBehaviorPropAttributeName } from './lib-behavior-serialization-getBehaviorPropAttributeName.js';
-import { getBehaviorPropSerializedValue } from './lib-behavior-serialization-getBehaviorPropSerializedValue.js';
 import { getBehaviorPropStylePropertyName } from './lib-behavior-serialization-getBehaviorPropStylePropertyName.js';
+import { queueMicrotask } from './lib-dom-queueMicrotask.js';
 /** @import {Values} from './lib-utilities-Values.js' */
 /** @import {BehaviorFactory} from './lib-behavior-factory-BehaviorFactory.js' */
 /** @import {BehaviorProps} from './lib-behavior-prop-BehaviorProps.js' */
+/** @import {BehaviorPropKindValue} from './lib-behavior-prop-BehaviorPropKindValue.js' */
 /** @import {BehaviorRepresentation} from './lib-behavior-factory-BehaviorRepresentation.js' */
 /** @import {BehaviorFactoryContext} from './lib-behavior-factory-BehaviorFactoryContext.js' */
 /** @import {BehaviorElementContext} from './lib-behavior-context-BehaviorElementContext.js' */
 /** @import {BehaviorConfigurator} from './lib-behavior-factory-BehaviorConfigurator.js' */
 /** @import {BehaviorPropsDescriptorValues} from './lib-behavior-prop-BehaviorPropsDescriptorValues.js' */
+/** @import {BehaviorInstance} from './lib-behavior-factory-BehaviorInstance.js' */
 
 export const t = /** @type {const} */ ({
   get boolean() {
     return new BehaviorPropDescriptor(
       BehaviorPropKind.Boolean,
-      /** @type {boolean | undefined} */ (undefined),
+      /**
+       * @type {BehaviorPropKindValue<typeof BehaviorPropKind.Boolean>
+       *   | undefined}
+       */ (undefined),
     );
   },
   get number() {
     return new BehaviorPropDescriptor(
       BehaviorPropKind.Number,
-      /** @type {number | undefined} */ (undefined),
+      /**
+       * @type {BehaviorPropKindValue<typeof BehaviorPropKind.Number>
+       *   | undefined}
+       */ (undefined),
     );
   },
   get string() {
     return new BehaviorPropDescriptor(
       BehaviorPropKind.String,
-      /** @type {string | undefined} */ (undefined),
+      /**
+       * @type {BehaviorPropKindValue<typeof BehaviorPropKind.String>
+       *   | undefined}
+       */ (undefined),
     );
   },
 });
@@ -79,12 +90,14 @@ export function registerGlobalBehaviors(
   for (const behavior of behaviors) {
     if (registeredGlobalBehaviors.get().has(behavior)) continue;
 
-    registeredGlobalBehaviors.update((it) => {
-      it.add(behavior);
-      registeredGlobalBehaviors.trigger();
-      return it;
-    });
-    _._ = () => {
+    add: {
+      registeredGlobalBehaviors.update((it) => {
+        it.add(behavior);
+        registeredGlobalBehaviors.trigger();
+        return it;
+      });
+    }
+    remove: _._ = () => {
       registeredGlobalBehaviors.update((it) => {
         it.delete(behavior);
         registeredGlobalBehaviors.trigger();
@@ -92,7 +105,9 @@ export function registerGlobalBehaviors(
       });
     };
 
-    _._ = installBehavior(behavior);
+    _._ = queueMicrotask(() => {
+      _._ = installBehavior(behavior);
+    });
   }
 
   return _;
@@ -102,39 +117,43 @@ export function getApplicableBehaviors(/** @type {HTMLElement} */ element) {
   return new Signal(
     new /** @type {typeof Set<BehaviorRepresentation>} */ (Set)(),
     ({ update }) =>
-      subscribe({ registeredGlobalBehaviors, elementContexts }, ({
-        $registeredGlobalBehaviors,
-        $elementContexts,
-      }) => {
-        const behaviors = new Set($registeredGlobalBehaviors);
+      subscribe(
+        { registeredGlobalBehaviors, elementContexts },
+        ({ $registeredGlobalBehaviors, $elementContexts }) => {
+          const behaviors = new Set($registeredGlobalBehaviors);
 
-        for (
-          let ancestor = /** @type {HTMLElement | null} */ (element);
-          ancestor;
-          ancestor = ancestor.parentElement
-        ) {
-          const ancestorContext = $elementContexts.get(ancestor);
-          if (!ancestorContext) continue;
+          for (
+            let ancestor = /** @type {HTMLElement | null} */ (element);
+            ancestor;
+            ancestor = ancestor.parentElement
+          ) {
+            const ancestorContext = $elementContexts.get(ancestor);
+            if (!ancestorContext) continue;
 
-          const { registeredLocalBehaviors } = ancestorContext;
-          for (const behavior of registeredLocalBehaviors.get())
-            behaviors.add(behavior);
-        }
+            const { registeredLocalBehaviors } = ancestorContext;
+            for (const behavior of registeredLocalBehaviors.get())
+              behaviors.add(behavior);
+          }
 
-        update((it) => {
-          if (behaviors.size === it.size && behaviors.isSubsetOf(it)) return it;
+          update((it) => {
+            if (behaviors.size === it.size && behaviors.isSubsetOf(it))
+              return it;
 
-          return behaviors;
-        });
-      }),
+            return behaviors;
+          });
+        },
+      ),
   ).readonly;
 }
 
+/** @template {BehaviorRepresentation<string, any, any>} Behavior */
 export function getAttachedBehavior(
   /** @type {HTMLElement} */ element,
-  /** @type {BehaviorRepresentation<string, any, any>} */ behavior,
+  /** @type {Behavior} */ behavior,
 ) {
-  const initial = /** @type {BehaviorProps | undefined} */ (undefined);
+  const initial = /** @type {BehaviorInstance<Behavior> | undefined} */ (
+    undefined
+  );
   return new Signal(initial, ({ set, trigger }) =>
     subscribe({ elementContexts }, ({ $elementContexts }) => {
       const context = $elementContexts.get(element);
@@ -145,10 +164,15 @@ export function getAttachedBehavior(
 
       const { behaviorToProps } = context;
       return subscribe({ behaviorToProps }, ({ $behaviorToProps }) => {
-        set($behaviorToProps.get(behavior));
+        set(
+          /** @type {BehaviorInstance<Behavior> | undefined} */ (
+            $behaviorToProps.get(behavior)
+          ),
+        );
         trigger();
       });
-    })).readonly;
+    }),
+  ).readonly;
 }
 
 export function getAttachedBehaviors(/** @type {HTMLElement} */ element) {
@@ -169,7 +193,8 @@ export function getAttachedBehaviors(/** @type {HTMLElement} */ element) {
         set($behaviorToProps);
         trigger();
       });
-    })).readonly;
+    }),
+  ).readonly;
 }
 
 export function hasAttachedBehavior(
@@ -225,7 +250,8 @@ export function detachBehavior(
     if (!props) return;
 
     return Object.keys(props).map((key) =>
-      getBehaviorPropAttributeName(name, key));
+      getBehaviorPropAttributeName(name, key),
+    );
   })();
 
   for (const name of [attributeName, ...(propAttributeNames ?? [])]) {
@@ -252,21 +278,15 @@ function installBehavior(
     ).filter(([, value]) => isBehaviorPropDescriptor(value));
 
     const hydrateProps = () => {
-      for (const [key, signal] of propDescriptorEntries) {
+      for (const [key, descriptor] of propDescriptorEntries) {
+        const { deserializer } = descriptor;
+        if (!deserializer) continue;
+
         const attributeName = getBehaviorPropAttributeName(name, key);
-        const serializedValue = element.getAttribute(attributeName);
-        const deserializedValue = (() => {
-          if (some(serializedValue))
-            switch (signal.kind) {
-              case BehaviorPropKind.Boolean:
-                return serializedValue !== 'false';
-              case BehaviorPropKind.Number:
-                return Number(serializedValue);
-              case BehaviorPropKind.String:
-                return String(serializedValue);
-            }
-        })();
-        signal.set(deserializedValue);
+        const serializedValue =
+          element.getAttribute(attributeName) ?? undefined;
+        const deserializedValue = deserializer(serializedValue);
+        descriptor.set(deserializedValue);
       }
     };
     hydrateProps();
@@ -274,7 +294,8 @@ function installBehavior(
     mo.observe(element, {
       attributes: true,
       attributeFilter: propDescriptorEntries.map(([key]) =>
-        getBehaviorPropAttributeName(name, key)),
+        getBehaviorPropAttributeName(name, key),
+      ),
     });
     _._ = () => {
       mo.disconnect();
@@ -296,45 +317,43 @@ function installBehavior(
         element.style.setProperty(propertyName, serializedValue);
       else element.style.removeProperty(propertyName);
     };
-    for (const [key, signal] of propDescriptorEntries)
-      _._ = signal.subscribeSoon((deserializedValue) => {
-        const serializedValue = getBehaviorPropSerializedValue(
-          signal.kind,
-          deserializedValue,
-        );
+    for (const [key, descriptor] of propDescriptorEntries) {
+      const { serializer } = descriptor;
+      if (!serializer) continue;
 
+      _._ = descriptor.subscribe((deserializedValue) => {
+        const serializedValue = serializer(deserializedValue);
         const attributeName = getBehaviorPropAttributeName(name, key);
         propagatePropAttribute(attributeName, serializedValue);
 
         const stylePropertyName = getBehaviorPropStylePropertyName(name, key);
         propagatePropStyle(stylePropertyName, serializedValue);
       });
+    }
 
     let elementContext = elementContexts.get().get(element);
     if (!elementContext) {
       const registeredLocalBehaviors = new Signal(
         new /** @type {typeof Set<BehaviorRepresentation>} */ (Set)(),
-        () => {
-          const _ = bin();
-          _._ = registeredLocalBehaviors.subscribe((it) => {
-            const { collect, dispose } = bin();
-            for (const behavior of it)
-              collect(installBehavior(behavior, element));
-            return dispose;
-          });
-          return _;
-        },
+        ({ subscribe }) =>
+          subscribe((it) => {
+            const _ = bin();
+            for (const behavior of it) _._ = installBehavior(behavior, element);
+            return _;
+          }),
       );
       elementContext = {
         behaviorToProps: new Signal(new Map()),
         registeredLocalBehaviors,
       };
-      elementContexts.update((it) => {
-        it.set(element, unwrap(elementContext));
-        elementContexts.trigger();
-        return it;
-      });
-      _._ = () => {
+      add: {
+        elementContexts.update((it) => {
+          it.set(element, unwrap(elementContext));
+          elementContexts.trigger();
+          return it;
+        });
+      }
+      remove: _._ = () => {
         elementContexts.update((it) => {
           it.delete(element);
           elementContexts.trigger();
@@ -351,7 +370,7 @@ function installBehavior(
 
     /** @type {BehaviorFactoryContext<typeof props>} */
     const factoryContext = {
-      registerLocalBehaviors: (...behaviors) => {
+      registerLocalBehaviors(...behaviors) {
         registeredLocalBehaviors.update((it) => {
           const { size } = it;
 
@@ -362,23 +381,42 @@ function installBehavior(
         });
       },
       getContext: (behavior) =>
-        derive({ elementContexts }, ({ $elementContexts }) => {
-          for (
-            let ancestor = /** @type {HTMLElement | null} */ (element);
-            ancestor;
-            ancestor = ancestor.parentElement
-          ) {
-            const ancestorContext = $elementContexts.get(ancestor);
-            if (!ancestorContext) continue;
+        new Signal(
+          /** @type {BehaviorInstance<typeof behavior> | undefined} */ (
+            undefined
+          ),
+          ({ set, get }) =>
+            subscribe({ elementContexts }, ({ $elementContexts }) => {
+              const _ = bin();
 
-            const props = ancestorContext.behaviorToProps.get().get(behavior);
-            if (!props) continue;
+              /** @type {any[]} */
+              const stack = [];
+              for (
+                let ancestor = /** @type {HTMLElement | null} */ (element),
+                  i = 0;
+                ancestor;
+                ancestor = ancestor.parentElement, i++
+              ) {
+                const ancestorContext = $elementContexts.get(ancestor);
+                if (!ancestorContext) continue;
 
-            return /** @type {InstanceType<(typeof behavior)['configurator']>} */ (
-              props
-            );
-          }
-        }).readonly,
+                const { behaviorToProps } = ancestorContext;
+                _._ = subscribe({ behaviorToProps }, ({ $behaviorToProps }) => {
+                  const props = /** @type {any} */ (
+                    $behaviorToProps.get(behavior)
+                  );
+                  if (!props) return;
+
+                  stack[i] = props;
+                  set(props);
+                  return () => {
+                    stack[i] = undefined;
+                    set(stack.find(some));
+                  };
+                });
+              }
+            }),
+        ).readonly,
     };
 
     const maybeFactoryInvalidator = factory(element, props, factoryContext);

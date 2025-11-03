@@ -5,7 +5,7 @@ import {
   registerGlobalBehaviors,
   t,
 } from './lib-behavior.js';
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 import { ProductPullNodeBehavior } from './data-product-pull-node.js';
 import { ProductPullOptionBehavior } from './data-product-pull-option.js';
 

@@ -1,5 +1,5 @@
 import { Component } from '@theme/component';
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 
 const Milliseconds = /** @type {const} */ ({
   Second: 1000,
@@ -132,9 +132,10 @@ export class XCountdown extends Component {
   #render(/** @type {number | undefined} */ forceValue = undefined) {
     if (!some(this.#targetTimestamp)) return;
 
-    const msRemaining = typeof forceValue === 'number' ? forceValue : (
-      Math.max(0, this.#targetTimestamp - Date.now())
-    );
+    const msRemaining =
+      typeof forceValue === 'number' ? forceValue : (
+        Math.max(0, this.#targetTimestamp - Date.now())
+      );
     const text = formatDuration(msRemaining, this.#format);
 
     if (text !== this.#lastRendered) {

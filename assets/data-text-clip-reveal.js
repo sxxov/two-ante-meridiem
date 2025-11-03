@@ -1,7 +1,7 @@
 import { bin, derive, Signal, subscribe } from './lib-signal.js';
 import { behavior, registerGlobalBehaviors, t } from './lib-behavior.js';
 import { watchElementIntersecting } from './lib-dom-watchElementIntersecting.js';
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 import { transformTextContentIntoPerSpans } from './data-text-clip-reveal-transformTextContentIntoPerSpans.js';
 import { applyOrderToPerSpans } from './data-text-clip-reveal-applyOrderToPerSpans.js';
 /** @import {PerSplitMode} from './data-text-clip-reveal-PerSplitMode.js' */
@@ -16,9 +16,9 @@ export const TextClipRevealBehavior = behavior(
     staggerNoise = t.number.default(0);
     maxDuration = t.number.default(2000);
 
-    obscured = t.boolean.transient();
-    duration = t.number.transient();
-    perDelay = t.number.transient();
+    obscured = t.boolean.backing();
+    duration = t.number.backing();
+    perDelay = t.number.backing();
   },
   (
     element,
@@ -75,26 +75,25 @@ export const TextClipRevealBehavior = behavior(
     perDuration.trigger();
     delay.trigger();
     duration.in(
-      derive({ staggeredDuration, maxDuration }, ({
-        $staggeredDuration,
-        $maxDuration,
-      }) => Math.min($staggeredDuration, $maxDuration)),
+      derive(
+        { staggeredDuration, maxDuration },
+        ({ $staggeredDuration, $maxDuration }) =>
+          Math.min($staggeredDuration, $maxDuration),
+      ),
     );
     perDelay.in(
-      derive({ stagger, duration, perSpans, perDuration }, ({
-        $stagger,
-        $duration,
-        $perSpans,
-        $perDuration,
-      }) =>
-        Math.min(
-          $stagger,
-          getPerStaggeredDelay(
-            $duration ?? 0,
-            $perSpans?.length ?? 0,
-            $perDuration,
+      derive(
+        { stagger, duration, perSpans, perDuration },
+        ({ $stagger, $duration, $perSpans, $perDuration }) =>
+          Math.min(
+            $stagger,
+            getPerStaggeredDelay(
+              $duration ?? 0,
+              $perSpans?.length ?? 0,
+              $perDuration,
+            ),
           ),
-        )),
+      ),
     );
   },
 );

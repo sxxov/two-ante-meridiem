@@ -1,7 +1,7 @@
 import { behavior, registerGlobalBehaviors, t } from './lib-behavior.js';
 import { watchElementRect } from './lib-dom-watchElementRect.js';
-import { some } from './lib-functional-some.js';
-import { unset } from './lib-functional-unset.js';
+import { some } from './lib-type-some.js';
+import { unset } from './lib-type-unset.js';
 import { scrollY } from './lib-human-scroll.js';
 import { clamp01 } from './lib-math-clamp01.js';
 import { map01 } from './lib-math-map01.js';
@@ -23,8 +23,8 @@ const activeCandidate = candidates.derive(
 export const HashIntoUrlBehavior = behavior(
   'hash-into-url',
   class {
-    active = t.boolean.transient();
-    current = t.boolean.transient();
+    active = t.boolean.backing();
+    current = t.boolean.backing();
   },
   (element, { active, current }, {}) => {
     const { id } = element;
@@ -35,39 +35,45 @@ export const HashIntoUrlBehavior = behavior(
     let previousHash = unset(String);
     const rect = watchElementRect(element);
 
-    _._ = subscribe({ rect, scrollY, viewportSize }, ({
-      $rect: { y: $y, height: $height },
-      $scrollY,
-      $viewportSize: { height: $vh },
-    }) => {
-      if (!some($y) || !some($height)) return;
+    _._ = subscribe(
+      { rect, scrollY, viewportSize },
+      ({
+        $rect: { y: $y, height: $height },
+        $scrollY,
+        $viewportSize: { height: $vh },
+      }) => {
+        if (!some($y) || !some($height)) return;
 
-      current.set($scrollY <= $y + $height - 1 && $scrollY + $vh - 1 >= $y);
-    });
+        current.set($scrollY <= $y + $height - 1 && $scrollY + $vh - 1 >= $y);
+      },
+    );
 
-    _._ = subscribe({ rect, current, viewportSize, scrollY }, ({
-      $rect: { y: $y, height: $height },
-      $current,
-      $viewportSize: { height: $vh },
-      $scrollY,
-    }) => {
-      if (!some($y) || !some($height)) return;
+    _._ = subscribe(
+      { rect, current, viewportSize, scrollY },
+      ({
+        $rect: { y: $y, height: $height },
+        $current,
+        $viewportSize: { height: $vh },
+        $scrollY,
+      }) => {
+        if (!some($y) || !some($height)) return;
 
-      if (!$current) return;
+        if (!$current) return;
 
-      candidates.update((it) => {
-        const progress =
-          clamp01(map01($scrollY, $y - $vh, $y - $vh + $height)) -
-          clamp01(map01($scrollY, $y, $y + $height));
-        element.style.setProperty('--progress', String(progress));
-        it.set(element, {
-          y: $y,
-          progress,
+        candidates.update((it) => {
+          const progress =
+            clamp01(map01($scrollY, $y - $vh, $y - $vh + $height)) -
+            clamp01(map01($scrollY, $y, $y + $height));
+          element.style.setProperty('--progress', String(progress));
+          it.set(element, {
+            y: $y,
+            progress,
+          });
+          candidates.trigger();
+          return it;
         });
-        candidates.trigger();
-        return it;
-      });
-    });
+      },
+    );
     _._ = () => {
       candidates.update((it) => {
         it.delete(element);

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 import Lenis from './lib-package-lenis.js';
 /** @import {ScrollCallback} from 'lenis' */
 
@@ -73,9 +73,10 @@ const { scrollTo } = window;
 function scrollToUsingLenis(
   /** @type {[number | ScrollToOptions | undefined, number | undefined]} */ ...args
 ) {
-  const objectArg = args[0] && typeof args[0] === 'object' ?
-    /** @type {ScrollToOptions} */ (args[0])
-  : undefined;
+  const objectArg =
+    args[0] && typeof args[0] === 'object' ?
+      /** @type {ScrollToOptions} */ (args[0])
+    : undefined;
   const top = objectArg?.top ?? args[1];
   const behavior = objectArg?.behavior;
 

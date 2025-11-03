@@ -1,7 +1,7 @@
 import { bin, subscribe } from './lib-signal.js';
 import { behavior, registerGlobalBehaviors, t } from './lib-behavior.js';
 import { route } from './lib-routing-route.js';
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 import { setAttributes } from './lib-dom-setAttributes.js';
 import { getTrailingUnslashed } from './lib-path-getTrailingUnslashed.js';
 

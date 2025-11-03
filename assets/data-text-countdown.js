@@ -1,7 +1,7 @@
-import { bin, Signal, subscribe } from './lib-signal.js';
+import { bin, subscribe } from './lib-signal.js';
 import { behavior, registerGlobalBehaviors, t } from './lib-behavior.js';
 import { setAttributes } from './lib-dom-setAttributes.js';
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 /** @import {Values} from './lib-utilities-Values.js' */
 
 const Milliseconds = /** @type {const} */ ({
@@ -26,7 +26,8 @@ export const TextCountdownBehavior = behavior(
     format = t.string.default('hh:mm:ss');
 
     strategy = this.format.derive((it) =>
-      /S+/.test(it) ? Strategy.RequestAnimationFrame : Strategy.SetTimeout);
+      /S+/.test(it) ? Strategy.RequestAnimationFrame : Strategy.SetTimeout,
+    );
     interval = this.format.derive((it) => {
       const millisecondDigitMatches = it.match(/S+/g);
 
@@ -34,7 +35,8 @@ export const TextCountdownBehavior = behavior(
         case millisecondDigitMatches && millisecondDigitMatches.length > 0: {
           const maxDigits = Math.max(
             ...millisecondDigitMatches.map((match) =>
-              Math.min(match.length, 3)),
+              Math.min(match.length, 3),
+            ),
           );
           const step = Math.max(4, Math.round(1000 / 10 ** maxDigits));
 
@@ -55,43 +57,41 @@ export const TextCountdownBehavior = behavior(
 
     const _ = bin();
 
-    _._ = subscribe({ targetTimestamp, format, strategy, interval }, ({
-      $targetTimestamp,
-      $format,
-      $strategy,
-      $interval,
-    }) => {
-      if (!some($targetTimestamp)) return;
+    _._ = subscribe(
+      { targetTimestamp, format, strategy, interval },
+      ({ $targetTimestamp, $format, $strategy, $interval }) => {
+        if (!some($targetTimestamp)) return;
 
-      const remaining = () => Math.max(0, $targetTimestamp - Date.now());
-      const render = () => {
-        const text = formatDuration(remaining(), $format);
-        element.textContent = text;
-      };
+        const remaining = () => Math.max(0, $targetTimestamp - Date.now());
+        const render = () => {
+          const text = formatDuration(remaining(), $format);
+          element.textContent = text;
+        };
 
-      switch ($strategy) {
-        case Strategy.RequestAnimationFrame: {
-          let rafHandle = requestAnimationFrame(function tick() {
-            render();
+        switch ($strategy) {
+          case Strategy.RequestAnimationFrame: {
+            let rafHandle = requestAnimationFrame(function tick() {
+              render();
 
-            if (remaining() <= 0) return;
-            rafHandle = requestAnimationFrame(tick);
-          });
-          return () => { cancelAnimationFrame(rafHandle); };
+              if (remaining() <= 0) return;
+              rafHandle = requestAnimationFrame(tick);
+            });
+            return () => { cancelAnimationFrame(rafHandle); };
+          }
+          case Strategy.SetTimeout: {
+            const timeoutDelay = () => computeDelay($interval, remaining());
+            let timeoutHandle = setTimeout(function tick() {
+              render();
+
+              if (remaining() <= 0) return;
+              timeoutHandle = setTimeout(tick, timeoutDelay());
+            }, timeoutDelay());
+            return () => { clearTimeout(timeoutHandle); };
+          }
+          default:
         }
-        case Strategy.SetTimeout: {
-          const timeoutDelay = () => computeDelay($interval, remaining());
-          let timeoutHandle = setTimeout(function tick() {
-            render();
-
-            if (remaining() <= 0) return;
-            timeoutHandle = setTimeout(tick, timeoutDelay());
-          }, timeoutDelay());
-          return () => { clearTimeout(timeoutHandle); };
-        }
-        default:
-      }
-    });
+      },
+    );
 
     return _;
   },

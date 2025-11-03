@@ -10,11 +10,11 @@ import { distance } from './lib-math-distance.js';
 export const CarouselItemBehavior = behavior(
   'carousel-item',
   class {
-    index = t.number.transient();
-    selected = t.boolean.transient();
-    push = t.number.transient();
-    sign = t.number.transient();
-    progress = t.number.transient();
+    index = t.number.backing();
+    selected = t.boolean.backing();
+    push = t.number.backing();
+    sign = t.number.backing();
+    progress = t.number.backing();
   },
   (element, { selected, index, push, sign, progress }, { getContext }) =>
     subscribe({ carousel: getContext(CarouselBehavior) }, ({ $carousel }) => {
@@ -39,39 +39,38 @@ export const CarouselItemBehavior = behavior(
         ),
       );
 
-      _._ = subscribe({ scroll, length, loop, index }, ({
-        $scroll,
-        $length,
-        $loop,
-        $index = 0,
-      }) => {
-        const progressValue = $index === 0 ?
-          1 +
-          clamp01(map01($scroll, $length - 1, $length)) -
-          clamp01(map01($scroll, 0, 1))
-        : clamp01(map01($scroll, $index - 1, $index)) -
-          clamp01(map01($scroll, $index, $index + 1));
-        /** @type {number} */
-        let pushValue;
-        /** @type {number} */
-        let signValue;
+      _._ = subscribe(
+        { scroll, length, loop, index },
+        ({ $scroll, $length, $loop, $index = 0 }) => {
+          const progressValue =
+            $index === 0 ?
+              1 +
+              clamp01(map01($scroll, $length - 1, $length)) -
+              clamp01(map01($scroll, 0, 1))
+            : clamp01(map01($scroll, $index - 1, $index)) -
+              clamp01(map01($scroll, $index, $index + 1));
+          /** @type {number} */
+          let pushValue;
+          /** @type {number} */
+          let signValue;
 
-        if ($loop) {
-          const distanceFromItem = cyclicalDistance($scroll, $index, $length);
-          const side = -cyclicalSide($scroll, $index, $length);
-          pushValue = (1 - distanceFromItem / $length - progressValue) * side;
-          signValue = (distanceFromItem / $length) * side;
-        } else {
-          const distanceFromItem = distance($scroll, $index);
-          const side = $scroll < $index ? 1 : -1;
-          pushValue = (1 - distanceFromItem / $length - progressValue) * side;
-          signValue = (distanceFromItem / $length) * side;
-        }
+          if ($loop) {
+            const distanceFromItem = cyclicalDistance($scroll, $index, $length);
+            const side = -cyclicalSide($scroll, $index, $length);
+            pushValue = (1 - distanceFromItem / $length - progressValue) * side;
+            signValue = (distanceFromItem / $length) * side;
+          } else {
+            const distanceFromItem = distance($scroll, $index);
+            const side = $scroll < $index ? 1 : -1;
+            pushValue = (1 - distanceFromItem / $length - progressValue) * side;
+            signValue = (distanceFromItem / $length) * side;
+          }
 
-        push.set(pushValue);
-        sign.set(signValue);
-        progress.set(progressValue);
-      });
+          push.set(pushValue);
+          sign.set(signValue);
+          progress.set(progressValue);
+        },
+      );
 
       return _;
     }),

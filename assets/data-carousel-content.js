@@ -5,9 +5,7 @@ import { behavior, detachBehavior, attachBehavior } from './lib-behavior.js';
 
 export const CarouselContentBehavior = behavior(
   'carousel-content',
-  class {
-    //
-  },
+  class {},
   (element, {}, { getContext }) =>
     subscribe({ carousel: getContext(CarouselBehavior) }, ({ $carousel }) => {
       const validElement = findNonContentsDescendent(element);

@@ -11,7 +11,7 @@ export const IntersectionBehavior = behavior(
       ),
     );
     visible = t.boolean
-      .transient()
+      .backing()
       .in(
         derive(
           { intersection: this.intersection, threshold: this.threshold },

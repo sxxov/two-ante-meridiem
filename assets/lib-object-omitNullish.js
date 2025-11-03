@@ -1,4 +1,4 @@
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 /** @import {PartialNullable} from "./lib-object-PartialNullable.js"; */
 
 /** @template {Record<string, any>} T */

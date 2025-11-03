@@ -39,7 +39,8 @@ export default function EmblaCarouselHash({} = {}) {
       return () => {
         controller.abort();
       };
-    }));
+    }),
+  );
   _._ = subscribe({ hash }, ({ $hash }) => {
     const url = new URL(location.href);
     url.hash = $hash;

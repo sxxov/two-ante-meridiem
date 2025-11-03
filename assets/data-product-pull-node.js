@@ -9,33 +9,34 @@ export const ProductPullNodeBehavior = behavior(
     '' = t.string;
   },
   (element, { '': id }, { getContext }) =>
-    subscribe({ productPull: getContext(ProductPullBehavior) }, ({
-      $productPull,
-    }) => {
-      if (!$productPull) return;
+    subscribe(
+      { productPull: getContext(ProductPullBehavior) },
+      ({ $productPull }) => {
+        if (!$productPull) return;
 
-      const _ = bin();
+        const _ = bin();
 
-      const { nodes } = $productPull;
-      const attributeName = getBehaviorAttributeName(
-        ProductPullNodeBehavior.name,
-      );
-      const selector = id.derive((it) => `[${attributeName}=${it}]`);
-      _._ = subscribe({ selector }, ({ $selector }) => {
-        nodes.update((it) => {
-          it.set(element, { selector: $selector });
-          nodes.trigger();
-          return it;
-        });
-        return () => {
+        const { nodes } = $productPull;
+        const attributeName = getBehaviorAttributeName(
+          ProductPullNodeBehavior.name,
+        );
+        const selector = id.derive((it) => `[${attributeName}=${it}]`);
+        _._ = subscribe({ selector }, ({ $selector }) => {
           nodes.update((it) => {
-            it.delete(element);
+            it.set(element, { selector: $selector });
             nodes.trigger();
             return it;
           });
-        };
-      });
+          return () => {
+            nodes.update((it) => {
+              it.delete(element);
+              nodes.trigger();
+              return it;
+            });
+          };
+        });
 
-      return _;
-    }),
+        return _;
+      },
+    ),
 );

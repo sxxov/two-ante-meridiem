@@ -3,7 +3,7 @@ import { Signal, derive, subscribe } from './lib-signal.js';
 import EmblaCarousel from './lib-package-embla-carousel.js';
 import { setStyles } from './lib-dom-setStyles.js';
 import { setAttributes } from './lib-dom-setAttributes.js';
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 /** @import {ReadableSignal} from './lib-signal.js' */
 
 // TODO: this is another very dirty re-implementation of marquee as a behavior
@@ -23,36 +23,38 @@ export const LighboxBehavior = behavior(
 
     const selectedIndex = new Signal(0);
     const selectedContainer = new Signal(/** @type {HTMLElement} */ (element));
-    const selectedImage = derive({ selectedContainer, selectedIndex }, ({
-      $selectedContainer,
-      $selectedIndex,
-    }) => {
-      const containerImage = (() => {
-        const image = $selectedContainer.querySelector(
-          `[data-lightbox-image="${$selectedIndex}"]`,
-        );
-        if (!(image instanceof HTMLImageElement)) return;
-        return image;
-      })();
-      if (containerImage) return containerImage;
+    const selectedImage = derive(
+      { selectedContainer, selectedIndex },
+      ({ $selectedContainer, $selectedIndex }) => {
+        const containerImage = (() => {
+          const image = $selectedContainer.querySelector(
+            `[data-lightbox-image="${$selectedIndex}"]`,
+          );
+          if (!(image instanceof HTMLImageElement)) return;
+          return image;
+        })();
+        if (containerImage) return containerImage;
 
-      const image = images[$selectedIndex];
-      if (image) return image;
-    });
+        const image = images[$selectedIndex];
+        if (image) return image;
+      },
+    );
 
     const scheduledRecalculateKey = new Signal({});
-    const aspect = derive({ selectedImage, scheduledRecalculateKey }, ({
-      $selectedImage,
-    }) => {
-      if (!$selectedImage) return 1;
-      return $selectedImage.naturalWidth / $selectedImage.naturalHeight;
-    });
-    const fromRect = derive({ selectedImage, scheduledRecalculateKey }, ({
-      $selectedImage,
-    }) => {
-      if (!$selectedImage) return new DOMRect();
-      return $selectedImage.getBoundingClientRect();
-    });
+    const aspect = derive(
+      { selectedImage, scheduledRecalculateKey },
+      ({ $selectedImage }) => {
+        if (!$selectedImage) return 1;
+        return $selectedImage.naturalWidth / $selectedImage.naturalHeight;
+      },
+    );
+    const fromRect = derive(
+      { selectedImage, scheduledRecalculateKey },
+      ({ $selectedImage }) => {
+        if (!$selectedImage) return new DOMRect();
+        return $selectedImage.getBoundingClientRect();
+      },
+    );
     const toRect = new Signal(/** @type {DOMRect | undefined} */ (undefined));
     // manually activate the above Signals since we're setting stuff up synchronously
     aspect.get();
@@ -211,7 +213,6 @@ function LightboxDialog(
     });
 
     const remove = () => {
-      console.log('remove');
       lightboxDialog.close();
       lightboxDialog.remove();
 
@@ -249,14 +250,12 @@ function LightboxDialog(
   };
   lightboxDialog.addEventListener('click', (e) => {
     if (e.target === lightboxDialog) closeDialog();
-    console.log('click');
   });
   open.subscribe((it) => {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         if (it) openDialog();
         else closeDialog();
-        console.log('open', it);
       });
     });
   });
@@ -349,13 +348,13 @@ function LightboxCarousel(
       });
     };
     // recalculate toRect the first time & when it's invalidated
-    subscribe({ selectedIndex, toRectCalculated }, ({
-      $selectedIndex,
-      $toRectCalculated,
-    }) => {
-      if ($toRectCalculated) return;
-      calculateToRect($selectedIndex);
-    });
+    subscribe(
+      { selectedIndex, toRectCalculated },
+      ({ $selectedIndex, $toRectCalculated }) => {
+        if ($toRectCalculated) return;
+        calculateToRect($selectedIndex);
+      },
+    );
     // recalculate toRect when selectedIndex changes
     subscribe({ selectedIndex }, ({ $selectedIndex }) => {
       calculateToRect($selectedIndex);

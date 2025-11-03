@@ -1,6 +1,8 @@
 import { PipeSignal } from './lib-signal-PipeSignal.js';
 import { BehaviorPropDisplay } from './lib-behavior-prop-BehaviorPropDisplay.js';
-import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSerialization.js';
+import { getBehaviorPropSerializedValue } from './lib-behavior-serialization-getBehaviorPropSerializedValue.js';
+import { getBehaviorPropDeserializedValue } from './lib-behavior-serialization-getBehaviorPropDeserializedValue.js';
+import { optional } from './lib-type-optional.js';
 /** @import {BehaviorPropKind} from './lib-behavior-prop-BehaviorPropKind.js' */
 /** @import {BehaviorPropKindValue} from './lib-behavior-prop-BehaviorPropKindValue.js' */
 /** @import {Starter} from './lib-signal.js' */
@@ -11,11 +13,11 @@ import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSeria
 const brand = '\0BehaviorPropDescriptor';
 
 /**
- * @augments {PipeSignal<T, T>}
  * @template {BehaviorPropKind} [Kind=BehaviorPropKind] Default is
  *   `BehaviorPropKind`
  * @template {BehaviorPropKindValue<Kind>} [T=BehaviorPropKindValue<Kind>]
  *   Default is `BehaviorPropKindValue<Kind>`
+ * @extends {PipeSignal<T, T>}
  */
 export class BehaviorPropDescriptor extends PipeSignal {
   /**
@@ -33,8 +35,15 @@ export class BehaviorPropDescriptor extends PipeSignal {
   /** @type {BehaviorPropDisplay} */
   display = BehaviorPropDisplay.Default;
 
-  /** @type {BehaviorPropSerialization} */
-  serialization = BehaviorPropSerialization.Serialized;
+  serializer = optional((/** @type {T} */ v) =>
+    getBehaviorPropSerializedValue(this.kind, v),
+  );
+  deserializer = optional(
+    (/** @type {string | undefined} */ v) =>
+      /** @type {T | undefined} */ (
+        getBehaviorPropDeserializedValue(this.kind, v)
+      ),
+  );
 
   constructor(
     /** @type {Kind} */ kind,
@@ -50,24 +59,34 @@ export class BehaviorPropDescriptor extends PipeSignal {
   }
 
   /**
-   * @template R
+   * @template const R
    * @returns {BehaviorPropDescriptor<Kind, R>}
    */
-  through(/** @type {(v: T) => R & T} */ mapper) {
+  through(/** @type {(v: T) => T | R} */ mapper) {
     const { pipe } = this;
     this.pipe = /** @type {any} */ (
       (/** @type {any} */ it) => mapper(/** @type {any} */ (pipe(it)))
     );
-    super.update((it) => it);
+    this.trigger();
     return /** @type {any} */ (this);
+  }
+
+  serialize(/** @type {typeof this.serializer} */ serializer) {
+    this.serializer = serializer;
+    return this;
+  }
+
+  deserialize(/** @type {typeof this.deserializer} */ deserializer) {
+    this.deserializer = deserializer;
+    return this;
   }
 
   /**
    * @template {T} R
-   * @returns {BehaviorPropDescriptor<Kind, NonNullable<T> | R>}
+   * @returns {BehaviorPropDescriptor<Kind, Exclude<T, undefined | null> | R>}
    */
   default(/** @type {R} */ value) {
-    return this.through((it) => it ?? value);
+    return /** @type {any} */ (this.through((it) => it ?? value));
   }
 
   /**
@@ -86,7 +105,8 @@ export class BehaviorPropDescriptor extends PipeSignal {
 
   transient() {
     this.display = BehaviorPropDisplay.Hidden;
-    this.serialization = BehaviorPropSerialization.Transient;
+    this.serializer = undefined;
+    this.deserializer = undefined;
     return this;
   }
 }

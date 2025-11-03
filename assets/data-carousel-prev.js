@@ -1,14 +1,14 @@
 import { subscribe, bin, derive } from './lib-signal.js';
 import { CarouselBehavior } from './data-carousel.js';
 import { behavior, t } from './lib-behavior.js';
-import { some } from './lib-functional-some.js';
+import { some } from './lib-type-some.js';
 
 export const CarouselPrevBehavior = behavior(
   'carousel-prev',
   class {
-    disabled = t.boolean.transient();
+    disabled = t.boolean.backing();
     loop = t.boolean.default(false);
-    looping = t.boolean.transient();
+    looping = t.boolean.backing();
   },
   (element, { disabled, looping, loop }, { getContext }) =>
     subscribe({ carousel: getContext(CarouselBehavior) }, ({ $carousel }) => {

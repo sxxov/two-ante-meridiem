@@ -7,24 +7,25 @@ export const CarouselAutoHeightBehavior = behavior(
   'carousel-auto-height',
   class {},
   (element, { ...options }, { getContext }) =>
-    subscribe({ carousel: getContext(CarouselBehavior) }, async ({
-      $carousel,
-    }) => {
-      if (!$carousel) return;
+    subscribe(
+      { carousel: getContext(CarouselBehavior) },
+      async ({ $carousel }) => {
+        if (!$carousel) return;
 
-      const { plugins } = $carousel;
-      const _ = bin();
-      const { default: EmblaCarouselAutoHeight } = await import(
-        './lib-package-embla-carousel-auto-height.js'
-      );
-      _._ = subscribe({ options: derive(options) }, ({ $options }) => {
-        plugins.update((it) => {
-          it.add(EmblaCarouselAutoHeight(omitNullish($options)));
-          plugins.trigger();
-          return it;
+        const { plugins } = $carousel;
+        const _ = bin();
+        const { default: EmblaCarouselAutoHeight } = await import(
+          './lib-package-embla-carousel-auto-height.js'
+        );
+        _._ = subscribe({ options: derive(options) }, ({ $options }) => {
+          plugins.update((it) => {
+            it.add(EmblaCarouselAutoHeight(omitNullish($options)));
+            plugins.trigger();
+            return it;
+          });
         });
-      });
 
-      return _;
-    }),
+        return _;
+      },
+    ),
 );

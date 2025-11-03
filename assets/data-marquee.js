@@ -8,7 +8,6 @@ import { clamp01 } from './lib-math-clamp01.js';
 import { map01 } from './lib-math-map01.js';
 import { setStyles } from './lib-dom-setStyles.js';
 import EmblaCarousel from './lib-package-embla-carousel.js';
-import { unwrap } from './lib-functional-unwrap.js';
 
 // TODO: this is a very dirty re-implementation of marquee as a behavior. we'll
 // need to actually rethink how to structure it instead of doing all these raw
@@ -41,39 +40,39 @@ export const MarqueeBehavior = behavior(
       'data-marquee-content': true,
     });
     seeker.append(content);
-    const progress = derive({ scrollY, containerRect, viewportSize }, ({
-      $scrollY,
-      $containerRect: { y: $containerY = 0, height: $containerHeight = 0 },
-      $viewportSize: { height: $vh },
-    }) =>
-      clamp01(
-        map01($scrollY, $containerY - $vh, $containerY + $containerHeight),
-      ));
-    _._ = subscribe({ viewportSize, progress, axis, amplitude }, ({
-      $viewportSize: { width: $vw },
-      $progress,
-      $axis,
-      $amplitude,
-    }) => {
-      // TODO: don't hard code the px amount
-      // probably expose this as a global store?
-      const amount = $vw <= 640 ? '0' : (
-        `${($progress - 1) * $amplitude * -100}%`
-      );
+    const progress = derive(
+      { scrollY, containerRect, viewportSize },
+      ({
+        $scrollY,
+        $containerRect: { y: $containerY = 0, height: $containerHeight = 0 },
+        $viewportSize: { height: $vh },
+      }) =>
+        clamp01(
+          map01($scrollY, $containerY - $vh, $containerY + $containerHeight),
+        ),
+    );
+    _._ = subscribe(
+      { viewportSize, progress, axis, amplitude },
+      ({ $viewportSize: { width: $vw }, $progress, $axis, $amplitude }) => {
+        // TODO: don't hard code the px amount
+        // probably expose this as a global store?
+        const amount =
+          $vw <= 640 ? '0' : `${($progress - 1) * $amplitude * -100}%`;
 
-      setStyles(content, {
-        translate: (() => {
-          switch ($axis) {
-            case 'x':
-              return `${amount} 0`;
-            case 'y':
-              return `0 ${amount}`;
-            default:
-              return '';
-          }
-        })(),
-      });
-    });
+        setStyles(content, {
+          translate: (() => {
+            switch ($axis) {
+              case 'x':
+                return `${amount} 0`;
+              case 'y':
+                return `0 ${amount}`;
+              default:
+                return '';
+            }
+          })(),
+        });
+      },
+    );
 
     const contentItems = document.createElement('div');
     setAttributes(contentItems, {
@@ -84,52 +83,60 @@ export const MarqueeBehavior = behavior(
     _._ = () => {
       contentItemsRect.destroy();
     };
-    _._ = subscribe({ contentItemsRect }, ({
-      $contentItemsRect: { width: $width, height: $height },
-    }) => {
-      setStyles(container, {
-        '--height': `${$height}px`,
-        '--width': `${$width}px`,
-      });
-    });
+    _._ = subscribe(
+      { contentItemsRect },
+      ({ $contentItemsRect: { width: $width, height: $height } }) => {
+        setStyles(container, {
+          '--height': `${$height}px`,
+          '--width': `${$width}px`,
+        });
+      },
+    );
 
-    const items = derive({ contentItemsRect, containerRect, axis }, ({
-      $contentItemsRect: {
-        width: $contentItemsWidth = 0,
-        height: $contentItemsHeight = 0,
-      },
-      $containerRect: {
-        width: $containerWidth = 0,
-        height: $containerHeight = 0,
-      },
-      $axis,
-    }) =>
-      Array.from(
-        {
-          length: Math.ceil(
-            unwrap(
-              {
-                x: $contentItemsWidth ?
-                  $containerWidth / $contentItemsWidth
-                : 0,
-                y: $contentItemsHeight ?
-                  $containerHeight / $contentItemsHeight
-                : 0,
-              }[$axis],
+    const items = derive(
+      { contentItemsRect, containerRect, axis },
+      ({
+        $contentItemsRect: {
+          width: $contentItemsWidth = 0,
+          height: $contentItemsHeight = 0,
+        },
+        $containerRect: {
+          width: $containerWidth = 0,
+          height: $containerHeight = 0,
+        },
+        $axis,
+      }) =>
+        Array.from(
+          {
+            length: Math.ceil(
+              (() => {
+                switch ($axis) {
+                  case 'x':
+                    return $contentItemsWidth ?
+                        $containerWidth / $contentItemsWidth
+                      : 0;
+                  case 'y':
+                    return $contentItemsHeight ?
+                        $containerHeight / $contentItemsHeight
+                      : 0;
+                  default:
+                    return 0;
+                }
+              })(),
             ),
-          ),
-        },
-        () => {
-          const wrapper = document.createElement('div');
-          setAttributes(wrapper, {
-            'data-marquee-item': true,
-          });
-          wrapper.replaceChildren(
-            ...children.map((child) => child.cloneNode(true)),
-          );
-          return wrapper;
-        },
-      ));
+          },
+          () => {
+            const wrapper = document.createElement('div');
+            setAttributes(wrapper, {
+              'data-marquee-item': true,
+            });
+            wrapper.replaceChildren(
+              ...children.map((child) => child.cloneNode(true)),
+            );
+            return wrapper;
+          },
+        ),
+    );
 
     const contentBefore = document.createElement('div');
     setAttributes(contentBefore, {

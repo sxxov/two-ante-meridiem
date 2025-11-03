@@ -46,7 +46,7 @@ export const CarouselBehavior = behavior(
     );
     selectedIndex = t.number
       .default(0)
-      .transient()
+      .backing()
       .in(
         new Signal(0, ({ set }) =>
           subscribe({ carousel: this.carousel }, ({ $carousel }) => {
@@ -60,47 +60,50 @@ export const CarouselBehavior = behavior(
               $carousel.off('init', updateSelectedIndex);
               $carousel.off('select', updateSelectedIndex);
             };
-          })).in(this.startIndex.derive((it) => it ?? 0)),
+          }),
+        ).in(this.startIndex.derive((it) => it ?? 0)),
       ).readonly;
-    targetSelectedIndex = new Signal(this.selectedIndex.get(), ({
-      subscribe,
-    }) => {
-      const _ = bin();
-      _._ = subscribe((it) => {
-        if (it) this.carousel.get()?.scrollTo(it);
-      });
-      return _;
-    }).in(this.selectedIndex);
+    targetSelectedIndex = new Signal(
+      this.selectedIndex.get(),
+      ({ subscribe }) => {
+        const _ = bin();
+        _._ = subscribe((it) => {
+          if (it) this.carousel.get()?.scrollTo(it);
+        });
+        return _;
+      },
+    ).in(this.selectedIndex);
     scroll = t.number
-      .transient()
+      .backing()
       .default(0)
       .in(
-        new Signal(0, ({ set }) =>
-          subscribe({ carousel: this.carousel, loop: this.loop }, ({
-            $carousel,
-            $loop,
-          }) => {
-            if (!$carousel) return;
+        new Signal(Number(), ({ set }) =>
+          subscribe(
+            { carousel: this.carousel, loop: this.loop },
+            ({ $carousel, $loop }) => {
+              if (!$carousel) return;
 
-            const updateScroll = () => {
-              set(
-                $carousel.scrollProgress() *
-                  ($carousel.scrollSnapList().length - 1 + ($loop ? 1 : 0)),
-              );
-            };
-            $carousel.on('init', updateScroll);
-            $carousel.on('scroll', updateScroll);
-            return () => {
-              $carousel.off('init', updateScroll);
-              $carousel.off('scroll', updateScroll);
-            };
-          })),
+              const updateScroll = () => {
+                set(
+                  $carousel.scrollProgress() *
+                    ($carousel.scrollSnapList().length - 1 + ($loop ? 1 : 0)),
+                );
+              };
+              $carousel.on('init', updateScroll);
+              $carousel.on('scroll', updateScroll);
+              return () => {
+                $carousel.off('init', updateScroll);
+                $carousel.off('scroll', updateScroll);
+              };
+            },
+          ),
+        ),
       ).readonly;
     length = t.number
-      .transient()
+      .backing()
       .default(0)
       .in(
-        new Signal(0, ({ set }) =>
+        new Signal(Number(), ({ set }) =>
           subscribe({ carousel: this.carousel }, ({ $carousel }) => {
             if (!$carousel) return;
 
@@ -115,7 +118,8 @@ export const CarouselBehavior = behavior(
               $carousel.off('reInit', updateLength);
               $carousel.off('slidesChanged', updateLength);
             };
-          })),
+          }),
+        ),
       ).readonly;
 
     indicatorsContext = {
@@ -169,7 +173,8 @@ export const CarouselBehavior = behavior(
           _._ = attachBehavior(element, CarouselContentBehavior, {});
 
         return _;
-      }));
+      }),
+    );
 
     carousel.in(
       derive(
@@ -216,4 +221,4 @@ export const CarouselBehavior = behavior(
   },
 );
 
-registerGlobalBehaviors(CarouselBehavior);
+queueMicrotask(() => { registerGlobalBehaviors(CarouselBehavior); });

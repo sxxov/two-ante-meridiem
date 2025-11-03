@@ -1,14 +1,14 @@
 import { subscribe, bin, Signal } from './lib-signal.js';
 import { CarouselBehavior } from './data-carousel.js';
 import { behavior, t } from './lib-behavior.js';
-import { some } from './lib-functional-some.js';
-import { unset } from './lib-functional-unset.js';
+import { some } from './lib-type-some.js';
+import { unset } from './lib-type-unset.js';
 
 export const CarouselIndicatorBehavior = behavior(
   'carousel-indicator',
   class {
     '' = t.string;
-    selected = t.boolean.transient();
+    selected = t.boolean.backing();
   },
   (element, { '': value, selected }, { getContext }) =>
     subscribe({ carousel: getContext(CarouselBehavior) }, ({ $carousel }) => {
@@ -60,27 +60,28 @@ export const CarouselIndicatorBehavior = behavior(
             intrinsic: {
               // fallback to intrinsic index
 
-              _._ = subscribe({ intrinsicIndexOccupants }, ({
-                $intrinsicIndexOccupants,
-              }) => {
-                const indexOfElement =
-                  $intrinsicIndexOccupants.indexOf(element);
-                const i = (() => {
-                  if ($intrinsicIndexOccupants.length <= 0) return 0;
+              _._ = subscribe(
+                { intrinsicIndexOccupants },
+                ({ $intrinsicIndexOccupants }) => {
+                  const indexOfElement =
+                    $intrinsicIndexOccupants.indexOf(element);
+                  const i = (() => {
+                    if ($intrinsicIndexOccupants.length <= 0) return 0;
 
-                  if (indexOfElement < 0)
-                    return $intrinsicIndexOccupants.length;
-                  return indexOfElement;
-                })();
-                set({ start: i, end: i });
-                intrinsicIndexOccupants.update((it) => {
-                  if (it[i] === element) return it;
+                    if (indexOfElement < 0)
+                      return $intrinsicIndexOccupants.length;
+                    return indexOfElement;
+                  })();
+                  set({ start: i, end: i });
+                  intrinsicIndexOccupants.update((it) => {
+                    if (it[i] === element) return it;
 
-                  it[i] = element;
-                  intrinsicIndexOccupants.trigger();
-                  return it;
-                });
-              });
+                    it[i] = element;
+                    intrinsicIndexOccupants.trigger();
+                    return it;
+                  });
+                },
+              );
               _._ = () => {
                 set({ start: undefined, end: undefined });
                 intrinsicIndexOccupants.update((it) => {
@@ -92,39 +93,39 @@ export const CarouselIndicatorBehavior = behavior(
           }),
       );
 
-      _._ = subscribe({ range, carousel }, ({
-        $range: { start: $start = 0 },
-        $carousel,
-      }) => {
-        if (!$carousel) return;
+      _._ = subscribe(
+        { range, carousel },
+        ({ $range: { start: $start = 0 }, $carousel }) => {
+          if (!$carousel) return;
 
-        const controller = new AbortController();
-        const { signal } = controller;
+          const controller = new AbortController();
+          const { signal } = controller;
 
-        element.addEventListener(
-          'click',
-          () => {
-            // force a 'select' event if the selected index is already the same
-            const needsSyntheticEvent =
-              $carousel.selectedScrollSnap() === $start;
-            $carousel.scrollTo($start);
-            if (needsSyntheticEvent) $carousel.emit('select');
-          },
-          { signal },
-        );
+          element.addEventListener(
+            'click',
+            () => {
+              // force a 'select' event if the selected index is already the same
+              const needsSyntheticEvent =
+                $carousel.selectedScrollSnap() === $start;
+              $carousel.scrollTo($start);
+              if (needsSyntheticEvent) $carousel.emit('select');
+            },
+            { signal },
+          );
 
-        return () => {
-          controller.abort();
-        };
-      });
+          return () => {
+            controller.abort();
+          };
+        },
+      );
 
-      _._ = subscribe({ range, selectedIndex }, ({
-        $range: { start: $start = 0, end: $end = 0 },
-        $selectedIndex,
-      }) => {
-        const indicating = $selectedIndex >= $start && $selectedIndex <= $end;
-        selected.set(indicating);
-      });
+      _._ = subscribe(
+        { range, selectedIndex },
+        ({ $range: { start: $start = 0, end: $end = 0 }, $selectedIndex }) => {
+          const indicating = $selectedIndex >= $start && $selectedIndex <= $end;
+          selected.set(indicating);
+        },
+      );
 
       return _;
     }),
