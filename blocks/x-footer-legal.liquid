@@ -1,0 +1,86 @@
+{% capture children %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+<nav
+  class='x-footer-legal'
+>
+  <div class='footer-legal-title h6'>Legal</div>
+  <div class='footer-legal-info h6'>
+    <div class='footer-legal-name'>
+      {{ shop.name | link_to: routes.root_url -}}
+    </div>
+    <div class='footer-legal-content'>
+      {{ children }}
+    </div>
+    <div class='footer-legal-address h6'>
+      {{ shop.address.street }},<br>
+      {{ shop.address.city }},
+      {{ shop.address.province }}
+      {{ shop.address.zip }},
+      {{ shop.address.country }}
+    </div>
+  </div>
+</nav>
+
+{% stylesheet %}
+  .x-footer-legal {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    background: currentColor;
+
+    @media (width < 640px) {
+      grid-template-columns: 1fr;
+      text-align: center;
+      justify-items: center;
+    }
+
+    & .footer-legal-title {
+      padding: 8px;
+
+      color: white;
+      mix-blend-mode: difference;
+    }
+
+    & .footer-legal-info {
+      padding: 8px;
+
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+
+      & * {
+        --color: white;
+        color: white;
+        font-weight: normal;
+        mix-blend-mode: difference;
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer: Legal",
+  "tag": "slot",
+  "blocks": [
+    {
+      "type": "text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer: Legal",
+      "category": "Footer",
+      "blocks": [
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

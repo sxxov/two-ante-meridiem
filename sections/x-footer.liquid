@@ -6,6 +6,10 @@
   {% content_for 'block', type: 'x-footer-nav', id: 'nav' %}
 {% endcapture %}
 
+{% capture legal %}
+  {% content_for 'block', type: 'x-footer-legal', id: 'legal' %}
+{% endcapture %}
+
 <footer
   class='x-footer'
   role='contentinfo'
@@ -26,6 +30,7 @@
   <div class='footer-brand'>
     {{ 'x-2.svg' | inline_asset_content }}
   </div>
+  <div class='footer-legal'>{{ legal }}</div>
 </footer>
 
 {% stylesheet %}
@@ -118,13 +123,6 @@
       "type": "_footer-copyright"
     }
   ],
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Menu"
-    }
-  ],
   "presets": [
     {
       "name": "Footer",
@@ -138,6 +136,11 @@
         {
           "type": "x-footer-nav",
           "id": "nav",
+          "static": true
+        },
+        {
+          "type": "x-footer-legal",
+          "id": "legal",
           "static": true
         }
       ]
