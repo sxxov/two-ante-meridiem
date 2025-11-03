@@ -17,6 +17,7 @@ import EmblaCarousel from './lib-package-embla-carousel.js';
 import { TaskSignal } from './lib-signal-TaskSignal.js';
 import { CarouselHashBehavior } from './data-carousel-hash.js';
 import { CarouselAutoHeightBehavior } from './data-carousel-auto-height.js';
+import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSerialization.js';
 /** @import {EmblaCarouselType, EmblaPluginType} from 'embla-carousel' */
 
 export const CarouselBehavior = behavior(
@@ -47,6 +48,9 @@ export const CarouselBehavior = behavior(
     selectedIndex = t.number
       .default(0)
       .backing()
+      .serialize(
+        BehaviorPropSerialization.Attribute | BehaviorPropSerialization.Style,
+      )
       .in(
         new Signal(0, ({ set }) =>
           subscribe({ carousel: this.carousel }, ({ $carousel }) => {
@@ -76,6 +80,7 @@ export const CarouselBehavior = behavior(
     scroll = t.number
       .backing()
       .default(0)
+      .serialize(BehaviorPropSerialization.Style)
       .in(
         new Signal(Number(), ({ set }) =>
           subscribe(
@@ -102,6 +107,9 @@ export const CarouselBehavior = behavior(
     length = t.number
       .backing()
       .default(0)
+      .serialize(
+        BehaviorPropSerialization.Attribute | BehaviorPropSerialization.Style,
+      )
       .in(
         new Signal(Number(), ({ set }) =>
           subscribe({ carousel: this.carousel }, ({ $carousel }) => {

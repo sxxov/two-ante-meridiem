@@ -22,6 +22,8 @@ import { getBehaviorAttributeName } from './lib-behavior-serialization-getBehavi
 import { getBehaviorPropAttributeName } from './lib-behavior-serialization-getBehaviorPropAttributeName.js';
 import { getBehaviorPropStylePropertyName } from './lib-behavior-serialization-getBehaviorPropStylePropertyName.js';
 import { queueMicrotask } from './lib-dom-queueMicrotask.js';
+import { BehaviorPropDeserialization } from './lib-behavior-prop-BehaviorPropDeserialization.js';
+import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSerialization.js';
 /** @import {Values} from './lib-utilities-Values.js' */
 /** @import {BehaviorFactory} from './lib-behavior-factory-BehaviorFactory.js' */
 /** @import {BehaviorProps} from './lib-behavior-prop-BehaviorProps.js' */
@@ -279,13 +281,19 @@ function installBehavior(
 
     const hydrateProps = () => {
       for (const [key, descriptor] of propDescriptorEntries) {
-        const { deserializer } = descriptor;
-        if (!deserializer) continue;
+        const { deserializeMapper, deserializeMode } = descriptor;
+        if (deserializeMode === BehaviorPropDeserialization.None) continue;
 
         const attributeName = getBehaviorPropAttributeName(name, key);
-        const serializedValue =
-          element.getAttribute(attributeName) ?? undefined;
-        const deserializedValue = deserializer(serializedValue);
+        const serializedValue = (() => {
+          let value;
+
+          if (deserializeMode & BehaviorPropDeserialization.Attribute)
+            value = element.getAttribute(attributeName) ?? undefined;
+
+          return value;
+        })();
+        const deserializedValue = deserializeMapper(serializedValue);
         descriptor.set(deserializedValue);
       }
     };
@@ -318,16 +326,21 @@ function installBehavior(
       else element.style.removeProperty(propertyName);
     };
     for (const [key, descriptor] of propDescriptorEntries) {
-      const { serializer } = descriptor;
-      if (!serializer) continue;
+      const { serializeMapper, serializeMode } = descriptor;
+      if (serializeMode === BehaviorPropSerialization.None) continue;
 
       _._ = descriptor.subscribe((deserializedValue) => {
-        const serializedValue = serializer(deserializedValue);
-        const attributeName = getBehaviorPropAttributeName(name, key);
-        propagatePropAttribute(attributeName, serializedValue);
+        const serializedValue = serializeMapper(deserializedValue);
 
-        const stylePropertyName = getBehaviorPropStylePropertyName(name, key);
-        propagatePropStyle(stylePropertyName, serializedValue);
+        if (serializeMode & BehaviorPropSerialization.Attribute) {
+          const attributeName = getBehaviorPropAttributeName(name, key);
+          propagatePropAttribute(attributeName, serializedValue);
+        }
+
+        if (serializeMode & BehaviorPropSerialization.Style) {
+          const stylePropertyName = getBehaviorPropStylePropertyName(name, key);
+          propagatePropStyle(stylePropertyName, serializedValue);
+        }
       });
     }
 

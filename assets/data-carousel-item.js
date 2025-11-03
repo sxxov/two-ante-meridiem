@@ -6,15 +6,20 @@ import { cyclicalDistance } from './lib-math-cyclicalDistance.js';
 import { cyclicalSide } from './lib-math-cyclicalSide.js';
 import { map01 } from './lib-math-map01.js';
 import { distance } from './lib-math-distance.js';
+import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSerialization.js';
 
 export const CarouselItemBehavior = behavior(
   'carousel-item',
   class {
-    index = t.number.backing();
+    index = t.number
+      .backing()
+      .serialize(
+        BehaviorPropSerialization.Attribute | BehaviorPropSerialization.Style,
+      );
     selected = t.boolean.backing();
-    push = t.number.backing();
-    sign = t.number.backing();
-    progress = t.number.backing();
+    push = t.number.backing().serialize(BehaviorPropSerialization.Style);
+    sign = t.number.backing().serialize(BehaviorPropSerialization.Style);
+    progress = t.number.backing().serialize(BehaviorPropSerialization.Style);
   },
   (element, { selected, index, push, sign, progress }, { getContext }) =>
     subscribe({ carousel: getContext(CarouselBehavior) }, ({ $carousel }) => {
