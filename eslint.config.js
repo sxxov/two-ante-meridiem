@@ -36,33 +36,25 @@ const config = /** @type {const} @satisfies {Linter.Config[]} */ ([
   {
     rules: {
       'no-console': 'error',
+      'object-shorthand': ['error', 'properties'],
+      'max-nested-callbacks': ['error', 6],
       'dot-notation': 'off',
-      '@typescript-eslint/dot-notation': 'error',
-      '@typescript-eslint/consistent-type-assertions': 'off',
       'no-labels': 'off',
       'no-unused-labels': 'off',
       'no-extra-label': 'off',
       'no-unused-vars': 'off',
       'no-eq-null': 'off',
-
-      eqeqeq: [
-        'error',
-        'always',
-        {
-          null: 'ignore',
-        },
-      ],
-
-      '@typescript-eslint/class-literal-property-style': ['error', 'fields'],
       'no-await-in-loop': 'off',
       'new-cap': 'off',
-
-      '@typescript-eslint/array-type': [
-        'error',
-        {
-          default: 'array',
-        },
-      ],
+      'capitalized-comments': 'off',
+      'no-empty-pattern': 'off',
+      'func-names': 'off',
+      'no-return-assign': 'off',
+      'max-params': 'off',
+      'no-inner-declarations': 'off',
+      'no-bitwise': 'off',
+      'no-lonely-if': 'off',
+      'no-label-var': 'off',
 
       '@typescript-eslint/naming-convention': [
         'error',
@@ -134,19 +126,11 @@ const config = /** @type {const} @satisfies {Linter.Config[]} */ ([
           modifiers: ['requiresQuotes'],
         },
       ],
-
-      'capitalized-comments': 'off',
+      '@typescript-eslint/dot-notation': 'error',
+      '@typescript-eslint/array-type': ['error', { default: 'array' }],
+      '@typescript-eslint/class-literal-property-style': ['error', 'fields'],
+      '@typescript-eslint/consistent-type-assertions': 'off',
       '@typescript-eslint/no-redeclare': 'off',
-      'no-empty-pattern': 'off',
-      'func-names': 'off',
-      'no-return-assign': 'off',
-      'object-shorthand': ['error', 'properties'],
-      'max-params': 'off',
-      'max-nested-callbacks': ['error', 6],
-      'no-inner-declarations': 'off',
-      'no-bitwise': 'off',
-      'no-lonely-if': 'off',
-
       '@typescript-eslint/no-restricted-types': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
