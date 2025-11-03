@@ -4,6 +4,7 @@ import { getBehaviorPropSerializedValue } from './lib-behavior-serialization-get
 import { getBehaviorPropDeserializedValue } from './lib-behavior-serialization-getBehaviorPropDeserializedValue.js';
 import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSerialization.js';
 import { BehaviorPropDeserialization } from './lib-behavior-prop-BehaviorPropDeserialization.js';
+import { unwrap } from './lib-type-unwrap.js';
 /** @import {BehaviorPropKind} from './lib-behavior-prop-BehaviorPropKind.js' */
 /** @import {BehaviorPropKindValue} from './lib-behavior-prop-BehaviorPropKindValue.js' */
 /** @import {Starter} from './lib-signal.js' */
@@ -94,12 +95,20 @@ export class BehaviorPropDescriptor extends PipeSignal {
     return this;
   }
 
+  /** @protected @type {T | undefined} */
+  defaultValue;
   /**
    * @template {T} R
    * @returns {BehaviorPropDescriptor<Kind, Exclude<T, undefined | null> | R>}
    */
   default(/** @type {R} */ value) {
-    return /** @type {any} */ (this.through((it) => it ?? value));
+    this.defaultValue = value;
+    this.update((it) => it ?? unwrap(value));
+    return /** @type {any} */ (this);
+  }
+  /** @override */
+  set(/** @type {T} */ value) {
+    super.set(value ?? unwrap(this.defaultValue));
   }
 
   /**
