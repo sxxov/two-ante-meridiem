@@ -4,21 +4,37 @@ import { watchElementIntersecting } from './lib-dom-watchElementIntersecting.js'
 import { some } from './lib-type-some.js';
 import { transformTextContentIntoPerSpans } from './data-text-clip-reveal-transformTextContentIntoPerSpans.js';
 import { applyOrderToPerSpans } from './data-text-clip-reveal-applyOrderToPerSpans.js';
+import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSerialization.js';
+import { BehaviorPropDeserialization } from './lib-behavior-prop-BehaviorPropDeserialization.js';
 /** @import {PerSplitMode} from './data-text-clip-reveal-PerSplitMode.js' */
 
 export const TextClipRevealBehavior = behavior(
   'text-clip-reveal',
   class {
     per = t.string.choice('word').choice('character').default('word');
-    perDuration = t.number.default(1000);
-    delay = t.number.default(0);
+    perDuration = t.number
+      .default(1000)
+      .serialize(
+        BehaviorPropSerialization.Attribute | BehaviorPropSerialization.Style,
+      );
+    delay = t.number
+      .default(0)
+      .serialize(
+        BehaviorPropSerialization.Attribute | BehaviorPropSerialization.Style,
+      );
     stagger = t.number.default(50);
     staggerNoise = t.number.default(0);
     maxDuration = t.number.default(2000);
 
     obscured = t.boolean.backing();
-    duration = t.number.backing();
-    perDelay = t.number.backing();
+    duration = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
+    perDelay = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
   },
   (
     element,
