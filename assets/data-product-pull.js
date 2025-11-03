@@ -34,12 +34,22 @@ export const ProductPullBehavior = behavior(
 
     const propagateParameters = () => {
       const $parameters = parameters.get();
-      const url = new URL(location.href);
-      const { searchParams } = url;
+      const $url = url.get();
+      if (!some($url)) return;
+
+      const targetUrl = new URL($url, location.href);
+      const locationUrl = new URL(location.href);
+      if (
+        locationUrl.origin !== targetUrl.origin ||
+        locationUrl.pathname !== targetUrl.pathname
+      )
+        return;
+
+      const { searchParams } = locationUrl;
 
       for (const [key, value] of $parameters) searchParams.set(key, value);
 
-      history.replaceState(undefined, '', url.href);
+      history.replaceState(undefined, '', locationUrl.href);
     };
 
     const pullHtml = async () => {
