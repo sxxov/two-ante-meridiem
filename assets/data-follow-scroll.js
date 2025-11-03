@@ -7,21 +7,53 @@ import { viewportSize } from './lib-viewport-viewportSize.js';
 import { clamp01 } from './lib-math-clamp01.js';
 import { map01 } from './lib-math-map01.js';
 import { lerp } from './lib-math-lerp.js';
+import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSerialization.js';
+import { BehaviorPropDeserialization } from './lib-behavior-prop-BehaviorPropDeserialization.js';
 
 export const FollowScrollBehavior = behavior(
   'follow-scroll',
   class {
-    x = t.number.backing();
-    xIn = t.number.backing();
-    xOut = t.number.backing();
-    xInOut = t.number.backing();
-    xBetween = t.number.backing();
+    x = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
+    xIn = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
+    xOut = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
+    xInOut = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
+    xBetween = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
 
-    y = t.number.backing();
-    yIn = t.number.backing();
-    yOut = t.number.backing();
-    yInOut = t.number.backing();
-    yBetween = t.number.backing();
+    y = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
+    yIn = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
+    yOut = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
+    yInOut = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
+    yBetween = t.number
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None)
+      .serialize(BehaviorPropSerialization.Style);
   },
   (
     element,
