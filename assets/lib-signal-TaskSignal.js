@@ -1,3 +1,4 @@
+import { queueMicrotask } from './lib-dom-queueMicrotask.js';
 import { Signal } from './lib-signal.js';
 
 /**
@@ -5,8 +6,19 @@ import { Signal } from './lib-signal.js';
  * @template T
  */
 export class TaskSignal extends Signal {
-  #triggerScheduled = false;
+  #setScheduled = false;
+  /** @override */
+  set(/** @type {T} */ value) {
+    if (this.#setScheduled) return;
+    this.#setScheduled = true;
 
+    queueMicrotask(() => {
+      this.#setScheduled = false;
+      super.set(value);
+    });
+  }
+
+  #triggerScheduled = false;
   /** @override */
   trigger() {
     if (this.#triggerScheduled) return;
