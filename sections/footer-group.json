@@ -83,9 +83,7 @@
         }
       },
       "name": "Footer",
-      "settings": {
-        "menu": ""
-      }
+      "settings": {}
     }
   },
   "order": [
