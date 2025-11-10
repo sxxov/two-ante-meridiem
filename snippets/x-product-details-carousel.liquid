@@ -36,10 +36,19 @@
 {% stylesheet %}
   .x-product-details-carousel {
     position: relative;
-    max-height: calc(50lvh - var(--x-header-height));
+    height: 100%;
+
+    display: flex;
 
     & .product-details-carousel-items {
+      flex-grow: 1;
+      height: 100%;
+
       & .product-details-carousel-item {
+        & img {
+          height: 100%;
+          object-fit: contain;
+        }
       }
     }
 
