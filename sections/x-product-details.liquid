@@ -17,24 +17,9 @@
   data-product-pull-section='{{ section.id }}'
 >
   <div class='product-details-container'>
-    <div
-      data-product-details-strip
-      class='product-details-strip'
-    >
-      {{ strip }}
-    </div>
-    <div
-      data-product-details-carousel
-      class='product-details-carousel'
-    >
-      {{ carousel }}
-    </div>
-    <div
-      data-product-details-breakdown
-      class='product-details-breakdown'
-    >
-      {{ breakdown }}
-    </div>
+    <div class='product-details-strip'>{{ strip }}</div>
+    <div class='product-details-carousel'>{{ carousel }}</div>
+    <div class='product-details-breakdown'>{{ breakdown }}</div>
   </div>
 </section>
 
@@ -53,22 +38,38 @@
       & {
         grid-template-columns: 0.4fr 0.6fr;
         grid-template-rows: auto;
+
+        & .product-details-strip {
+          display: block;
+        }
+        & .product-details-carousel {
+          display: none;
+        }
       }
       @container (width < 1024px) {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto;
-      }
 
+        & .product-details-strip {
+          display: none;
+        }
+        & .product-details-carousel {
+          display: block;
+          max-height: calc(50lvh - var(--x-header-height));
+        }
+      }
+    }
+  }
+  [data-fragment] .x-product-details {
+    padding-top: 0;
+
+    & .product-details-container {
       & .product-details-strip {
-        @container (width < 1024px) {
-          display: none;
-        }
+        display: none;
       }
-
       & .product-details-carousel {
-        @container (width >= 1024px) {
-          display: none;
-        }
+        display: block;
+        max-height: none;
       }
     }
   }
