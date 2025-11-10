@@ -15,7 +15,9 @@
         {{ title }}
       </h3>
     </div>
-    <div class='separator-title-after h5'>({{ count }})</div>
+    {% if count >= 0 %}
+      <div class='separator-title-after h5'>({{ count }})</div>
+    {% endif %}
   </div>
   <div class='separator-description-b h6'>
     {{ description_b }}
