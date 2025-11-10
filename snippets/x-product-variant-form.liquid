@@ -12,15 +12,15 @@
               continue
             endunless
           %}
-          {% capture id %}
+          {%- capture id -%}
             {{ product_option.name | escape }}-{{ product_option_value | escape }}-{{ block.id }}-{{ product.id }}
-          {% endcapture %}
-          {% capture name %}
+          {%- endcapture -%}
+          {%- capture name -%}
             {{ product_option.name | escape }}-{{ block.id }}-{{ product.id }}
-          {% endcapture %}
-          {% capture value %}
+          {%- endcapture -%}
+          {%- capture value -%}
             {{ product_option_value | escape }}
-          {% endcapture %}
+          {%- endcapture -%}
           <label class='product-variant-field'>
             <input
               class='product-variant-input'
