@@ -1,6 +1,7 @@
 /* eslint-disable max-depth */
 /* eslint-disable complexity */
 import { setAttributes } from './lib-dom-setAttributes.js';
+import { some } from './lib-type-some.js';
 /** @import {PerSplitMode} from './data-text-clip-reveal-PerSplitMode.js' */
 
 export function transformTextContentIntoPerSpans(
@@ -32,7 +33,7 @@ function recursivelyTransformTextContentToSpans(
   if (el instanceof HTMLScriptElement || el instanceof HTMLStyleElement) return;
   for (const node of [...el.childNodes]) {
     if (node.nodeType === Node.TEXT_NODE) {
-      if (node.textContent == null || node.textContent.trim().length <= 0)
+      if (!some(node.textContent) || node.textContent.trim().length <= 0)
         continue;
 
       /** @type {(Node | string)[]} */
