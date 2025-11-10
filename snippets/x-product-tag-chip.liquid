@@ -1,6 +1,34 @@
-<div class='x-product-tag-chip h6 variant/{{ variant | default: 'default' }}'>
-  {{ text }}
-</div>
+{%- capture class -%}
+  x-product-tag-chip h6 variant/{{ variant | default: 'default' }}
+{%- endcapture -%}
+
+{%- capture children -%}
+  {{ text | default: tag }}
+{%- endcapture -%}
+
+{% assign tag_handle = tag | handleize %}
+{% assign related_collection = collections[tag_handle] %}
+
+{% if related_collection != null %}
+  {% assign url = related_collection.url %}
+{% else %}
+  {%- capture url -%}
+    {{ routes.all_products_collection_url }}/{{ tag | handleize }}
+  {%- endcapture -%}
+{% endif %}
+
+{% if tag %}
+  <a
+    class='{{ class }}'
+    href='{{ url }}'
+  >
+    {{ children }}
+  </a>
+{% else %}
+  <div class='{{ class }}'>
+    {{ children }}
+  </div>
+{% endif %}
 
 {% stylesheet %}
   .x-product-tag-chip {
