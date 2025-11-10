@@ -1,7 +1,7 @@
 import { subscribe, bin } from './lib-signal.js';
 import { CarouselBehavior } from './data-carousel.js';
-import { CarouselItemBehavior } from './data-carousel-item.js';
 import { behavior, detachBehavior, attachBehavior } from './lib-behavior.js';
+import { CarouselItemsBehavior } from './data-carousel-items.js';
 
 export const CarouselContentBehavior = behavior(
   'carousel-content',
@@ -23,46 +23,17 @@ export const CarouselContentBehavior = behavior(
       const { contentContainer } = $carousel;
       const _ = bin();
 
-      const previousContentContainer = contentContainer.get();
-      contentContainer.set(element);
-      _._ = () => {
-        if (contentContainer.get() === element)
-          contentContainer.set(previousContentContainer);
-      };
-
-      const nodeDetachBehaviors =
-        new /** @type {typeof Map<HTMLElement, () => void>} */ (Map)();
-      for (const child of element.children) {
-        if (!(child instanceof HTMLElement)) continue;
-
-        nodeDetachBehaviors.set(
-          child,
-          attachBehavior(child, CarouselItemBehavior, {}),
-        );
+      attach: {
+        const $contentContainer = contentContainer.get();
+        if (!$contentContainer?.contains(element))
+          contentContainer.set(element);
       }
-      const mo = new MutationObserver((mutations) => {
-        for (const mutation of mutations) {
-          for (const node of mutation.addedNodes) {
-            if (!(node instanceof HTMLElement)) continue;
-
-            nodeDetachBehaviors.set(
-              node,
-              attachBehavior(node, CarouselItemBehavior, {}),
-            );
-          }
-
-          for (const node of mutation.removedNodes) {
-            if (!(node instanceof HTMLElement)) continue;
-
-            nodeDetachBehaviors.get(node)?.();
-            nodeDetachBehaviors.delete(node);
-          }
-        }
-      });
-      mo.observe(element, { childList: true });
-      _._ = () => {
-        mo.disconnect();
+      detach: _._ = () => {
+        const $contentContainer = contentContainer.get();
+        if ($contentContainer === element) contentContainer.set(undefined);
       };
+
+      _._ = attachBehavior(element, CarouselItemsBehavior, {});
 
       return _;
     }),

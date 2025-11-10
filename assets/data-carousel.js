@@ -2,7 +2,6 @@ import { Signal, subscribe, bin, derive } from './lib-signal.js';
 import {
   behavior,
   t,
-  hasAttachedBehavior,
   attachBehavior,
   registerGlobalBehaviors,
 } from './lib-behavior.js';
@@ -18,6 +17,8 @@ import { TaskSignal } from './lib-signal-TaskSignal.js';
 import { CarouselHashBehavior } from './data-carousel-hash.js';
 import { CarouselAutoHeightBehavior } from './data-carousel-auto-height.js';
 import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSerialization.js';
+import { some } from './lib-type-some.js';
+import { CarouselItemsBehavior } from './data-carousel-items.js';
 /** @import {EmblaCarouselType, EmblaPluginType} from 'embla-carousel' */
 
 export const CarouselBehavior = behavior(
@@ -38,7 +39,7 @@ export const CarouselBehavior = behavior(
     startIndex = t.number;
 
     plugins = new TaskSignal(/** @type {Set<EmblaPluginType>} */ (new Set()));
-    contentContainer = new Signal(
+    contentContainer = new TaskSignal(
       /** @type {HTMLElement | undefined} */ (undefined),
     );
 
@@ -72,7 +73,7 @@ export const CarouselBehavior = behavior(
       ({ subscribe }) => {
         const _ = bin();
         _._ = subscribe((it) => {
-          if (it) this.carousel.get()?.scrollTo(it);
+          if (some(it)) this.carousel.get()?.scrollTo(it);
         });
         return _;
       },
@@ -158,6 +159,7 @@ export const CarouselBehavior = behavior(
   ) => {
     registerLocalBehaviors(
       CarouselContentBehavior,
+      CarouselItemsBehavior,
       CarouselItemBehavior,
       CarouselIndicatorBehavior,
       CarouselPrevBehavior,
@@ -170,18 +172,30 @@ export const CarouselBehavior = behavior(
     const _ = bin();
 
     // attach content to first element if no content behavior
-    _._ = subscribeSelectorAll([element, ':scope > :first-child'], (element) =>
-      contentContainer.subscribe((it) => {
-        if (it) return;
+    _._ = subscribeSelectorAll(
+      [element, ':scope > :first-child'],
+      (element) => {
         if (!(element instanceof HTMLElement)) return;
 
         const _ = bin();
 
-        if (!hasAttachedBehavior(element, CarouselContentBehavior))
-          _._ = attachBehavior(element, CarouselContentBehavior, {});
+        _._ = subscribe(
+          {
+            isImplicitContentContainer: contentContainer.derive(
+              (it) => it === element,
+            ),
+            hasContentContainer: contentContainer.derive(some),
+          },
+          ({ $isImplicitContentContainer, $hasContentContainer }) => {
+            if ($isImplicitContentContainer || $hasContentContainer) return;
+
+            contentContainer.set(element);
+            return attachBehavior(element, CarouselItemsBehavior, {});
+          },
+        );
 
         return _;
-      }),
+      },
     );
 
     carousel.in(
