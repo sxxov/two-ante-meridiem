@@ -1,0 +1,75 @@
+{%- capture id -%}
+  interlude-id-{{- 'now' | date: '%s' -}}
+{%- endcapture -%}
+
+<div
+  class='x-interlude-stretch'
+  data-follow-scroll
+>
+  <div class='interlude-stretch-bar'></div>
+  <div class='interlude-stretch-container'>
+    <a
+      class='interlude-stretch-pill'
+      href='#{{ id }}'
+    >
+      {% render 'x-button', text: text %}
+    </a>
+  </div>
+  <div
+    class='interlude-stretch-end'
+    id='{{ id }}'
+  ></div>
+</div>
+
+{% stylesheet %}
+  .x-interlude-stretch {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 66.67lvh;
+    overflow: clip;
+
+    background: var(--color-background);
+
+    --progress: calc(var(--follow-scroll-y-out, 0));
+
+    & .interlude-stretch-bar {
+      position: absolute;
+      inset-block: 0;
+      left: 50%;
+      width: 1px;
+      translate: -50% 0;
+      background: currentColor;
+    }
+
+    & .interlude-stretch-container {
+      flex-grow: 1;
+
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+
+      translate: 0 calc(var(--progress) * 50%);
+
+      & .interlude-stretch-pill {
+        border-radius: 9999px;
+
+        --color: var(--color-foreground);
+        background: var(--color-background);
+        outline: 16px solid var(--color-background);
+
+        translate: 0 calc(var(--progress) * -50%);
+      }
+    }
+
+    & .interlude-stretch-end {
+      position: absolute;
+      bottom: -1px;
+    }
+  }
+{% endstylesheet %}

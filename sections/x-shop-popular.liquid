@@ -1,0 +1,176 @@
+{% capture heading %}
+  {% content_for 'block', type: 'x-separator-heading', id: 'heading' %}
+{% endcapture %}
+
+{% assign collection = section.settings.collection %}
+{% assign products = collection.products %}
+
+<div class='x-shop-popular'>
+  <div class='shop-popular-heading'>
+    {{ heading }}
+  </div>
+
+  <div
+    class='shop-popular-products'
+    data-carousel
+    data-carousel-loop
+    data-carousel-skip-snaps
+    data-carousel-align='start'
+  >
+    <div
+      class='shop-popular-products-prev'
+      data-carousel-prev
+    >
+      {% capture chevron_left_icon %}
+        {{ 'x-icon-chevron-left.svg' | inline_asset_content }}
+      {% endcapture %}
+      {% render 'x-button', icon: chevron_left_icon %}
+    </div>
+    <div
+      class='shop-popular-products-container'
+      data-carousel-content
+    >
+      {% for product in products limit: 10 %}
+        <div
+          class='shop-popular-product'
+        >
+          {% content_for 'block',
+            type: 'x-product-card',
+            id: 'product',
+            variant: 'image-info',
+            closest.product: product
+          %}
+        </div>
+      {% endfor %}
+    </div>
+    <div
+      class='shop-popular-products-next'
+      data-carousel-next
+    >
+      {% capture chevron_right_icon %}
+        {{ 'x-icon-chevron-right.svg' | inline_asset_content }}
+      {% endcapture %}
+      {% render 'x-button', icon: chevron_right_icon %}
+    </div>
+  </div>
+
+  <div class='shop-popular-all'>
+    <a
+      class='shop-popular-all-call-to-action'
+      href='{{ collection.url }}'
+    >
+      {% render 'x-button-arrowed', before: 'Shop', after: 'All' %}
+    </a>
+  </div>
+
+  <div class='shop-popular-coda'></div>
+</div>
+
+{% stylesheet %}
+  .x-shop-popular {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    padding-inline: 16px;
+    margin-block: 64px;
+
+    & .shop-popular-heading {
+      display: contents;
+    }
+
+    & .shop-popular-products {
+      position: relative;
+
+      & .shop-popular-products-prev {
+        position: absolute;
+        top: 50%;
+        left: 16px;
+        translate: 0 -50%;
+
+        z-index: 10;
+      }
+
+      & .shop-popular-products-container {
+        display: flex;
+        --gap: 16px;
+
+        & .shop-popular-product {
+          flex-shrink: 0;
+          margin-right: var(--gap);
+
+          & {
+            flex-basis: calc(100% / 4 - var(--gap));
+          }
+          @media (width < 1024px) {
+            flex-basis: calc(100% / 3 - var(--gap));
+          }
+          @media (width < 768px) {
+            flex-basis: calc(100% / 2 - var(--gap));
+          }
+          @media (width < 640px) {
+            flex-basis: calc(100% / 1 - var(--gap));
+          }
+        }
+      }
+
+      & .shop-popular-products-next {
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        translate: 0 -50%;
+
+        z-index: 10;
+      }
+    }
+
+    & .shop-popular-all {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      margin-block: 32px;
+    }
+
+    & .shop-popular-coda {
+      height: 64px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Shop: Popular",
+  "class": "slot",
+  "blocks": [{ "type": "x-separator-heading" }, { "type": "x-product-card" }],
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop: Popular",
+      "category": "Shop",
+      "settings": { "collection": "all" },
+      "blocks": [
+        {
+          "type": "x-separator-heading",
+          "id": "heading",
+          "static": true
+        },
+        {
+          "type": "x-product-card",
+          "id": "product",
+          "static": true,
+          "settings": { "product": "{{ closest.product }}" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

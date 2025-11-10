@@ -14,16 +14,229 @@
       "blocks": {
         "page-content": {
           "type": "page-content",
-          "settings": {}
+          "settings": {},
+          "blocks": {}
         }
       },
       "block_order": [
         "page-content"
       ],
+      "settings": {
+        "content_direction": "column",
+        "gap": 12,
+        "color_scheme": "",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "x_shop_intro_KzKUj8": {
+      "type": "x-shop-intro",
+      "name": "Shop: Intro",
       "settings": {}
+    },
+    "x_shop_popular_WpRWQ4": {
+      "type": "x-shop-popular",
+      "blocks": {
+        "heading": {
+          "type": "x-separator-heading",
+          "static": true,
+          "settings": {
+            "title": "<p>Popular</p>",
+            "count": -1
+          },
+          "blocks": {
+            "a": {
+              "type": "x-separator-description",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "text": {
+                  "type": "text",
+                  "static": true,
+                  "settings": {
+                    "text": "<p>Informed<br/>by the past.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            },
+            "b": {
+              "type": "x-separator-description",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "text": {
+                  "type": "text",
+                  "static": true,
+                  "settings": {
+                    "text": "<p>Informed<br/>by the past.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            }
+          },
+          "block_order": []
+        },
+        "product": {
+          "type": "x-product-card",
+          "static": true,
+          "settings": {
+            "product": "{{ closest.product }}",
+            "variant": "image-info",
+            "reveal": "always"
+          },
+          "blocks": {}
+        }
+      },
+      "name": "Shop: Popular",
+      "settings": {
+        "collection": "all"
+      }
+    },
+    "x_shop_collections_Ugk46N": {
+      "type": "x-shop-collections",
+      "blocks": {
+        "heading": {
+          "type": "x-separator-heading",
+          "static": true,
+          "settings": {
+            "title": "<p>Collections</p>",
+            "count": -1
+          },
+          "blocks": {
+            "a": {
+              "type": "x-separator-description",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "text": {
+                  "type": "text",
+                  "static": true,
+                  "settings": {
+                    "text": "<p>Informed by<br/>the past.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            },
+            "b": {
+              "type": "x-separator-description",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "text": {
+                  "type": "text",
+                  "static": true,
+                  "settings": {
+                    "text": "<p>Informed by<br/>the past.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            }
+          },
+          "block_order": []
+        },
+        "collection": {
+          "type": "x-shop-collection",
+          "static": true,
+          "settings": {
+            "collection": "{{ closest.collection }}"
+          },
+          "blocks": {}
+        }
+      },
+      "name": "Shop: Collections",
+      "settings": {
+        "collections": [
+          "echos-we-live-with",
+          "rhythm-of-the-unknown",
+          "wanderer"
+        ]
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "x_shop_intro_KzKUj8",
+    "x_shop_popular_WpRWQ4",
+    "x_shop_collections_Ugk46N"
   ]
 }

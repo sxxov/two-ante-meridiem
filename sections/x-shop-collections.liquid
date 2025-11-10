@@ -1,0 +1,84 @@
+{% capture heading %}
+  {% content_for 'block', type: 'x-separator-heading', id: 'heading' %}
+{% endcapture %}
+
+{% assign collections = section.settings.collections %}
+
+<div class='x-shop-collections'>
+  <div class='shop-collections-heading'>
+    {{ heading }}
+  </div>
+
+  <div
+    class='shop-collections-items'
+    data-indices
+  >
+    {% for collection in collections %}
+      <div class='shop-collections-item'>
+        {% content_for 'block', type: 'x-shop-collection', id: 'collection', closest.collection: collection %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class='shop-collections-coda'></div>
+</div>
+
+{% stylesheet %}
+  .x-shop-collections {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    padding-inline: 16px;
+    margin-block: 64px;
+
+    & .shop-collections-heading {
+      display: contents;
+    }
+
+    & .shop-collections-items {
+      display: flex;
+      flex-direction: column;
+      gap: 128px;
+    }
+
+    & .shop-collections-coda {
+      height: 96px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Shop: Collections",
+  "class": "slot",
+  "blocks": [{ "type": "x-separator-heading" }, { "type": "x-shop-collection" }],
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Collections"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop: Collections",
+      "category": "Shop",
+      "settings": { "collections": [] },
+      "blocks": [
+        {
+          "type": "x-separator-heading",
+          "id": "heading",
+          "static": true
+        },
+        {
+          "type": "x-shop-collection",
+          "id": "collection",
+          "static": true,
+          "settings": { "collection": "{{ closest.collection }}" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
