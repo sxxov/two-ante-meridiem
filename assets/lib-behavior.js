@@ -24,6 +24,7 @@ import { getBehaviorPropStylePropertyName } from './lib-behavior-serialization-g
 import { queueMicrotask } from './lib-dom-queueMicrotask.js';
 import { BehaviorPropDeserialization } from './lib-behavior-prop-BehaviorPropDeserialization.js';
 import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSerialization.js';
+import { TaskSignal } from './lib-signal-TaskSignal.js';
 /** @import {Values} from './lib-utilities-Values.js' */
 /** @import {BehaviorFactory} from './lib-behavior-factory-BehaviorFactory.js' */
 /** @import {BehaviorProps} from './lib-behavior-prop-BehaviorProps.js' */
@@ -398,37 +399,57 @@ function installBehavior(
           /** @type {BehaviorInstance<typeof behavior> | undefined} */ (
             undefined
           ),
-          ({ set, get }) =>
-            subscribe({ elementContexts }, ({ $elementContexts }) => {
-              const _ = bin();
+          ({ set }) => {
+            const stack = new TaskSignal(
+              /** @type {any[]} */ ([]),
+              ({ update, trigger }) =>
+                elementContexts.subscribe(($elementContexts) => {
+                  const _ = bin();
 
-              /** @type {any[]} */
-              const stack = [];
-              for (
-                let ancestor = /** @type {HTMLElement | null} */ (element),
-                  i = 0;
-                ancestor;
-                ancestor = ancestor.parentElement, i++
-              ) {
-                const ancestorContext = $elementContexts.get(ancestor);
-                if (!ancestorContext) continue;
+                  for (
+                    let ancestor = /** @type {HTMLElement | null} */ (element),
+                      i = 0;
+                    ancestor;
+                    ancestor = ancestor.parentElement, i++
+                  ) {
+                    const ancestorContext = $elementContexts.get(ancestor);
+                    if (!ancestorContext) continue;
 
-                const { behaviorToProps } = ancestorContext;
-                _._ = subscribe({ behaviorToProps }, ({ $behaviorToProps }) => {
-                  const props = /** @type {any} */ (
-                    $behaviorToProps.get(behavior)
-                  );
-                  if (!props) return;
+                    const { behaviorToProps } = ancestorContext;
+                    _._ = behaviorToProps.subscribe(($behaviorToProps) => {
+                      const props = /** @type {any} */ (
+                        $behaviorToProps.get(behavior)
+                      );
+                      if (!props) return;
 
-                  stack[i] = props;
-                  set(props);
-                  return () => {
-                    stack[i] = undefined;
-                    set(stack.find(some));
-                  };
-                });
-              }
-            }),
+                      const _ = bin();
+
+                      add: {
+                        update((it) => {
+                          if (it[i] === props) return it;
+                          it[i] = props;
+                          trigger();
+                          return it;
+                        });
+                      }
+                      remove: _._ = () => {
+                        update((it) => {
+                          if (it[i] === undefined) return it;
+                          it[i] = undefined;
+                          trigger();
+                          return it;
+                        });
+                      };
+
+                      return _;
+                    });
+                  }
+
+                  return _;
+                }),
+            );
+            return stack.subscribe((it) => { set(it.find(some)); });
+          },
         ).readonly,
     };
 
