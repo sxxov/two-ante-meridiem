@@ -15,8 +15,8 @@
           data-dialog-trigger
         >
           {% capture add_to_cart_icon %}
-              {{ 'x-icon-add-shopping-cart.svg' | inline_asset_content }}
-            {% endcapture %}
+            {{ 'x-icon-add-shopping-cart.svg' | inline_asset_content }}
+          {% endcapture %}
           {% render 'x-button', variant: 'secondary', icon: add_to_cart_icon %}
         </button>
       </div>
@@ -29,8 +29,8 @@
           data-dialog-trigger
         >
           {% capture buy_now_icon %}
-              {{ 'x-icon-local-mall.svg' | inline_asset_content }}
-            {% endcapture %}
+            {{ 'x-icon-local-mall.svg' | inline_asset_content }}
+          {% endcapture %}
           {% render 'x-button', variant: 'primary', icon: buy_now_icon %}
         </button>
       </div>
@@ -39,7 +39,7 @@
         data-dialog-content
         data-fragment
         data-fragment-url='{{ product.url }}'
-        data-fragment-selector='[data-product-id="{{ product.id }}"] [data-product-details-breakdown]'
+        data-fragment-selector='[data-product-details][data-product-id="{{ product.id }}"]'
         data-fragment-loading='lazy'
         data-lenis-prevent
       >
@@ -113,7 +113,9 @@
         pointer-events: auto;
 
         & .product-card-action-trigger {
-          all: unset;
+          appearance: none;
+          background: none;
+          border: none;
 
           transition-property: translate;
           transition-timing-function: var(--ease-in-out);
@@ -137,8 +139,8 @@
 
       & .product-card-content {
         width: 100%;
-        max-width: 768px;
-        max-height: min(560px, 100%);
+        max-width: 1280px;
+        max-height: 100%;
         overflow-y: auto;
 
         pointer-events: auto;
@@ -184,15 +186,17 @@
         transition-delay: 0s;
         transition-duration: 0.2s;
 
-        & .product-card-button {
-          transition-delay: calc((var(--index) + 1) * 0.2s);
-          transition-duration: 0.5s;
+        & .product-card-action {
+          & .product-card-action-trigger {
+            transition-delay: calc((var(--index) + 1) * 0.2s);
+            transition-duration: 0.5s;
 
-          &.variant\/add-to-cart {
-            translate: -100% 0;
-          }
-          &.variant\/buy-now {
-            translate: 100% 0;
+            &.variant\/add-to-cart {
+              translate: -100% 0;
+            }
+            &.variant\/buy-now {
+              translate: 100% 0;
+            }
           }
         }
       }

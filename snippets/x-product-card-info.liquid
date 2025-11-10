@@ -30,7 +30,7 @@
 <div class='x-product-card-info'>
   <div class='product-card-heading'>
     <h3
-      class='product-card-title h4'
+      class='product-card-title h3'
       data-text-clip-reveal
     >
       {{ product.title }}
@@ -47,22 +47,14 @@
       {% endif %}
 
       {% for tag in product.tags %}
-        {% if tag contains 'Sale-' %}
-          {% assign sale_text = tag | remove: 'Sale-' %}
-          {% render 'x-product-tag-chip', variant: 'sale', text: sale_text %}
+        {% assign tag_handle = tag | handleize %}
+        {% if tag_handle contains 'sale-' %}
+          {% render 'x-product-tag-chip', variant: 'sale', tag: tag %}
         {% else %}
-          {% liquid
-            assign is_collection_tag = false
-            for collection in product.collections
-              if collection.title == tag
-                assign is_collection_tag = true
-                break
-              endif
-            endfor
-          %}
-          {% unless is_collection_tag %}
-            {% render 'x-product-tag-chip', text: tag %}
-          {% endunless %}
+          {% assign related_collection = collections[tag_handle] %}
+          {% if related_collection == null %}
+            {% render 'x-product-tag-chip', tag: tag %}
+          {% endif %}
         {% endif %}
       {% endfor %}
     </div>

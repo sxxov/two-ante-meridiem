@@ -3,7 +3,11 @@
   data-carousel
 >
   {% if product.media.size > 1 %}
-    <div class='product-card-thumbnail-indicators'>
+    <div
+      class='product-card-thumbnail-indicators'
+      data-intersection
+      data-indices
+    >
       {% for media in product.media %}
         <button
           class='product-card-thumbnail-indicator'
@@ -68,6 +72,10 @@
 
         cursor: crosshair;
 
+        transition-property: scale;
+        transition-timing-function: var(--ease-in-out);
+        transition-delay: calc(var(--index) * 0.1s);
+
         &::after {
           content: '';
           position: absolute;
@@ -78,6 +86,11 @@
         &[data-carousel-indicator-selected] {
           background: white;
         }
+      }
+      &:not([data-intersection-visible]) .product-card-thumbnail-indicator {
+        scale: 0;
+        transition-delay: 1s;
+        transition-duration: 0s;
       }
     }
 
