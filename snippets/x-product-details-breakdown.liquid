@@ -19,9 +19,11 @@
   </div>
   <div
     class='product-details-info'
-    data-product-pull-node='product-details-info-{{ block.id }}-{{ product.id }}'
   >
-    <div class='product-details-price h4'>
+    <div
+      class='product-details-price h4'
+      data-product-pull-node='product-details-price-{{ block.id }}-{{ product.id }}'
+    >
       {{ product.price | money }}
     </div>
     <div class='product-details-particulars'>
