@@ -14,15 +14,13 @@ export const CarouselPrevBehavior = behavior(
     subscribe({ carousel: getContext(CarouselBehavior) }, ({ $carousel }) => {
       if (!$carousel) return;
 
-      const { carousel, targetSelectedIndex, selectedIndex } = $carousel;
+      const { carousel, targetSelectedIndex, selectedIndex, length } =
+        $carousel;
       const _ = bin();
 
       _._ = subscribe(
-        {
-          carousel,
-          loop,
-        },
-        ({ $carousel, $loop }) => {
+        { carousel, loop, length },
+        ({ $carousel, $loop, $length }) => {
           if (!$carousel) return;
 
           const controller = new AbortController();
@@ -33,8 +31,7 @@ export const CarouselPrevBehavior = behavior(
             () => {
               if ($carousel.canScrollPrev())
                 targetSelectedIndex.update((v) => v - 1);
-              else if ($loop)
-                $carousel.scrollTo($carousel.scrollSnapList().length - 1);
+              else if ($loop) targetSelectedIndex.set($length - 1);
             },
             { signal },
           );

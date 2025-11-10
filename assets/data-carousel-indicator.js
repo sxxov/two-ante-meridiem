@@ -2,7 +2,6 @@ import { subscribe, bin, Signal } from './lib-signal.js';
 import { CarouselBehavior } from './data-carousel.js';
 import { behavior, t } from './lib-behavior.js';
 import { some } from './lib-type-some.js';
-import { unset } from './lib-type-unset.js';
 
 export const CarouselIndicatorBehavior = behavior(
   'carousel-indicator',
@@ -18,14 +17,15 @@ export const CarouselIndicatorBehavior = behavior(
         carousel,
         indicatorsContext: { intrinsicIndexOccupants },
         selectedIndex,
+        targetSelectedIndex,
       } = $carousel;
       const _ = bin();
       const range = new Signal(
         {
-          start: unset(Number),
-          end: unset(Number),
+          start: /** @type {number | undefined} */ (undefined),
+          end: /** @type {number | undefined} */ (undefined),
         },
-        ({ set }) =>
+        ({ update }) =>
           subscribe({ value }, ({ $value }) => {
             specified: {
               if ($value === '' || !some($value)) break specified;
@@ -39,7 +39,10 @@ export const CarouselIndicatorBehavior = behavior(
                   end !== undefined &&
                   !Number.isNaN(end)
                 ) {
-                  set({ start, end });
+                  update((it) => {
+                    if (it.start === start && it.end === end) return it;
+                    return { start, end };
+                  });
                   return;
                 }
               }
@@ -47,9 +50,16 @@ export const CarouselIndicatorBehavior = behavior(
               // specified index
               const targetAttributeNumber = Number($value);
               if (!Number.isNaN(targetAttributeNumber)) {
-                set({
-                  start: targetAttributeNumber,
-                  end: targetAttributeNumber,
+                update((it) => {
+                  if (
+                    it.start === targetAttributeNumber &&
+                    it.end === targetAttributeNumber
+                  )
+                    return it;
+                  return {
+                    start: targetAttributeNumber,
+                    end: targetAttributeNumber,
+                  };
                 });
                 return;
               }
@@ -72,7 +82,10 @@ export const CarouselIndicatorBehavior = behavior(
                       return $intrinsicIndexOccupants.length;
                     return indexOfElement;
                   })();
-                  set({ start: i, end: i });
+                  update((it) => {
+                    if (it.start === i && it.end === i) return it;
+                    return { start: i, end: i };
+                  });
                   intrinsicIndexOccupants.update((it) => {
                     if (it[i] === element) return it;
 
@@ -83,7 +96,10 @@ export const CarouselIndicatorBehavior = behavior(
                 },
               );
               _._ = () => {
-                set({ start: undefined, end: undefined });
+                update((it) => {
+                  if (it.start === undefined && it.end === undefined) return it;
+                  return { start: undefined, end: undefined };
+                });
                 intrinsicIndexOccupants.update((it) => {
                   if (!it.includes(element)) return it;
                   return it.filter((item) => item !== element);
@@ -98,7 +114,9 @@ export const CarouselIndicatorBehavior = behavior(
         ({ $range: { start: $start = 0 }, $carousel }) => {
           if (!$carousel) return;
 
+          const _ = bin();
           const controller = new AbortController();
+          _._ = () => { controller.abort(); };
           const { signal } = controller;
 
           element.addEventListener(
@@ -107,15 +125,13 @@ export const CarouselIndicatorBehavior = behavior(
               // force a 'select' event if the selected index is already the same
               const needsSyntheticEvent =
                 $carousel.selectedScrollSnap() === $start;
-              $carousel.scrollTo($start);
+              targetSelectedIndex.set($start);
               if (needsSyntheticEvent) $carousel.emit('select');
             },
             { signal },
           );
 
-          return () => {
-            controller.abort();
-          };
+          return _;
         },
       );
 

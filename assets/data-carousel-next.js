@@ -17,32 +17,26 @@ export const CarouselNextBehavior = behavior(
       const { carousel, targetSelectedIndex, selectedIndex } = $carousel;
       const _ = bin();
 
-      _._ = subscribe(
-        {
-          carousel,
-          loop,
-        },
-        ({ $carousel, $loop }) => {
-          if (!$carousel) return;
+      _._ = subscribe({ carousel, loop }, ({ $carousel, $loop }) => {
+        if (!$carousel) return;
 
-          const controller = new AbortController();
-          const { signal } = controller;
+        const controller = new AbortController();
+        const { signal } = controller;
 
-          element.addEventListener(
-            'click',
-            () => {
-              if ($carousel.canScrollNext())
-                targetSelectedIndex.update((it) => it + 1);
-              else if ($loop) $carousel.scrollTo(0);
-            },
-            { signal },
-          );
+        element.addEventListener(
+          'click',
+          () => {
+            if ($carousel.canScrollNext())
+              targetSelectedIndex.update((it) => it + 1);
+            else if ($loop) targetSelectedIndex.set(0);
+          },
+          { signal },
+        );
 
-          return () => {
-            controller.abort();
-          };
-        },
-      );
+        return () => {
+          controller.abort();
+        };
+      });
 
       disabled.in(
         derive(
