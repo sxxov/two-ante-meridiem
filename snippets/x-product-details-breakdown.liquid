@@ -5,12 +5,18 @@
   >
     <div class='product-details-tags'>
       {% for collection in product.collections %}
-        <a
-          href='{{ collection.url }}'
-          class='product-details-tag-link'
-        >
-          {% render 'x-product-tag-chip', text: collection.title %}
-        </a>
+        {% assign collection_handle = collection.handle %}
+        {% for tag in product.tags %}
+          {% assign tag_handle = tag | handle %}
+          {% if tag_handle == collection_handle %}
+            <a
+              href='{{ collection.url }}'
+              class='product-details-tag-link'
+            >
+              {% render 'x-product-tag-chip', text: collection.title %}
+            </a>
+          {% endif %}
+        {% endfor %}
       {% endfor %}
     </div>
     <h1 class='product-details-title h1'>
