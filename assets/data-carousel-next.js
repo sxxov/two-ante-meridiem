@@ -2,11 +2,14 @@ import { subscribe, bin, derive } from './lib-signal.js';
 import { CarouselBehavior } from './data-carousel.js';
 import { behavior, t } from './lib-behavior.js';
 import { some } from './lib-type-some.js';
+import { BehaviorPropDeserialization } from './lib-behavior-prop-BehaviorPropDeserialization.js';
 
 export const CarouselNextBehavior = behavior(
   'carousel-next',
   class {
-    disabled = t.boolean.backing();
+    disabled = t.boolean
+      .backing()
+      .deserialize(BehaviorPropDeserialization.None);
     loop = t.boolean.default(false);
     looping = t.boolean.backing();
   },

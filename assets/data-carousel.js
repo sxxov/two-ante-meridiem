@@ -19,6 +19,7 @@ import { CarouselAutoHeightBehavior } from './data-carousel-auto-height.js';
 import { BehaviorPropSerialization } from './lib-behavior-prop-BehaviorPropSerialization.js';
 import { some } from './lib-type-some.js';
 import { CarouselItemsBehavior } from './data-carousel-items.js';
+import { BehaviorPropDeserialization } from './lib-behavior-prop-BehaviorPropDeserialization.js';
 /** @import {EmblaCarouselType, EmblaPluginType} from 'embla-carousel' */
 
 export const CarouselBehavior = behavior(
@@ -82,6 +83,7 @@ export const CarouselBehavior = behavior(
       .backing()
       .default(0)
       .serialize(BehaviorPropSerialization.Style)
+      .deserialize(BehaviorPropDeserialization.None)
       .in(
         new Signal(Number(), ({ set }) =>
           subscribe(
@@ -111,6 +113,7 @@ export const CarouselBehavior = behavior(
       .serialize(
         BehaviorPropSerialization.Attribute | BehaviorPropSerialization.Style,
       )
+      .deserialize(BehaviorPropDeserialization.None)
       .in(
         new Signal(Number(), ({ set }) =>
           subscribe({ carousel: this.carousel }, ({ $carousel }) => {
