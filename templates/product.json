@@ -27,6 +27,14 @@
           },
           "blocks": {}
         },
+        "carousel": {
+          "type": "x-product-details-carousel",
+          "static": true,
+          "settings": {
+            "product": ""
+          },
+          "blocks": {}
+        },
         "breakdown": {
           "type": "x-product-details-breakdown",
           "static": true,
@@ -37,6 +45,165 @@
         }
       },
       "name": "Product: Details",
+      "settings": {
+        "product": "{{ closest.product }}"
+      }
+    },
+    "x_product_traits_V4jCkn": {
+      "type": "x-product-traits",
+      "blocks": {
+        "attributes": {
+          "type": "x-product-traits-attributes",
+          "static": true,
+          "settings": {
+            "product": "{{ closest.product }}"
+          },
+          "blocks": {}
+        },
+        "collection": {
+          "type": "x-product-traits-collection",
+          "static": true,
+          "settings": {
+            "product": "{{ closest.product }}"
+          },
+          "blocks": {}
+        },
+        "notes": {
+          "type": "x-product-traits-notes",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "text_HHjg76": {
+              "type": "text",
+              "name": "t:names.text",
+              "settings": {
+                "text": "<p>Free Shipping within East Malaysia<br/>Locally designed & made</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_HHjg76"
+          ]
+        }
+      },
+      "name": "Product: Traits",
+      "settings": {
+        "product": "{{ closest.product }}"
+      }
+    },
+    "x_product_recommendations_y8D6WV": {
+      "type": "x-product-recommendations",
+      "blocks": {
+        "heading": {
+          "type": "x-separator-heading",
+          "static": true,
+          "settings": {
+            "title": "<p>Frequently Bought Together</p>",
+            "count": 4
+          },
+          "blocks": {
+            "a": {
+              "type": "x-separator-description",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "text": {
+                  "type": "text",
+                  "static": true,
+                  "settings": {
+                    "text": "<p>You might also<br/>like these.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            },
+            "b": {
+              "type": "x-separator-description",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "text": {
+                  "type": "text",
+                  "static": true,
+                  "settings": {
+                    "text": "<p>Informed<br/>by the past.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            }
+          },
+          "block_order": []
+        },
+        "product": {
+          "type": "x-product-card",
+          "static": true,
+          "settings": {
+            "product": "{{ closest.product }}",
+            "variant": "info-image",
+            "reveal": "hover"
+          },
+          "blocks": {}
+        }
+      },
+      "name": "Product: Recommendations",
       "settings": {
         "product": "{{ closest.product }}"
       }
@@ -479,6 +646,7 @@
       "block_order": [
         "header"
       ],
+      "disabled": true,
       "settings": {
         "product": "{{ closest.product }}",
         "recommendation_type": "related",
@@ -502,6 +670,8 @@
   "order": [
     "x_header_logo_variant_provider_TpLFfd",
     "x_product_details_jfRKMy",
+    "x_product_traits_V4jCkn",
+    "x_product_recommendations_y8D6WV",
     "main",
     "product-recommendations"
   ]
