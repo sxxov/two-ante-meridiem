@@ -46,7 +46,7 @@
 
     & .product-card-thumbnail-indicators {
       position: absolute;
-      top: 0;
+      top: 2px;
       inset-inline: 0;
 
       display: flex;
@@ -98,8 +98,16 @@
       display: flex;
 
       & .product-card-thumbnail-item {
+        aspect-ratio: 2 / 3;
+        background: var(--color-background);
+
         & .product-card-thumbnail-link {
           display: contents;
+
+          & img {
+            height: 100%;
+            object-fit: contain;
+          }
         }
       }
     }
