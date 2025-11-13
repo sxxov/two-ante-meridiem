@@ -1,0 +1,32 @@
+{% capture children %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+<div class='x-product-traits-notes'>
+  {{ children }}
+</div>
+
+{% stylesheet %}
+  .x-product-traits-notes {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+    --text-align: end;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product: Traits: Notes",
+  "tag": "slot",
+  "blocks": [{ "type": "text" }, { "type": "image" }],
+  "presets": [
+    {
+      "name": "Product: Traits: Notes",
+      "category": "Product",
+      "blocks": [{ "type": "text" }]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,79 @@
+{% assign product = block.settings.product %}
+
+{% assign material = product.metafields.custom.material %}
+{% if material != blank %}
+  {%- capture title -%}
+    {{ material.value.label }}
+  {%- endcapture -%}
+  {%- capture description -%}
+    {{ material.value.description | metafield_tag }}
+  {%- endcapture -%}
+  {% capture material_attribute %}
+    {% render 'x-product-traits-attribute', title: title, description: description %}
+  {% endcapture %}
+{% endif %}
+
+{% assign weight = product.metafields.custom.weight %}
+{% if weight != blank %}
+  {% capture weight_attribute %}
+    {%- capture title -%}
+      {{ weight.value.gsm }}g/m²
+    {%- endcapture -%}
+    {%- capture description -%}
+      {{ weight.value.description | metafield_tag }}
+    {%- endcapture -%}
+    {% render 'x-product-traits-attribute', title: title, description: description %}
+  {% endcapture %}
+{% endif %}
+
+{% assign fitting = product.metafields.custom.fitting %}
+{% if fitting != blank %}
+  {%- capture title -%}
+    {{ fitting.value.label }}
+  {%- endcapture -%}
+  {%- capture description -%}
+    {{ fitting.value.description | metafield_tag }}
+  {%- endcapture -%}
+  {% capture fitting_attribute %}
+    {% render 'x-product-traits-attribute', title: title, description: description %}
+  {% endcapture %}
+{% endif %}
+
+<div class='x-product-traits-attributes'>
+  {{ material_attribute }}
+  {{ weight_attribute }}
+  {{ fitting_attribute }}
+</div>
+
+{% stylesheet %}
+  .x-product-traits-attributes {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+
+    margin-block: 16px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product: Traits: Attribu…",
+  "tag": "slot",
+  "settings": [
+    {
+      "type": "product",
+      "label": "Product",
+      "id": "product"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product: Traits: Attributes",
+      "category": "Product",
+      "settings": {
+        "product": "{{ closest.product }}"
+      }
+    }
+  ]
+}
+{% endschema %}

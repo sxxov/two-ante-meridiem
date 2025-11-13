@@ -1,0 +1,108 @@
+{% assign product = section.settings.product %}
+
+{% capture attributes %}
+  {% content_for 'block', type: 'x-product-traits-attributes', id: 'attributes', closest.product: product %}
+{% endcapture %}
+
+{% capture collection %}
+  {% content_for 'block', type: 'x-product-traits-collection', id: 'collection', closest.product: product %}
+{% endcapture %}
+
+{% capture notes %}
+  {% content_for 'block', type: 'x-product-traits-notes', id: 'notes', closest.product: product %}
+{% endcapture %}
+
+<section class='x-product-traits'>
+  <div class='product-traits-attributes'>{{ attributes }}</div>
+  <div class='product-traits-collection'>{{ collection }}</div>
+  <div class='product-traits-notes'>{{ notes }}</div>
+</section>
+
+{% stylesheet %}
+  .x-product-traits {
+    margin-block: 64px;
+    padding-inline: 16px;
+    position: relative;
+
+    display: grid;
+
+    background: var(--color-background);
+
+    & {
+      grid-template-areas:
+        'attributes collection'
+        'attributes notes';
+      grid-template-columns: 0.33fr 0.67fr;
+      grid-template-rows: 1fr auto;
+      column-gap: 16px;
+      row-gap: 64px;
+    }
+    @media (width < 768px) {
+      grid-template-areas:
+        'attributes'
+        'collection'
+        'notes';
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      column-gap: 16px;
+      row-gap: 64px;
+    }
+
+    & .product-traits-attributes {
+      grid-area: attributes;
+    }
+
+    & .product-traits-collection {
+      grid-area: collection;
+    }
+
+    & .product-traits-notes {
+      grid-area: notes;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product: Traits",
+  "class": "slot",
+  "blocks": [
+    { "type": "x-product-traits-attributes" },
+    { "type": "x-product-traits-collection" },
+    { "type": "x-product-traits-notes" }
+  ],
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product: Traits",
+      "category": "Product",
+      "settings": { "product": "{{ closest.product }}" },
+      "blocks": [
+        {
+          "type": "x-product-traits-attributes",
+          "settings": { "product": "{{ closest.product }}" },
+          "id": "attributes",
+          "static": true
+        },
+        {
+          "type": "x-product-traits-collection",
+          "settings": { "product": "{{ closest.product }}" },
+          "id": "collection",
+          "static": true
+        },
+        {
+          "type": "x-product-traits-notes",
+          "id": "notes",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,184 @@
+{% assign product = section.settings.product %}
+
+{% capture heading %}
+  {% content_for 'block', type: 'x-separator-heading', id: 'heading' %}
+{% endcapture %}
+
+{% liquid
+  if recommendations.performed and recommendations.products_count > 0
+    assign products = recommendations.products
+  else
+    assign products = collections.all.products | reject: 'id', product.id
+  endif
+%}
+
+<section class='x-product-recommendations'>
+  {% capture children %}
+   <div class='product-recommendations-container'>
+      <div class='product-recommendations-heading'>
+        {{ heading }}
+      </div>
+      <div
+        class='product-recommendations-products' 
+        data-carousel
+        data-carousel-align='start'
+        data-carousel-loop
+        data-carousel-skip-snaps
+      >
+        <div
+          class='product-recommendations-products-prev'
+          data-carousel-prev
+        >
+        {% capture chevron_left_icon %}
+          {{ 'x-icon-chevron-left.svg' | inline_asset_content }}
+        {% endcapture %}
+        {% render 'x-button', icon: chevron_left_icon %}
+      </div>
+      <div class='product-recommendations-products-items' 
+        data-carousel-content data-carousel-items>
+        {% for product in products limit: 6 %}
+          <div class='product-recommendations-products-item' data-carousel-item>
+            {% content_for 'block', type: 'x-product-card', id: 'product', closest.product: product %}
+          </div>
+        {% endfor %}
+      </div>
+      <div
+        class='product-recommendations-products-next'
+        data-carousel-next
+      >
+        {% capture chevron_right_icon %}
+          {{ 'x-icon-chevron-right.svg' | inline_asset_content }}
+        {% endcapture %}
+        {% render 'x-button', icon: chevron_right_icon %}
+      </div>
+    </div>
+   </div>
+  {% endcapture %}
+  {% render 'x-call-to-action', variant: 'dark-lighter', children: children %}
+</section>
+
+{% stylesheet %}
+  .x-product-recommendations {
+    position: relative;
+    z-index: 0;
+
+    display: flex;
+    flex-direction: column;
+    overflow: clip;
+
+    & .product-recommendations-container {
+      align-self: stretch;
+
+      display: flex;
+      flex-direction: column;
+
+      padding-inline: 16px;
+
+      & .product-recommendations-heading {
+        display: contents;
+      }
+
+      & .product-recommendations-products {
+        flex-grow: 1;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        color: white;
+        mix-blend-mode: difference;
+        overflow: unset;
+
+        & .product-recommendations-products-prev {
+          position: absolute;
+          top: 50%;
+          left: 16px;
+          translate: 0 -50%;
+
+          z-index: 10;
+
+          &[data-carousel-prev-disabled] {
+            display: none;
+          }
+        }
+
+        & .product-recommendations-products-items {
+          display: grid;
+          grid-auto-flow: column;
+          --gap: 16px;
+
+          & {
+            grid-auto-columns: calc(100% / 4);
+          }
+          @media (width < 1024px) {
+            grid-auto-columns: calc(100% / 3);
+          }
+          @media (width < 768px) {
+            grid-auto-columns: calc(100% / 2);
+          }
+          @media (width < 640px) {
+            grid-auto-columns: calc(100% / 1);
+          }
+
+          & .product-recommendations-products-item {
+            margin-right: var(--gap);
+            display: flex;
+
+            /** TODO: don't target directly (hack) */
+            & .product-card-thumbnail-item {
+              filter: invert(1);
+            }
+          }
+        }
+
+        & .product-recommendations-products-next {
+          position: absolute;
+          top: 50%;
+          right: 16px;
+          translate: 0 -50%;
+
+          z-index: 10;
+
+          &[data-carousel-next-disabled] {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product: Recommendations",
+  "class": "slot",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    }
+  ],
+  "blocks": [{ "type": "x-separator-heading" }, { "type": "x-product-card" }],
+  "presets": [
+    {
+      "name": "Product: Recommendations",
+      "category": "Product",
+      "settings": { "product": "{{ closest.product }}" },
+      "blocks": [
+        {
+          "type": "x-separator-heading",
+          "id": "heading",
+          "static": true
+        },
+        {
+          "type": "x-product-card",
+          "id": "product",
+          "static": true,
+          "settings": { "product": "{{ closest.product }}" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

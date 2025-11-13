@@ -47,11 +47,11 @@
       <div class='shop-collection-tags'>
         {% for tag in collection.all_tags %}
           {% assign tag_handle = tag | handleize %}
-          {% unless tag_handle == collection.handle or tag_handle == 'coming-soon' %}
+          {% if tag_handle != collection.handle and tag_handle != 'coming-soon' %}
             <span class='shop-collection-tag'>
               {% render 'x-product-tag-chip', tag: tag %}
             </span>
-          {% endunless %}
+          {% endif %}
         {% endfor %}
       </div>
     </div>

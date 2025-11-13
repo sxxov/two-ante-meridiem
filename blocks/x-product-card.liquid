@@ -1,9 +1,10 @@
 {% liquid
+  assign product = block.settings.product
   assign variant = variant | default: block.settings.variant | default: 'image-info'
   assign reveal = reveal | default: block.settings.reveal | default: 'always'
 %}
 
-{% render 'x-product-card', variant: variant, reveal: reveal, product: block.settings.product %}
+{% render 'x-product-card', variant: variant, reveal: reveal, product: product %}
 
 {% schema %}
 {
@@ -50,7 +51,7 @@
   ],
   "presets": [
     {
-      "name": "Card",
+      "name": "Product: Card",
       "category": "Product",
       "settings": {
         "product": "{{ closest.product }}"

@@ -1,0 +1,23 @@
+<div class='x-product-traits-attribute'>
+  <h4 class='product-traits-attribute-description'>
+    {% render 'x-separator-description', children: description %}
+  </h4>
+  <div class='product-traits-attribute-title h2'>
+    {{ title }}
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-product-traits-attribute {
+    display: flex;
+    flex-direction: column;
+
+    & .product-traits-attribute-description {
+      margin: 0;
+    }
+
+    & .product-traits-attribute-title {
+      text-align: end;
+    }
+  }
+{% endstylesheet %}

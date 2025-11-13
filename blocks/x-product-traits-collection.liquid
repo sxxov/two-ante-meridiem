@@ -1,0 +1,63 @@
+{% assign product = block.settings.product %}
+
+<div class='x-product-traits-collection'>
+  <div class='product-traits-collection-title h1'>
+    {% for collection in product.collections %}
+      {% assign collection_handle = collection.handle %}
+      {% for tag in product.tags %}
+        {% assign tag_handle = tag | handle %}
+        {% if tag_handle == collection_handle %}
+          <a
+            href='{{ collection.url }}'
+            class='product-traits-collection-title-link'
+            data-dot-matrix='text'
+            data-dot-matrix-polarity='inverted'
+          >
+            {{ collection.title }}
+          </a>
+
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-product-traits-collection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: end;
+
+    & .product-traits-collection-title {
+      font-size: max(var(--font-h1--size), 10lvw);
+      letter-spacing: -0.08em;
+      mix-blend-mode: difference;
+      max-width: 6em;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product: Traits: Collect…",
+  "tag": "slot",
+  "settings": [
+    {
+      "type": "product",
+      "label": "Product",
+      "id": "product"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product: Traits: Collection",
+      "category": "Product",
+      "settings": {
+        "product": "{{ closest.product }}"
+      }
+    }
+  ]
+}
+{% endschema %}
