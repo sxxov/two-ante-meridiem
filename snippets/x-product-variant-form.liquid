@@ -36,9 +36,7 @@
                 aria-disabled='true'
               {% endif %}
 
-              data-product-pull-option
-              data-product-pull-option-name='variant'
-              data-product-pull-option-value='{{ product_option_value.variant.id }}'
+              data-pull-input-option='{{ product_option_value.id }}'
 
               data-option-value-id='{{ product_option_value.id }}'
               data-variant-id='{{ product_option_value.variant.id }}'

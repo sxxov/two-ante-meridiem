@@ -1,30 +1,34 @@
-import { bin, Signal } from './lib-signal.js';
-import {
-  behavior,
-  hasAttachedBehavior,
-  registerGlobalBehaviors,
-  t,
-} from './lib-behavior.js';
+import { bin, Signal, subscribe } from './lib-signal.js';
+import { behavior, registerGlobalBehaviors, t } from './lib-behavior.js';
 import { some } from './lib-type-some.js';
-import { ProductPullNodeBehavior } from './data-product-pull-node.js';
-import { ProductPullOptionBehavior } from './data-product-pull-option.js';
+import { PullTargetBehavior } from './data-pull-target.js';
+import { PullInputParameterBehavior } from './data-pull-input-parameter.js';
+import { PullInputOptionBehavior } from './data-pull-input-option.js';
+import { TaskSignal } from './lib-signal-TaskSignal.js';
 
-export const ProductPullBehavior = behavior(
-  'product-pull',
+export const PullBehavior = behavior(
+  'pull',
   class {
     url = t.string;
     section = t.string;
+
     parameters = new Signal(new URLSearchParams());
     nodes = new Signal(
       new /** @type {typeof Map<HTMLElement, { selector: string }>} */ (Map)(),
     );
+
+    version = t.number.backing().default(-1);
   },
   (
     element,
-    { url, section, parameters, nodes },
+    { url, section, parameters, nodes, version },
     { registerLocalBehaviors },
   ) => {
-    registerLocalBehaviors(ProductPullNodeBehavior, ProductPullOptionBehavior);
+    registerLocalBehaviors(
+      PullTargetBehavior,
+      PullInputOptionBehavior,
+      PullInputParameterBehavior,
+    );
 
     const _ = bin();
 
@@ -92,26 +96,15 @@ export const ProductPullBehavior = behavior(
       }
     };
 
-    element.addEventListener(
-      'change',
-      (event) => {
-        const { target } = event;
-        if (
-          !(target instanceof HTMLElement) ||
-          !hasAttachedBehavior(target, ProductPullOptionBehavior)
-        )
-          return;
-
-        propagateParameters();
-        void pull();
-      },
-      { signal },
-    );
+    _._ = subscribe({ version: new TaskSignal(-1).in(version) }, () => {
+      propagateParameters();
+      void pull();
+    });
 
     return _;
   },
 );
 
 queueMicrotask(() => {
-  registerGlobalBehaviors(ProductPullBehavior);
+  registerGlobalBehaviors(PullBehavior);
 });

@@ -1,7 +1,7 @@
 <div class='x-product-details-breakdown'>
   <div
     class='product-details-heading'
-    data-product-pull-node='product-details-heading-{{ block.id }}-{{ product.id }}'
+    data-pull-target='product-details-heading-{{ block.id }}-{{ product.id }}'
   >
     <div class='product-details-tags'>
       {% for collection in product.collections %}
@@ -28,7 +28,7 @@
   >
     <div
       class='product-details-price h4'
-      data-product-pull-node='product-details-price-{{ block.id }}-{{ product.id }}'
+      data-pull-target='product-details-price-{{ block.id }}-{{ product.id }}'
     >
       {{ product.price | money }}
     </div>
