@@ -14,22 +14,23 @@ export class TaskSignal extends Signal {
     if (!this.#setScheduled) {
       this.#setScheduled = true;
       this.#setPrevious = this.get();
-    }
 
-    this.value = value;
-
-    if (!this.#setScheduled)
       queueMicrotask(() => {
         this.#setScheduled = false;
 
+        const previous = this.#setPrevious;
+        const next = this.get();
         const same = /** @type {typeof TaskSignal} */ (
           this.constructor
-        ).compare(this.#setPrevious, this.get());
+        ).compare(previous, next);
         this.#setPrevious = undefined;
 
         if (same) return;
         super.trigger();
       });
+    }
+
+    this.value = value;
   }
 
   #triggerScheduled = false;
