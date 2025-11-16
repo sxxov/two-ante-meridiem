@@ -41,14 +41,8 @@ export const DialogContainerBehavior = behavior(
             open.set(false);
             controller.abort();
           };
-          element.addEventListener('transitionend', close, {
-            once: true,
-            signal,
-          });
-          element.addEventListener('transitioncancel', close, {
-            once: true,
-            signal,
-          });
+          element.addEventListener('transitionend', close, { signal });
+          element.addEventListener('transitioncancel', close, { signal });
         },
         { signal },
       );
