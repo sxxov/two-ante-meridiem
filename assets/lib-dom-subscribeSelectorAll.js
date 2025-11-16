@@ -96,6 +96,30 @@ function attachBodyMutationObserver() {
     const addedOnlyNodes = addedNodes.difference(removedNodes);
     const removedOnlyNodes = removedNodes.difference(addedNodes);
 
+    for (const node of removedOnlyNodes) {
+      if (!(node instanceof Element)) continue;
+
+      for (const subscription of subscriptions) {
+        const { selector, registrations } = subscription;
+
+        self: if (node.matches(selector)) {
+          if (!registrations.has(node)) continue;
+          unregisterElement(subscription, node);
+
+          continue;
+        }
+
+        children: {
+          for (const child of node.querySelectorAll(selector)) {
+            if (!registrations.has(child)) continue;
+            unregisterElement(subscription, child);
+          }
+
+          continue;
+        }
+      }
+    }
+
     for (const node of addedOnlyNodes) {
       if (!(node instanceof Element)) continue;
 
@@ -114,30 +138,6 @@ function attachBodyMutationObserver() {
           for (const child of node.querySelectorAll(selector)) {
             if (registrations.has(child)) continue;
             registerElement(subscription, child);
-          }
-
-          continue;
-        }
-      }
-    }
-
-    for (const node of removedOnlyNodes) {
-      if (!(node instanceof Element)) continue;
-
-      for (const subscription of subscriptions) {
-        const { selector, registrations } = subscription;
-
-        self: if (node.matches(selector)) {
-          if (!registrations.has(node)) continue;
-          unregisterElement(subscription, node);
-
-          continue;
-        }
-
-        children: {
-          for (const child of node.querySelectorAll(selector)) {
-            if (!registrations.has(child)) continue;
-            unregisterElement(subscription, child);
           }
 
           continue;
