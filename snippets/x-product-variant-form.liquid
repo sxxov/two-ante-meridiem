@@ -29,10 +29,13 @@
               id='{{ id }}'
               name='{{ name }}'
               value='{{ value }}'
-              {% if product_option_value == product.selected_or_first_available_variant.options[product_option_index] %}
-                checked
-              {% endif %}
-              {% if product_option_value.available == false %}
+              {% if product_option_value.available %}
+                {%- if product_option_value == product.selected_or_first_available_variant.options[product_option_index]
+                -%}
+                  checked
+                {%- endif -%}
+              {% else %}
+                disabled
                 aria-disabled='true'
               {% endif %}
 
