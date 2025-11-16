@@ -77,6 +77,8 @@ export const PullBehavior = behavior(
         const parser = new DOMParser();
         return parser.parseFromString(text, 'text/html');
       } catch (error) {
+        if (signal.aborted) return;
+
         // eslint-disable-next-line no-console
         console.error(error);
       }
@@ -96,10 +98,15 @@ export const PullBehavior = behavior(
       }
     };
 
-    _._ = subscribe({ version: new TaskSignal(-1).in(version) }, () => {
-      propagateParameters();
-      void pull();
-    });
+    _._ = subscribe(
+      { version: new TaskSignal(-1).in(version) },
+      ({ $version }) => {
+        if ($version < 0) return;
+
+        propagateParameters();
+        void pull();
+      },
+    );
 
     return _;
   },
