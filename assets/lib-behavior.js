@@ -413,7 +413,16 @@ function installBehavior(
                     ancestor = ancestor.parentElement, i++
                   ) {
                     const ancestorContext = $elementContexts.get(ancestor);
-                    if (!ancestorContext) continue;
+                    if (!ancestorContext) {
+                      update((it) => {
+                        if (!it[i]) return it;
+                        it[i] = undefined;
+                        trigger();
+                        return it;
+                      });
+
+                      continue;
+                    }
 
                     const { behaviorToProps } = ancestorContext;
                     _._ = behaviorToProps.subscribe(($behaviorToProps) => {
@@ -424,22 +433,12 @@ function installBehavior(
 
                       const _ = bin();
 
-                      add: {
-                        update((it) => {
-                          if (it[i] === props) return it;
-                          it[i] = props;
-                          trigger();
-                          return it;
-                        });
-                      }
-                      remove: _._ = () => {
-                        update((it) => {
-                          if (it[i] === undefined) return it;
-                          it[i] = undefined;
-                          trigger();
-                          return it;
-                        });
-                      };
+                      update((it) => {
+                        if (it[i] === props) return it;
+                        it[i] = props;
+                        trigger();
+                        return it;
+                      });
 
                       return _;
                     });
