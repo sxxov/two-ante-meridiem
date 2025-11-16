@@ -9,6 +9,8 @@ import { watchElementIntersecting } from './lib-dom-watchElementIntersecting.js'
 import { FragmentContentBehavior } from './data-fragment-content.js';
 import { FragmentTriggerBehavior } from './data-fragment-trigger.js';
 import { BehaviorPropDeserialization } from './lib-behavior-prop-BehaviorPropDeserialization.js';
+import { some } from './lib-type-some.js';
+import { FragmentPortalBehavior } from './data-fragment-portal.js';
 /** @import {Values} from './lib-utilities-Values.js' */
 
 export const FragmentBehavior = behavior(
@@ -33,23 +35,30 @@ export const FragmentBehavior = behavior(
     version = t.number.backing().default(-1);
   },
   (element, { loading, container, version }, { registerLocalBehaviors }) => {
-    registerLocalBehaviors(FragmentContentBehavior, FragmentTriggerBehavior);
+    registerLocalBehaviors(
+      FragmentPortalBehavior,
+      FragmentContentBehavior,
+      FragmentTriggerBehavior,
+    );
 
     const _ = bin();
 
-    _._ = subscribe({ container }, ({ $container }) => {
-      if ($container) return;
+    _._ = subscribe(
+      { hasContainer: container.derive(some) },
+      ({ $hasContainer }) => {
+        if ($hasContainer) return;
 
-      const _ = bin();
+        const _ = bin();
 
-      const content = document.createElement('div');
-      add: element.append(content);
-      remove: _._ = () => { content.remove(); };
+        const portal = document.createElement('slot');
+        add: element.append(portal);
+        remove: _._ = () => { portal.remove(); };
 
-      _._ = attachBehavior(content, FragmentContentBehavior, {});
+        _._ = attachBehavior(portal, FragmentPortalBehavior, {});
 
-      return _;
-    });
+        return _;
+      },
+    );
 
     _._ = subscribe({ loading }, ({ $loading }) => {
       const _ = bin();
