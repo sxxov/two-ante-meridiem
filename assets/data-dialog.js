@@ -15,12 +15,14 @@ export const DialogBehavior = behavior(
   'dialog',
   class {
     open = t.boolean;
+    mode = t.string.choice('consume').choice('move').default('move');
+
     visible = t.boolean.backing();
     content = new TaskSignal(
       /** @type {HTMLElement | undefined} */ (undefined),
     );
   },
-  (element, { open, visible, content }, { registerLocalBehaviors }) => {
+  (element, { open, visible, content, mode }, { registerLocalBehaviors }) => {
     registerLocalBehaviors(
       DialogCloseBehavior,
       DialogContentBehavior,
@@ -29,29 +31,67 @@ export const DialogBehavior = behavior(
 
     const _ = bin();
 
-    _._ = subscribe({ open, content }, ({ $open, $content }) => {
+    const dialog = document.createElement('dialog');
+    _._ = attachBehavior(dialog, DialogContainerBehavior, {});
+
+    _._ = subscribe({ mode, content }, ({ $mode, $content }) => {
+      if ($mode !== 'consume' || !$content) return;
+
+      const _ = bin();
+
+      const placeholderComment = document.createComment('');
+      add: {
+        element.append(dialog);
+        $content.replaceWith(placeholderComment);
+        dialog.append($content);
+      }
+      remove: _._ = () => {
+        dialog.remove();
+        placeholderComment.replaceWith($content);
+      };
+
+      return _;
+    });
+
+    _._ = subscribe({ open, mode, content }, ({ $open, $mode, $content }) => {
       if (!$open || !$content) return;
 
       const _ = bin();
 
-      const dialog = document.createElement('dialog');
-      attachBehavior(dialog, DialogContainerBehavior, {});
+      switch ($mode) {
+        case 'consume': {
+          add: {
+            dialog.showModal();
+            visible.set(true);
+          }
+          remove: _._ = () => {
+            visible.set(false);
+            dialog.close();
+          };
 
-      const contentPlaceholderComment = document.createComment('');
-      $content.replaceWith(contentPlaceholderComment);
-      add: { dialog.appendChild($content); }
-      remove: _._ = () => { contentPlaceholderComment.replaceWith($content); };
+          break;
+        }
+        case 'move': {
+          const placeholderComment = document.createComment('');
+          $content.replaceWith(placeholderComment);
+          add: { dialog.append($content); }
+          remove: _._ = () => { placeholderComment.replaceWith($content); };
 
-      add: {
-        element.append(dialog);
-        dialog.showModal();
-        visible.set(true);
+          add: {
+            element.append(dialog);
+            dialog.showModal();
+            visible.set(true);
+          }
+          remove: _._ = () => {
+            visible.set(false);
+            dialog.close();
+            dialog.remove();
+          };
+
+          break;
+        }
+        default:
       }
-      remove: _._ = () => {
-        visible.set(false);
-        dialog.close();
-        dialog.remove();
-      };
 
       return _;
     });

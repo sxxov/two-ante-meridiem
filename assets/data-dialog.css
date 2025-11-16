@@ -82,7 +82,8 @@
       }
     }
 
-    &:not(:has([data-dialog-container])) [data-dialog-content] {
+    &:not(:has([data-dialog-container])) [data-dialog-content],
+    &:not([data-dialog-visible]) [data-dialog-container]:not([open]) {
       display: none;
     }
   }

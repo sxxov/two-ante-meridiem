@@ -27,6 +27,10 @@ export const DialogContainerBehavior = behavior(
             return;
           }
 
+          const controller = new AbortController();
+          const { signal } = controller;
+          _._ = () => { controller.abort(); };
+
           visible.set(false);
           const close = (/** @type {TransitionEvent} */ event) => {
             if (
@@ -35,9 +39,16 @@ export const DialogContainerBehavior = behavior(
             )
               return;
             open.set(false);
+            controller.abort();
           };
-          element.addEventListener('transitionend', close, { signal });
-          element.addEventListener('transitioncancel', close, { signal });
+          element.addEventListener('transitionend', close, {
+            once: true,
+            signal,
+          });
+          element.addEventListener('transitioncancel', close, {
+            once: true,
+            signal,
+          });
         },
         { signal },
       );
