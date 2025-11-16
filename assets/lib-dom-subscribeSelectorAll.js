@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-/* eslint-disable max-depth */
+
 import { coerceInvalidator, Signal, subscribe } from './lib-signal.js';
 
 /** @typedef {() => void} SelectorInvalidator */
@@ -83,83 +83,92 @@ function attachBodyMutationObserver() {
   if (observer) return;
 
   observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations)
-      switch (mutation.type) {
-        case 'childList':
-          {
-            const { addedNodes, removedNodes } = mutation;
+    // handle childList mutations
+    const childListMutations = mutations.filter(
+      (it) => it.type === 'childList',
+    );
+    const addedNodes = new Set();
+    const removedNodes = new Set();
+    for (const mutation of childListMutations) {
+      for (const node of mutation.addedNodes) addedNodes.add(node);
+      for (const node of mutation.removedNodes) removedNodes.add(node);
+    }
+    const addedOnlyNodes = addedNodes.difference(removedNodes);
+    const removedOnlyNodes = removedNodes.difference(addedNodes);
 
-            for (const node of addedNodes) {
-              if (!(node instanceof Element)) continue;
+    for (const node of addedOnlyNodes) {
+      if (!(node instanceof Element)) continue;
 
-              for (const subscription of subscriptions) {
-                const { root, selector, registrations } = subscription;
-                if (!root.contains(node)) continue;
+      for (const subscription of subscriptions) {
+        const { root, selector, registrations } = subscription;
+        if (!root.contains(node)) continue;
 
-                self: if (node.matches(selector)) {
-                  if (registrations.has(node)) continue;
-                  registerElement(subscription, node);
+        self: if (node.matches(selector)) {
+          if (registrations.has(node)) continue;
+          registerElement(subscription, node);
 
-                  continue;
-                }
-
-                children: {
-                  for (const child of node.querySelectorAll(selector)) {
-                    if (registrations.has(child)) continue;
-                    registerElement(subscription, child);
-                  }
-
-                  continue;
-                }
-              }
-            }
-
-            for (const node of removedNodes) {
-              if (!(node instanceof Element)) continue;
-
-              for (const subscription of subscriptions) {
-                const { selector, registrations } = subscription;
-
-                self: if (node.matches(selector)) {
-                  if (!registrations.has(node)) continue;
-                  unregisterElement(subscription, node);
-
-                  continue;
-                }
-
-                children: {
-                  for (const child of node.querySelectorAll(selector)) {
-                    if (!registrations.has(child)) continue;
-                    unregisterElement(subscription, child);
-                  }
-
-                  continue;
-                }
-              }
-            }
-          }
-          break;
-
-        case 'attributes':
-          {
-            const { target: node } = mutation;
-            if (!(node instanceof Element)) continue;
-
-            for (const subscription of subscriptions) {
-              const { root, selector, registrations } = subscription;
-              if (!root.contains(node)) continue;
-
-              const registered = registrations.has(node);
-              if (registered && !node.matches(selector))
-                unregisterElement(subscription, node);
-              else if (!registered && node.matches(selector))
-                registerElement(subscription, node);
-            }
-          }
-          break;
-
-        case 'characterData':
           continue;
+        }
+
+        children: {
+          for (const child of node.querySelectorAll(selector)) {
+            if (registrations.has(child)) continue;
+            registerElement(subscription, child);
+          }
+
+          continue;
+        }
+      }
+    }
+
+    for (const node of removedOnlyNodes) {
+      if (!(node instanceof Element)) continue;
+
+      for (const subscription of subscriptions) {
+        const { selector, registrations } = subscription;
+
+        self: if (node.matches(selector)) {
+          if (!registrations.has(node)) continue;
+          unregisterElement(subscription, node);
+
+          continue;
+        }
+
+        children: {
+          for (const child of node.querySelectorAll(selector)) {
+            if (!registrations.has(child)) continue;
+            unregisterElement(subscription, child);
+          }
+
+          continue;
+        }
+      }
+    }
+
+    // handle attribute mutations
+    const attributeNodes = new /** @type {typeof Set<Element>} */ (Set)();
+    const attributeMutations = mutations.filter(
+      (it) => it.type === 'attributes',
+    );
+    for (const mutation of attributeMutations) {
+      if (!mutation.attributeName) continue;
+
+      const node = mutation.target;
+      if (!(node instanceof Element)) continue;
+
+      attributeNodes.add(node);
+    }
+
+    for (const node of attributeNodes)
+      for (const subscription of subscriptions) {
+        const { root, selector, registrations } = subscription;
+        if (!root.contains(node)) continue;
+
+        const registered = registrations.has(node);
+        if (registered && !node.matches(selector))
+          unregisterElement(subscription, node);
+        else if (!registered && node.matches(selector))
+          registerElement(subscription, node);
       }
   });
 
