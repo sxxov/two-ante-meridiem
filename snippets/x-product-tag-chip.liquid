@@ -1,23 +1,23 @@
 {%- capture class -%}
-  x-product-tag-chip h6 variant/{{ variant | default: 'default' }}
+  x-product-tag-chip
 {%- endcapture -%}
 
 {%- capture children -%}
-  {{ text | default: tag }}
+  {% assign tag_text = text | default: tag %}
+  {% render 'x-chip', text: tag_text, variant: variant %}
 {%- endcapture -%}
 
-{% assign tag_handle = tag | handleize %}
-{% assign related_collection = collections[tag_handle] %}
-
-{% if related_collection != null %}
-  {% assign url = related_collection.url %}
-{% else %}
-  {%- capture url -%}
-    {{ routes.all_products_collection_url }}/{{ tag | handleize }}
-  {%- endcapture -%}
-{% endif %}
-
 {% if tag %}
+  {% assign tag_handle = tag | handleize %}
+  {% assign related_collection = collections[tag_handle] %}
+
+  {% if related_collection != null %}
+    {% assign url = related_collection.url %}
+  {% else %}
+    {%- capture url -%}
+      {{ routes.all_products_collection_url }}/{{ tag_handle }}
+    {%- endcapture -%}
+  {% endif %}
   <a
     class='{{ class }}'
     href='{{ url }}'
@@ -32,36 +32,6 @@
 
 {% stylesheet %}
   .x-product-tag-chip {
-    display: inline-block;
-    padding-inline: 0.3em;
-    padding-block: 0.3em;
-
-    letter-spacing: -0.03em !important;
-    text-transform: unset !important;
-
-    border-radius: 6px;
-    border: 1px solid color-mix(in oklab, currentColor, transparent 50%);
-
-    text-wrap: nowrap;
-
-    &.variant\/default {
-      color: currentColor;
-    }
-
-    &.variant\/new {
-      color: #2791ae;
-    }
-
-    &.variant\/sale {
-      color: #b94de7;
-    }
-
-    &.variant\/low-stock {
-      color: #e74d4d;
-    }
-
-    &.variant\/out-of-stock {
-      color: #888;
-    }
+    display: contents;
   }
 {% endstylesheet %}
