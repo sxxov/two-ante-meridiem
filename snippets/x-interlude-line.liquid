@@ -1,28 +1,28 @@
 {%- capture id -%}
-  interlude-id-{{- 'now' | date: '%s' -}}
+  interlude-{{- 'now' | date: '%s' -}}
 {%- endcapture -%}
 
 <div
-  class='x-interlude-stretch'
+  class='x-interlude-line'
   data-follow-scroll
 >
-  <div class='interlude-stretch-bar'></div>
-  <div class='interlude-stretch-container'>
+  <div class='interlude-line-bar'></div>
+  <div class='interlude-line-container'>
     <a
-      class='interlude-stretch-pill'
+      class='interlude-line-pill'
       href='#{{ id }}'
     >
       {% render 'x-button', text: text %}
     </a>
   </div>
   <div
-    class='interlude-stretch-end'
+    class='interlude-line-end'
     id='{{ id }}'
   ></div>
 </div>
 
 {% stylesheet %}
-  .x-interlude-stretch {
+  .x-interlude-line {
     position: relative;
 
     display: flex;
@@ -35,7 +35,7 @@
 
     --progress: calc(var(--follow-scroll-y-out, 0));
 
-    & .interlude-stretch-bar {
+    & .interlude-line-bar {
       position: absolute;
       inset-block: 0;
       left: 50%;
@@ -44,7 +44,7 @@
       background: currentColor;
     }
 
-    & .interlude-stretch-container {
+    & .interlude-line-container {
       flex-grow: 1;
 
       position: relative;
@@ -56,7 +56,7 @@
 
       translate: 0 calc(var(--progress) * 50%);
 
-      & .interlude-stretch-pill {
+      & .interlude-line-pill {
         border-radius: 9999px;
 
         --color: var(--color-foreground);
@@ -67,7 +67,7 @@
       }
     }
 
-    & .interlude-stretch-end {
+    & .interlude-line-end {
       position: absolute;
       bottom: -1px;
     }
