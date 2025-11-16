@@ -1,0 +1,56 @@
+{% capture description_a %}
+  {% content_for 'block', type: 'x-separator-description', id: 'a' %}
+{% endcapture %}
+
+{% capture description_b %}
+  {% content_for 'block', type: 'x-separator-description', id: 'b' %}
+{% endcapture %}
+
+{% liquid
+  if search.performed
+    assign title = search.terms | capitalize
+    assign title = '“' | append: title | append: '”'
+    assign count = search.results_count
+  else
+    assign title = collections.all.title
+    assign count = collections.all.products_count
+  endif
+%}
+{% render 'x-separator-heading',
+  title: title,
+  count: count,
+  description_a: description_a,
+  description_b: description_b
+%}
+
+{% schema %}
+{
+  "name": "Separator: Heading: by S…",
+  "tag": "slot",
+  "blocks": [
+    {
+      "type": "x-separator-description"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Separator: Heading: by Search",
+      "category": "Separator",
+      "blocks": [
+        {
+          "type": "x-separator-description",
+          "id": "a",
+          "name": "Description A",
+          "static": true
+        },
+        {
+          "type": "x-separator-description",
+          "id": "b",
+          "name": "Description B",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

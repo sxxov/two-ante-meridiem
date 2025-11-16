@@ -1,0 +1,89 @@
+{% capture heading %}
+  {% content_for 'block', type: 'x-separator-heading-by-search', id: 'heading' %}
+{% endcapture %}
+
+<section class='x-search-results'>
+  <div class='search-results-heading'>
+    {{ heading }}
+  </div>
+  {% paginate search.results by 24 %}
+    <div
+      class='search-results-items'
+      data-pagination
+      data-pagination-length='{{ paginate.pages }}'
+      data-pagination-section='{{ section.id }}'
+    >
+      {% if search.results_count > 0 %}
+        {% assign products = search.results | where: 'object_type', 'product' %}
+      {% else %}
+        {% assign collection = collections.all %}
+        {% assign products = collection.products %}
+      {% endif %}
+      {% for product in products %}
+        {% content_for 'block', type: 'x-product-card', id: 'product', closest.product: product %}
+      {% endfor %}
+    </div>
+  {% endpaginate %}
+</section>
+
+{% stylesheet %}
+  .x-search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+
+    padding-inline: 16px;
+    margin-block-start: calc(var(--x-header-height) - 16px);
+    margin-block-end: 64px;
+
+    & .search-results-heading {
+      display: contents;
+    }
+
+    & .search-results-items {
+      display: grid;
+      row-gap: 64px;
+      column-gap: 16px;
+
+      & {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      @media (max-width: 1280px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      @media (max-width: 1024px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Search: Results",
+  "class": "slot",
+  "blocks": [{ "type": "x-separator-heading-by-search" }, { "type": "x-product-card" }],
+  "presets": [
+    {
+      "name": "Search: Results",
+      "category": "Shop",
+      "blocks": [
+        {
+          "type": "x-separator-heading-by-search",
+          "id": "heading",
+          "static": true
+        },
+        {
+          "type": "x-product-card",
+          "id": "product",
+          "static": true,
+          "settings": { "product": "{{ closest.product }}" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
