@@ -1,0 +1,148 @@
+{% assign collection = section.settings.collection %}
+
+{% capture hanger %}
+  {% content_for 'block', type: 'image', id: 'hanger' %}
+{% endcapture %}
+
+<section class='x-collection-heading'>
+  <div class='collection-heading-title'>
+    <h1
+      class='collection-heading-title-text h1'
+      data-dot-matrix
+      data-dot-matrix-polarity='inverted'
+      data-text-clip-reveal
+      data-text-clip-reveal-obscured
+      data-text-clip-reveal-per='character'
+      data-text-clip-reveal-stagger-noise='.5'
+    >
+      {{ collection.title }}
+    </h1>
+    <div class='collection-heading-title-chip'>
+      {% render 'x-chip', text: 'Collection' %}
+    </div>
+  </div>
+  <div class='collection-heading-hanger'>
+    {{ hanger }}
+  </div>
+  <div class='collection-heading-thumbnail'>
+    {%- capture thumbnail -%}
+      <div class="collection-heading-thumbnail-container">
+        {{ collection.image | image_url: width: 2048 | image_tag: alt: collection.title }}
+      </div>
+    {%- endcapture -%}
+    {% render 'x-interlude-cover', children: thumbnail %}
+  </div>
+  <div
+    class='collection-heading-description'
+    data-text-clip-reveal
+  >
+    {{ collection.description }}
+  </div>
+</section>
+
+{% stylesheet %}
+  .x-collection-heading {
+    position: relative;
+    z-index: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-bottom: 64px;
+    padding-inline: 16px;
+
+    background: var(--color-background);
+
+    & .collection-heading-title {
+      position: relative;
+      z-index: 20;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      gap: 16px;
+
+      mix-blend-mode: difference;
+
+      & .collection-heading-title-text {
+        margin: 0;
+        text-align: center;
+        font-size: max(15lvw, var(--font-h1--size));
+        line-height: 0.8;
+        letter-spacing: -0.09em;
+
+        color: white;
+      }
+
+      & .collection-heading-title-chip {
+        color: white;
+        text-transform: uppercase;
+      }
+    }
+
+    & .collection-heading-hanger {
+      margin-top: -36px;
+      margin-bottom: -40px;
+      width: 100%;
+      max-width: 400px;
+
+      position: relative;
+      z-index: 10;
+    }
+
+    & .collection-heading-thumbnail {
+      margin-inline: -16px;
+
+      & .collection-heading-thumbnail-container {
+        /* padding-inline: 4px; */
+        width: 100%;
+
+        & img {
+          /* border-radius: 16px; */
+          aspect-ratio: 2 / 1;
+          height: 100%;
+        }
+      }
+    }
+
+    & .collection-heading-description {
+      margin-block: 128px;
+
+      width: 100%;
+      max-width: 35ch;
+      text-align: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection: Heading",
+  "class": "slot",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "blocks": [{ "type": "image" }],
+  "presets": [
+    {
+      "name": "Collection: Heading",
+      "category": "Collection",
+      "settings": { "collection": "{{ closest.collection }}" },
+      "blocks": [
+        {
+          "type": "image",
+          "id": "hanger",
+          "name": "Hanger",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,187 @@
+<section
+  class='x-collection-products'
+>
+  {% paginate collection.products by 50 %}
+    <div
+      class='collection-products-container'
+      data-pagination
+      data-pagination-length='{{ paginate.pages }}'
+      data-pagination-section='{{ section.id }}'
+    >
+      {% if paginate.current_page > 1 %}
+        <div class='collection-products-page-break h6'>
+          <hr>
+          Page {{ paginate.current_page }} of {{ paginate.pages }}
+          <hr>
+        </div>
+      {% endif %}
+
+      {% assign ancestors = collection.products | map: 'category' | map: 'ancestors' %}
+      {% assign groups = '' | split: '' %}
+      {% liquid
+        for ancestor in ancestors
+          if groups contains ancestor.first
+            continue
+          endif
+          assign groups = ancestor | slice: 0 | concat: groups
+        endfor
+      %}
+      {% assign parents = collection.products | map: 'category' %}
+      {% assign categories = '' | split: '' %}
+      {% liquid
+        for category in parents
+          if categories contains category
+            continue
+          endif
+          assign categories = category | concat: categories
+        endfor
+      %}
+      {% for group in groups %}
+        <div class='collection-products-group'>
+          <div class='collection-products-group-heading'>
+            <h2 class='collection-products-group-title h2'>
+              {{ group.name }}
+            </h2>
+          </div>
+          <div class='collection-products-categories'>
+            {% for category in categories %}
+              {% if category.ancestors.first == group %}
+                {% assign products = collection.products | where: 'category', category %}
+                <div class='collection-products-category'>
+                  <div class='collection-products-category-heading'>
+                    {% content_for 'block',
+                      type: 'x-separator-heading',
+                      id: 'heading',
+                      title: category.name,
+                      count: products.size
+                    %}
+                  </div>
+                  <div
+                    class='collection-products-category-products'
+                  >
+                    {% for product in products %}
+                      <div class='collection-products-category-product'>
+                        {% content_for 'block', type: 'x-product-card', id: 'product', closest.product: product %}
+                      </div>
+                    {% endfor %}
+                  </div>
+                  <div class='collection-products-category-coda'></div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endpaginate %}
+</section>
+
+{% stylesheet %}
+  .x-collection-products {
+    margin-block: 64px;
+    padding-inline: 16px;
+
+    & .collection-products-container {
+      display: flex;
+      flex-direction: column;
+      gap: 128px;
+
+      & .collection-products-group {
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+
+        & .collection-products-group-heading {
+          display: flex;
+          gap: 16px;
+        }
+
+        & .collection-products-categories {
+          display: flex;
+          flex-direction: column;
+          gap: 96px;
+
+          & .collection-products-category {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+
+            & .collection-products-category-heading {
+              display: contents;
+            }
+
+            & .collection-products-category-products {
+              display: grid;
+              gap: 16px;
+
+              & {
+                grid-template-columns: repeat(4, 1fr);
+              }
+              @media (max-width: 1280px) {
+                grid-template-columns: repeat(3, 1fr);
+              }
+              @media (max-width: 1024px) {
+                grid-template-columns: repeat(2, 1fr);
+              }
+              @media (max-width: 640px) {
+                grid-template-columns: 1fr;
+              }
+            }
+
+            & .collection-products-category-coda {
+              height: 40px;
+            }
+          }
+        }
+      }
+
+      & .collection-products-page-break {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        & hr {
+          flex-grow: 1;
+          border: none;
+          border-top: 1px dotted currentColor;
+        }
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection: Products",
+  "class": "slot",
+  "blocks": [{ "type": "x-product-card" }, { "type": "x-separator-heading" }],
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection: Products",
+      "category": "Collection",
+      "settings": { "collection": "{{ closest.collection }}" },
+      "blocks": [
+        {
+          "type": "x-product-card",
+          "id": "product",
+          "name": "Product",
+          "static": true,
+          "settings": { "product": "{{ closest.product }}" }
+        },
+        {
+          "type": "x-separator-heading",
+          "id": "heading",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
