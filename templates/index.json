@@ -207,31 +207,29 @@
           },
           "blocks": {}
         },
-        "inspiration": {
-          "type": "x-home-inspiration",
-          "name": "Home: Inspiration",
+        "inspirations": {
+          "type": "x-home-inspirations",
           "static": true,
           "settings": {},
           "blocks": {
-            "x_home_inspiration_part_yLMKwP": {
-              "type": "x-home-inspiration-part",
-              "name": "Home: Inspiration Part",
+            "x_home_inspiration_Q8T3xQ": {
+              "type": "x-home-inspiration",
+              "name": "Home: Inspiration: Image",
               "settings": {
                 "variant": "transparent"
               },
               "blocks": {
-                "image": {
+                "image_pG73MJ": {
                   "type": "image",
-                  "static": true,
                   "settings": {
-                    "image": "shopify://shop_images/rhythm-overlap-1.webp",
+                    "image": "shopify://shop_images/DSC03635-3.jpg",
                     "link": "",
                     "image_ratio": "adapt",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
                     "custom_width_mobile": 100,
-                    "height": "fit",
+                    "height": "fill",
                     "border": "none",
                     "border_width": 1,
                     "border_opacity": 100,
@@ -244,27 +242,28 @@
                   "blocks": {}
                 }
               },
-              "block_order": []
+              "block_order": [
+                "image_pG73MJ"
+              ]
             },
-            "x_home_inspiration_part_fhtG8E": {
-              "type": "x-home-inspiration-part",
-              "name": "Home: Inspiration Part",
+            "x_home_inspiration_rLDKhJ": {
+              "type": "x-home-inspiration",
+              "name": "Home: Inspiration: Image",
               "settings": {
                 "variant": "background-dots"
               },
               "blocks": {
-                "image": {
+                "image_bRQK99": {
                   "type": "image",
-                  "static": true,
                   "settings": {
-                    "image": "shopify://shop_images/rhythm-overlap-2.webp",
+                    "image": "shopify://shop_images/DSC03778-3.jpg",
                     "link": "",
                     "image_ratio": "adapt",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
                     "custom_width_mobile": 100,
-                    "height": "fit",
+                    "height": "fill",
                     "border": "none",
                     "border_width": 1,
                     "border_opacity": 100,
@@ -277,27 +276,28 @@
                   "blocks": {}
                 }
               },
-              "block_order": []
+              "block_order": [
+                "image_bRQK99"
+              ]
             },
-            "x_home_inspiration_part_pex3wc": {
-              "type": "x-home-inspiration-part",
-              "name": "Home: Inspiration Part",
+            "x_home_inspiration_KNqyhj": {
+              "type": "x-home-inspiration",
+              "name": "Home: Inspiration: Video",
               "settings": {
-                "variant": "transparent"
+                "variant": "background"
               },
               "blocks": {
-                "image": {
-                  "type": "image",
-                  "static": true,
+                "video_GbagDc": {
+                  "type": "video",
                   "settings": {
-                    "image": "shopify://shop_images/rhythm-overlap-3.webp",
-                    "link": "",
-                    "image_ratio": "adapt",
-                    "width": "fill",
+                    "source": "uploaded",
+                    "video": "shopify://files/videos/efc103f38ba44369bb1e94e65d0e9b69.web.mp4",
+                    "video_autoplay": true,
+                    "video_loop": true,
+                    "alt": "",
                     "custom_width": 100,
-                    "width_mobile": "fill",
                     "custom_width_mobile": 100,
-                    "height": "fit",
+                    "aspect_ratio": "auto",
                     "border": "none",
                     "border_width": 1,
                     "border_opacity": 100,
@@ -310,13 +310,15 @@
                   "blocks": {}
                 }
               },
-              "block_order": []
+              "block_order": [
+                "video_GbagDc"
+              ]
             }
           },
           "block_order": [
-            "x_home_inspiration_part_yLMKwP",
-            "x_home_inspiration_part_fhtG8E",
-            "x_home_inspiration_part_pex3wc"
+            "x_home_inspiration_Q8T3xQ",
+            "x_home_inspiration_rLDKhJ",
+            "x_home_inspiration_KNqyhj"
           ]
         },
         "call_to_action": {
@@ -505,31 +507,29 @@
           },
           "blocks": {}
         },
-        "inspiration": {
-          "type": "x-home-inspiration",
-          "name": "Home: Inspiration",
+        "inspirations": {
+          "type": "x-home-inspirations",
           "static": true,
           "settings": {},
           "blocks": {
-            "x_home_inspiration_part_xFYmNL": {
-              "type": "x-home-inspiration-part",
-              "name": "Home: Inspiration Part",
+            "x_home_inspiration_zEJH8k": {
+              "type": "x-home-inspiration",
+              "name": "Home: Inspiration: Image",
               "settings": {
                 "variant": "transparent"
               },
               "blocks": {
-                "image": {
+                "image_zVkBE3": {
                   "type": "image",
-                  "static": true,
                   "settings": {
-                    "image": "shopify://shop_images/rhythm-overlap-1.webp",
+                    "image": "shopify://shop_images/IMG_9418.jpg",
                     "link": "",
                     "image_ratio": "adapt",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
                     "custom_width_mobile": 100,
-                    "height": "fit",
+                    "height": "fill",
                     "border": "none",
                     "border_width": 1,
                     "border_opacity": 100,
@@ -542,27 +542,28 @@
                   "blocks": {}
                 }
               },
-              "block_order": []
+              "block_order": [
+                "image_zVkBE3"
+              ]
             },
-            "x_home_inspiration_part_6QbrhX": {
-              "type": "x-home-inspiration-part",
-              "name": "Home: Inspiration Part",
+            "x_home_inspiration_hffLYh": {
+              "type": "x-home-inspiration",
+              "name": "Home: Inspiration: Image",
               "settings": {
                 "variant": "background-dots"
               },
               "blocks": {
-                "image": {
+                "image_gzmxzR": {
                   "type": "image",
-                  "static": true,
                   "settings": {
-                    "image": "shopify://shop_images/rhythm-overlap-2.webp",
+                    "image": "shopify://shop_images/IMG_9417.jpg",
                     "link": "",
                     "image_ratio": "adapt",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
                     "custom_width_mobile": 100,
-                    "height": "fit",
+                    "height": "fill",
                     "border": "none",
                     "border_width": 1,
                     "border_opacity": 100,
@@ -575,27 +576,28 @@
                   "blocks": {}
                 }
               },
-              "block_order": []
+              "block_order": [
+                "image_gzmxzR"
+              ]
             },
-            "x_home_inspiration_part_biL63G": {
-              "type": "x-home-inspiration-part",
-              "name": "Home: Inspiration Part",
+            "x_home_inspiration_3aU33H": {
+              "type": "x-home-inspiration",
+              "name": "Home: Inspiration: Video",
               "settings": {
-                "variant": "transparent"
+                "variant": "background"
               },
               "blocks": {
-                "image": {
-                  "type": "image",
-                  "static": true,
+                "video_hp4MH8": {
+                  "type": "video",
                   "settings": {
-                    "image": "shopify://shop_images/rhythm-overlap-3.webp",
-                    "link": "",
-                    "image_ratio": "adapt",
-                    "width": "fill",
+                    "source": "uploaded",
+                    "video": "shopify://files/videos/LAST-1.mp4",
+                    "video_autoplay": true,
+                    "video_loop": true,
+                    "alt": "",
                     "custom_width": 100,
-                    "width_mobile": "fill",
                     "custom_width_mobile": 100,
-                    "height": "fit",
+                    "aspect_ratio": "auto",
                     "border": "none",
                     "border_width": 1,
                     "border_opacity": 100,
@@ -608,13 +610,15 @@
                   "blocks": {}
                 }
               },
-              "block_order": []
+              "block_order": [
+                "video_hp4MH8"
+              ]
             }
           },
           "block_order": [
-            "x_home_inspiration_part_xFYmNL",
-            "x_home_inspiration_part_6QbrhX",
-            "x_home_inspiration_part_biL63G"
+            "x_home_inspiration_zEJH8k",
+            "x_home_inspiration_hffLYh",
+            "x_home_inspiration_3aU33H"
           ]
         },
         "call_to_action": {
@@ -802,31 +806,29 @@
           },
           "blocks": {}
         },
-        "inspiration": {
-          "type": "x-home-inspiration",
-          "name": "Home: Inspiration",
+        "inspirations": {
+          "type": "x-home-inspirations",
           "static": true,
           "settings": {},
           "blocks": {
-            "x_home_inspiration_part_YfVmjp": {
-              "type": "x-home-inspiration-part",
-              "name": "Home: Inspiration Part",
+            "x_home_inspiration_F9P3UG": {
+              "type": "x-home-inspiration",
+              "name": "Home: Inspiration: Image",
               "settings": {
                 "variant": "transparent"
               },
               "blocks": {
-                "image": {
+                "image_A7dPVg": {
                   "type": "image",
-                  "static": true,
                   "settings": {
-                    "image": "shopify://shop_images/rhythm-overlap-1.webp",
+                    "image": "shopify://shop_images/IMG_7006.jpg",
                     "link": "",
                     "image_ratio": "adapt",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
                     "custom_width_mobile": 100,
-                    "height": "fit",
+                    "height": "fill",
                     "border": "none",
                     "border_width": 1,
                     "border_opacity": 100,
@@ -839,20 +841,21 @@
                   "blocks": {}
                 }
               },
-              "block_order": []
+              "block_order": [
+                "image_A7dPVg"
+              ]
             },
-            "x_home_inspiration_part_hRUt97": {
-              "type": "x-home-inspiration-part",
-              "name": "Home: Inspiration Part",
+            "x_home_inspiration_YxNiiD": {
+              "type": "x-home-inspiration",
+              "name": "Home: Inspiration: Image",
               "settings": {
                 "variant": "background-dots"
               },
               "blocks": {
-                "image": {
+                "image_FKWEaa": {
                   "type": "image",
-                  "static": true,
                   "settings": {
-                    "image": "shopify://shop_images/rhythm-overlap-2.webp",
+                    "image": "shopify://shop_images/HANDLING-08.jpg",
                     "link": "",
                     "image_ratio": "adapt",
                     "width": "fill",
@@ -872,27 +875,28 @@
                   "blocks": {}
                 }
               },
-              "block_order": []
+              "block_order": [
+                "image_FKWEaa"
+              ]
             },
-            "x_home_inspiration_part_3CTFzL": {
-              "type": "x-home-inspiration-part",
-              "name": "Home: Inspiration Part",
+            "x_home_inspiration_jhJxqJ": {
+              "type": "x-home-inspiration",
+              "name": "Home: Inspiration: Image",
               "settings": {
-                "variant": "transparent"
+                "variant": "background"
               },
               "blocks": {
-                "image": {
+                "image_pYJNr7": {
                   "type": "image",
-                  "static": true,
                   "settings": {
-                    "image": "shopify://shop_images/rhythm-overlap-3.webp",
+                    "image": "shopify://shop_images/Untitled-1.jpg",
                     "link": "",
                     "image_ratio": "adapt",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
                     "custom_width_mobile": 100,
-                    "height": "fit",
+                    "height": "fill",
                     "border": "none",
                     "border_width": 1,
                     "border_opacity": 100,
@@ -905,13 +909,15 @@
                   "blocks": {}
                 }
               },
-              "block_order": []
+              "block_order": [
+                "image_pYJNr7"
+              ]
             }
           },
           "block_order": [
-            "x_home_inspiration_part_YfVmjp",
-            "x_home_inspiration_part_hRUt97",
-            "x_home_inspiration_part_3CTFzL"
+            "x_home_inspiration_F9P3UG",
+            "x_home_inspiration_YxNiiD",
+            "x_home_inspiration_jhJxqJ"
           ]
         },
         "call_to_action": {

@@ -1,13 +1,73 @@
-<div
-  class='x-home-inspiration'
-  data-indices
->
+{% capture children %}
   {% content_for 'blocks' %}
+{% endcapture %}
+
+<div
+  class='x-home-inspiration variant/{{ block.settings.variant }}'
+  data-follow-scroll
+>
+  {% if block.settings.variant contains 'background' %}
+    <div class='home-inspiration-background'></div>
+  {% endif %}
+
+  <div class='home-inspiration-content'>{{ children }}</div>
+
+  {% if block.settings.variant contains 'dots' %}
+    <div class='home-inspiration-dots'>
+      {% render 'x-dots-overlay' %}
+    </div>
+  {% endif %}
 </div>
 
 {% stylesheet %}
   .x-home-inspiration {
-    position: relative;
+    position: sticky;
+    top: 0;
+
+    --in-progress: calc(clamp(0, var(--follow-scroll-y-in, 0) * 9999, 1));
+    --out-progress: calc(clamp(0, (1 - var(--follow-scroll-y-in, 0)) * 9999, 1));
+
+    & .home-inspiration-background {
+      position: absolute;
+      inset: 0;
+      min-height: 100lvh;
+      background-color: var(--color-background);
+    }
+
+    & .home-inspiration-dots {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    & .home-inspiration-content {
+      position: relative;
+
+      transition-property: clip-path;
+      transition-duration: 1s;
+      transition-timing-function: var(--ease-out);
+      transition-delay: calc(var(--index, 0) * 0.1s);
+
+      clip-path: inset(calc((1 - var(--in-progress)) * 50%) 0 0 0);
+
+      &::after {
+        content: '';
+        display: block;
+        position: sticky;
+        bottom: 0;
+        inset-inline: 0;
+        height: 64px;
+        margin-top: -64px;
+        mask-image: linear-gradient(to bottom, #fff0, #fff);
+        backdrop-filter: blur(calc(var(--out-progress) * 16px));
+
+        transition-property: backdrop-filter;
+      }
+
+      & * {
+        max-height: 100lvh;
+      }
+    }
   }
 {% endstylesheet %}
 
@@ -15,11 +75,33 @@
 {
   "name": "Home: Inspiration",
   "tag": "slot",
-  "blocks": [{ "type": "x-home-inspiration-part" }],
+  "blocks": [{ "type": "image" }, { "type": "video" }],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "select",
+      "id": "variant",
+      "label": "Variant",
+      "options": [
+        { "value": "transparent", "label": "Transparent" },
+        { "value": "background", "label": "Background" },
+        { "value": "background-dots", "label": "Background with Dots" }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Home: Inspiration",
-      "category": "Home"
+      "name": "Home: Inspiration: Image",
+      "category": "Home",
+      "blocks": [{ "type": "image" }]
+    },
+    {
+      "name": "Home: Inspiration: Video",
+      "category": "Home",
+      "blocks": [{ "type": "video" }]
     }
   ]
 }

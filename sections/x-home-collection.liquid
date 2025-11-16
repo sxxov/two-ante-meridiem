@@ -10,8 +10,8 @@
   {% content_for 'block', type: 'x-call-to-shop', id: 'call_to_shop', closest.collection: collection %}
 {% endcapture %}
 
-{% capture inspiration %}
-  {% content_for 'block', type: 'x-home-inspiration', id: 'inspiration', closest.collection: collection %}
+{% capture inspirations %}
+  {% content_for 'block', type: 'x-home-inspirations', id: 'inspirations', closest.collection: collection %}
 {% endcapture %}
 
 {% capture call_to_action %}
@@ -64,7 +64,7 @@
   </div>
 
   <div class='home-collection-inspiration'>
-    {{ inspiration }}
+    {{ inspirations }}
   </div>
 
   <div class='home-collection-call-to-action'>
@@ -252,8 +252,8 @@
           "settings": { "product": "{{ closest.product }}" }
         },
         {
-          "type": "x-home-inspiration",
-          "id": "inspiration",
+          "type": "x-home-inspirations",
+          "id": "inspirations",
           "static": true
         },
         {

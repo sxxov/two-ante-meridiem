@@ -1,0 +1,26 @@
+<div
+  class='x-home-inspirations'
+  data-indices
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .x-home-inspirations {
+    position: relative;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Home: Inspirations",
+  "tag": "slot",
+  "blocks": [{ "type": "x-home-inspiration" }],
+  "presets": [
+    {
+      "name": "Home: Inspiration",
+      "category": "Home"
+    }
+  ]
+}
+{% endschema %}
