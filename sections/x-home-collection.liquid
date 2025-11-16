@@ -7,18 +7,25 @@
 {% endcapture %}
 
 {% capture call_to_shop %}
-  {% content_for 'block', type: 'x-call-to-shop', id: 'call_to_shop' %}
+  {% content_for 'block', type: 'x-call-to-shop', id: 'call_to_shop', closest.collection: collection %}
 {% endcapture %}
 
 {% capture inspiration %}
-  {% content_for 'block', type: 'x-home-inspiration', id: 'inspiration' %}
+  {% content_for 'block', type: 'x-home-inspiration', id: 'inspiration', closest.collection: collection %}
 {% endcapture %}
 
 {% capture call_to_action %}
-  {% content_for 'block', type: 'x-call-to-action', id: 'call_to_action' %}
+  {% content_for 'block', type: 'x-call-to-action', id: 'call_to_action', closest.collection: collection %}
 {% endcapture %}
 
 <section class='x-home-collection'>
+  <div
+    class='home-collection-description'
+    data-text-clip-reveal
+  >
+    {{ collection.description }}
+  </div>
+
   <div class='home-collection-call-to-shop'>
     {{ call_to_shop }}
   </div>
@@ -74,6 +81,15 @@
 
     z-index: 0;
     overflow: clip;
+
+    & .home-collection-description {
+      margin-inline: auto;
+      margin-block: 128px;
+
+      width: 100%;
+      max-width: 35ch;
+      text-align: center;
+    }
 
     & .home-collection-grid {
       position: relative;

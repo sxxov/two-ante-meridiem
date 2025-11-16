@@ -115,41 +115,6 @@
         "amplitude": 0.2
       }
     },
-    "x_solo_paragraph_wTDLPR": {
-      "type": "x-solo-paragraph",
-      "blocks": {
-        "text_k4AKU3": {
-          "type": "text",
-          "settings": {
-            "text": "<p>An exploration of movement, solitude, and self-searching. Designed for those drifting between places and identities, this collection captured the stillness in motion. Each piece reflected a step forward into the unknown - embodying what it feels like to not belong yet still move.</p>",
-            "width": "100%",
-            "max_width": "narrow",
-            "alignment": "center",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "text_k4AKU3"
-      ],
-      "name": "Solo: Paragraph",
-      "settings": {}
-    },
     "x_home_collection_gabgVK": {
       "type": "x-home-collection",
       "blocks": {
@@ -1050,7 +1015,6 @@
     "x_header_logo_variant_provider_xpnVWg",
     "x_home_hero_GMh8hk",
     "x_wide_image_Y73PkU",
-    "x_solo_paragraph_wTDLPR",
     "x_home_collection_gabgVK",
     "x_home_collection_VNxcpq",
     "x_home_collection_QnAFG4"
