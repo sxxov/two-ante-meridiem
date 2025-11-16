@@ -1,0 +1,55 @@
+<div
+  class='x-interlude-cover'
+  data-follow-scroll
+  style='--amplitude: {{ amplitude | default: 0.2 }}'
+>
+  <div class='interlude-cover-container'>
+    {{ children }}
+  </div>
+</div>
+
+{% stylesheet %}
+  .x-interlude-cover {
+    --outset-height: 64px;
+
+    position: relative;
+    padding-block: 64px;
+    margin-block: -64px;
+
+    overflow-x: clip;
+    mask-image: linear-gradient(
+      to bottom,
+      #fff0,
+      #fff var(--outset-height),
+      #fff calc(100% - var(--outset-height)),
+      #fff0
+    );
+
+    perspective: 100px;
+
+    &::after {
+      content: '';
+      display: block;
+      position: sticky;
+      bottom: 0;
+      inset-inline: 0;
+      height: var(--outset-height);
+      mask-image: linear-gradient(to bottom, #fff0, #fff);
+      backdrop-filter: blur(16px);
+    }
+
+    & * {
+      transform-style: preserve-3d;
+    }
+
+    & .interlude-cover-container {
+      transform: scaleY(calc(1 + clamp(0, (1 - var(--follow-scroll-y-in, 1)) * 6 - 3, 1) * var(--amplitude, 0.2) * 10));
+      scale: calc(1 + (1 - var(--follow-scroll-y-in, 1)) * var(--amplitude, 0.2));
+      rotate: x calc((1 - var(--follow-scroll-y-in, 1)) * var(--amplitude, 0.2) * -10deg);
+      transform-style: preserve-3d;
+      transform-origin: top;
+      transition-property: transform, scale, rotate;
+      transition-duration: 1s, 0.5s, 0.5s;
+    }
+  }
+{% endstylesheet %}

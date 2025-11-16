@@ -1,24 +1,24 @@
-{% capture image %}
-  {% content_for 'block', type: 'image', id: 'image' %}
+{% capture video %}
+  {% content_for 'block', type: 'video', id: 'video' %}
 {% endcapture %}
 
-<section class='x-solo-image'>
-  {% render 'x-interlude-cover', children: image, amplitude: section.settings.amplitude %}
+<section class='x-solo-video'>
+  {% render 'x-interlude-cover', children: video, amplitude: section.settings.amplitude %}
 </section>
 
 {% stylesheet %}
-  .x-solo-image {
+  .x-solo-video {
     display: contents;
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Solo: Image",
+  "name": "Solo: Video",
   "class": "slot",
   "blocks": [
     {
-      "type": "image"
+      "type": "video"
     }
   ],
   "settings": [
@@ -38,12 +38,12 @@
   ],
   "presets": [
     {
-      "name": "Solo: Image",
+      "name": "Solo: Video",
       "category": "Solo",
       "blocks": [
         {
-          "type": "image",
-          "id": "image",
+          "type": "video",
+          "id": "video",
           "static": true
         }
       ]
