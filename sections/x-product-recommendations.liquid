@@ -72,7 +72,8 @@
       display: flex;
       flex-direction: column;
 
-      padding-inline: 16px;
+      padding-inline: 32px;
+      padding-block: 16px;
 
       & .product-recommendations-heading {
         display: contents;
@@ -96,6 +97,8 @@
           translate: 0 -50%;
 
           z-index: 10;
+
+          filter: invert(1);
 
           &[data-carousel-prev-disabled] {
             display: none;
@@ -125,7 +128,8 @@
             display: flex;
 
             /** TODO: don't target directly (hack) */
-            & .product-card-thumbnail-item {
+            & .product-card-thumbnail-item,
+            & .product-card-action {
               filter: invert(1);
             }
           }
@@ -138,6 +142,8 @@
           translate: 0 -50%;
 
           z-index: 10;
+
+          filter: invert(1);
 
           &[data-carousel-next-disabled] {
             display: none;
